@@ -4,6 +4,12 @@ import com.deli.deliverypp.util.Config;
 
 import java.sql.*;
 
+/**
+ *  간단한 커넥션 핸들러 입니다
+ *  static import로 간편하게 사용해주시면 되고
+ *
+ *  close 명령어로 꼭 닫아주세요
+ */
 public class ConnHandler {
     private static final String URL = Config.DB_URL;
     private static final String USR = Config.DB_ID;
