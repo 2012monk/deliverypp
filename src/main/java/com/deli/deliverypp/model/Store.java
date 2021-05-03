@@ -1,19 +1,33 @@
 package com.deli.deliverypp.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Store implements Serializable {
 
+    private String storeId;
     private String storeName;
     private String storeDesc;
-    private String storeId;
+    private String storeImage;
+    private List<Product> productList;
 
     public Store() {
     }
 
-    public Store(String storeName, String storeDesc, String storeId) {
-        this.storeName = storeName;
-        this.storeDesc = storeDesc;
+
+    public List<Product> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
 
@@ -33,11 +47,11 @@ public class Store implements Serializable {
         this.storeDesc = storeDesc;
     }
 
-    public String getStoreId() {
-        return storeId;
+    public String getStoreImage() {
+        return storeImage;
     }
 
-    public void setStoreId(String storeId) {
-        this.storeId = storeId;
+    public void setStoreImage(String storeImage) {
+        this.storeImage = storeImage;
     }
 }

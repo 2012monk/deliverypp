@@ -49,7 +49,7 @@
 
         <root level="debug" additivity="false">
 <!--            <level value="debug" />-->
-            <appender-ref ref="daily" />
+<!--            <appender-ref ref="daily" />-->
             <appender-ref ref="console"/>
         </root>
     </Loggers>
