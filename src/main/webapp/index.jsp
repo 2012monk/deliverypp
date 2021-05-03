@@ -17,5 +17,6 @@
 
 <%
     Connection conn = getConn();
+    conn.commit();
     close(conn);
 %>

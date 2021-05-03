@@ -1,0 +1,16 @@
+[{
+  "storeName" : "TEST store 111",
+  "storeDesc" : "testing process",
+  "storeId" : "store1"
+},
+  {
+    "storeName" : "TEST store 222",
+    "storeDesc" : "testing process",
+    "storeId" : "store2"
+  },
+  {
+    "storeName" : "TEST store 333",
+    "storeDesc" : "testing process",
+    "storeId" : "store3"
+  }
+]
