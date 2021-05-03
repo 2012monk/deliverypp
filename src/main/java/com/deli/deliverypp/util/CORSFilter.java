@@ -49,7 +49,7 @@ public class CORSFilter implements Filter {
             Enumeration<String> e = rq.getHeaderNames();
             while (e.hasMoreElements()){
                 String s = e.nextElement();
-                log.debug(s+"  :  "+rq.getHeader(s));
+//                log.debug(s+"  :  "+rq.getHeader(s));
             }
 
             rs.setHeader("Access-Control-Allow-Credentials", "true");
