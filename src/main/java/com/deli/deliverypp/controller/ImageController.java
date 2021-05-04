@@ -1,6 +1,7 @@
 package com.deli.deliverypp.controller;
 
 import com.oreilly.servlet.MultipartRequest;
+import org.apache.commons.fileupload.FileUpload;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -12,6 +13,7 @@ public class ImageController extends HttpServlet {
 
 
     private static MultipartRequest multipartRequest;
+    private static final FileUpload upLoader = new FileUpload();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
