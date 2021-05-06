@@ -10,10 +10,19 @@ public class Store implements Serializable {
     private String storeDesc;
     private String storeImage;
     private List<Product> productList;
+    private String storeAddr;
 
     public Store() {
     }
 
+
+    public String getStoreAddr() {
+        return storeAddr;
+    }
+
+    public void setStoreAddr(String storeAddr) {
+        this.storeAddr = storeAddr;
+    }
 
     public List<Product> getProductList() {
         return productList;
@@ -53,5 +62,17 @@ public class Store implements Serializable {
 
     public void setStoreImage(String storeImage) {
         this.storeImage = storeImage;
+    }
+
+    @Override
+    public String toString() {
+        return "Store{" +
+                "storeId='" + storeId + '\'' +
+                ", storeName='" + storeName + '\'' +
+                ", storeDesc='" + storeDesc + '\'' +
+                ", storeImage='" + storeImage + '\'' +
+                ", productList=" + productList +
+                ", storeAddr='" + storeAddr + '\'' +
+                '}';
     }
 }
