@@ -49,7 +49,8 @@ public class ControlUtil {
         sendResponseData(response, data, "null");
     }
 
-    public static void sendResponseData(HttpServletResponse response, String data, String message) throws IOException {
+    public static void sendResponseData(HttpServletResponse response, String data, String message)
+            throws IOException {
         response.getWriter().write(formatJson(message, data));
     }
 

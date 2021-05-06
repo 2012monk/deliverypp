@@ -1,6 +1,7 @@
 package com.deli.deliverypp.DB;
 
-import com.deli.deliverypp.util.Config;
+import com.deli.deliverypp.util.ConfigLoader;
+import com.deli.deliverypp.util.LoadConfig;
 
 import java.sql.*;
 
@@ -10,19 +11,26 @@ import java.sql.*;
  *
  *  close 명령어로 꼭 닫아주세요
  */
+@LoadConfig(path = "config.properties")
 public class ConnHandler {
-    private static final String URL = Config.DB_URL;
-    private static final String USR = Config.DB_ID;
-    private static final String PW = Config.DB_PW;
-    private static final String DRIVER = Config.DRIVER;
 
-    static {
-        System.out.println(URL+USR+PW);
+    private static String DB_URL;
+    private static String DB_ID;
+    private static String DB_PW;
+    private static String DRIVER;
+
+
+    public static void init() {
         try {
             Class.forName(DRIVER);
-        }catch (ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
+
         }
+    }
+
+    public static void main(String[] args) {
+        getConn();
     }
 
 
@@ -30,7 +38,7 @@ public class ConnHandler {
     public static Connection getConn() {
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection(URL, USR, PW);
+            conn = DriverManager.getConnection(DB_URL, DB_ID, DB_PW);
             conn.setAutoCommit(false);
         }catch (SQLException e){
             e.printStackTrace();
