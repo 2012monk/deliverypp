@@ -1,4 +1,59 @@
+/*
+설명
+
+상품목록 JSON 포맷
+{
+	상품명1:{업체명:aa, 상품명:bb, 가격:cc},
+	상품명2:{업체명:aa, 상품명:bb, 가격:cc},
+	상품명3:{업체명:aa, 상품명:bb, 가격:cc},
+	......
+}
+
+로컬스토리지 JSON(stringify) 포맷
+{
+	"cartList":
+		{
+			상품명1:{업체명:aa, 상품명:bb, 가격:cc},
+			상품명2:{업체명:aa, 상품명:bb, 가격:cc},
+			상품명3:{업체명:aa, 상품명:bb, 가격:cc},
+			......
+		}
+}
+
+CartLoad(상품목록, 업체명)
+메뉴리스트에서 '담기' 눌렀을때 호출됨.
+장바구니가 비었거나 같은업체 품목일 때는 장바구니에 추가.
+다른 업체의 품목일때는 기존 장바구니를 비우고 새 업체 품목을 담을 것인지 사용자에게 물음.
+
+CartAddAll()
+상품목록 전부를 CartAdd()로 하나씩 로컬스토리지에 올림
+
+CartAdd()
+스토리지에 카트가 없으면 새로 만들고 상품 하나 추가.
+스토리지에 카트가 있고 같은 품목이면 품목 수량 1 증가
+스토리지에 카트가 있고 다른 품목이면 새로운 상품 하나 추가.
+
+CartMain()
+로컬스토리지에 저장된 장바구니 정보를 읽어와서 모달창에 html로 출력
+
+
+*/
+
+
+
+
 $(function(){
+	var parseList =
+
+        {
+            "productId": "pid1",
+            "productName": "치킨아이템123",
+            "productImage": null,
+            "storeId": "stid2",
+            "productPrice": "24000",
+            "productDesc": null
+        }
+
 	var cart = {"store":"store1","product":"product1","price":"2700"};
 	var cart2 = {"store":"store2","product":"product2","price":"4600"};
 	var cart_all = {"product3":{"store":"store3","product":"product3","price":"1300"},
@@ -7,9 +62,10 @@ $(function(){
 	cart_all2.product3 = cart;
 	cart_all2.product4 = cart2;
 	
+	CartParse(parseList, "테스트업체");
 	
-	CartLoad(cart_all,"store1");
-	CartLoad(cart_all2,"store2");
+	//CartLoad(cart_all,"store1");
+	//CartLoad(cart_all2,"store2");
 	
 	
 	
@@ -108,9 +164,25 @@ function CartMain(){
 	
 }
 
+function CartParse(parseOne, storeName)
+{
+	var cart_list = {};
+	//var parse_list = JSON.parse(parseOne)
+	var parse_list = parseOne;
+	
+	//cart_list[parse_list.productName] = {store:storeName,product:parse_list.productName,price:parse_list.productPrice};
+	cart_list.store = storeName;
+	cart_list.product = parse_list.productName;
+	cart_list.price = parse_list.productPrice;
+	var cart33 = {"store":"store1","product":"product1","price":"2700"};
+	console.log(JSON.stringify(cart_list));
+	console.log(JSON.stringify(cart33));
+	CartAdd(cart_list);
+	console.log("목록을넘김");
+}
 
 //메뉴창에서 메뉴(들)을 담기 누르면 호출
-function CartLoad(cart_all, cart_store){
+function CartLoad(cart_list, cart_store){
 	console.log("CartLoad()실행");
 	var cartAdd = JSON.parse(localStorage.getItem("cartList"));
 	var cartStore = localStorage.getItem("cartStore");
@@ -130,7 +202,7 @@ function CartLoad(cart_all, cart_store){
 		}
 	}
 	
-	CartAddAll(cart_all);  // 전부 담기
+	CartAddAll(cart_list);  // 전부 담기
 	localStorage.setItem("cartStore",cart_store); // 담긴 업체명 수정
 	//alert("장바구니에 메뉴를 추가했습니다.");
 	
