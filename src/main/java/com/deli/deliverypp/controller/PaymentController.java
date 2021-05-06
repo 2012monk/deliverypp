@@ -1,7 +1,6 @@
 package com.deli.deliverypp.controller;
 
 import com.deli.deliverypp.util.ControlUtil;
-import org.apache.commons.fileupload.FileUpload;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
