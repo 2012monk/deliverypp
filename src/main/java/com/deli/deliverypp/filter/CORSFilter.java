@@ -1,10 +1,11 @@
-package com.deli.deliverypp.util;
+package com.deli.deliverypp.filter;
 
 //import org.apache.log4j.Logger;
 
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.core.Logger;
 
+import com.deli.deliverypp.util.ConfigLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.servlet.*;
@@ -30,8 +31,15 @@ public class CORSFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
+        try {
+            Class.forName("com.deli.deliverypp.util.ConfigLoader");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
+    // TODO CORS issue
+    // TODO Access-Control-Allow-Origin origin source 확인
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest rq = (HttpServletRequest) servletRequest;
