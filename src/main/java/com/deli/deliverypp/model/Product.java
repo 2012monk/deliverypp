@@ -7,8 +7,17 @@ public class Product {
     private String productImage;
     private String storeId;
     private String productPrice;
+    private String productDesc;
 
     public Product() {
+    }
+
+    public String getProductDesc() {
+        return productDesc;
+    }
+
+    public void setProductDesc(String productDesc) {
+        this.productDesc = productDesc;
     }
 
     public String getProductId() {

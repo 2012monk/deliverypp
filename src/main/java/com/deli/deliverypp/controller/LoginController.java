@@ -1,31 +1,39 @@
 package com.deli.deliverypp.controller;
 
-import com.oreilly.servlet.MultipartRequest;
-import org.apache.commons.fileupload.FileUpload;
+import com.deli.deliverypp.auth.google.GoogleAuthentication;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
-import java.io.IOException;
+import java.io.*;
 
-@WebServlet(name = "ImageController", value = "/ImageController")
-public class ImageController extends HttpServlet {
+@WebServlet(name = "LoginController", value = {"/login/*", "/signup"})
+public class LoginController extends HttpServlet {
+
+    //TODO implements refresh token
+    //TODO check the token
 
 
-    private static MultipartRequest multipartRequest;
-    private static final FileUpload upLoader = new FileUpload();
 
+    // GET ACCESS TOKEN
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-    }
 
+    }
 
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        GoogleAuthentication.googleLogin(request, response);
+
 
     }
+
+
+
+
 }
+
