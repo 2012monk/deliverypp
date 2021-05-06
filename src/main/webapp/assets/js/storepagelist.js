@@ -1,6 +1,6 @@
 $(function(){
 
-		$(document).on("click","button.add",function(){
+		$(document).on("click","button.cart-add",function(){
 		console.log("추가버튼");
 		var product_name = $(this).parent().prev().prev().prev().text();
 		var price = $(this).parent().prev().prev().text();
@@ -14,7 +14,7 @@ $(function(){
 		//alert(product_name+"_"+price+"_"+entity);
 	})
 	
-	$(document).on("click","button.delete",function(){
+	$(document).on("click","button.cart-delete",function(){
 		console.log("삭제버튼");
 		var product_name = $(this).parent().prev().prev().prev().prev().text();
 		var price = $(this).parent().prev().prev().prev().text();
@@ -27,7 +27,7 @@ $(function(){
 		//alert(product_name+"_"+price+"_"+entity);
 	})
 	
-	$(document).on("click","button.delete-line",function(){
+	$(document).on("click","button.cart-delete-line",function(){
 		console.log("한줄삭제버튼");
 		var product_name = $(this).parent().prev().prev().prev().prev().prev().text();
 		var price = $(this).parent().prev().prev().prev().prev().text();
@@ -40,10 +40,57 @@ $(function(){
 		//alert(product_name+"_"+price+"_"+entity);
 	})
 	
-	$(document).on("click","button.clear",function(){
+	$(document).on("click","button.cart-clear",function(){
 		console.log("장바구니비움버튼");
 		CartRemoveAll();
 		alert("장바구니를 비웠습니다");
+	})
+	
+	$(document).on("click","button.cart-order",function(){
+		console.log("장바구니 주문하기 버튼");
+		var cart_pay = {}
+		cart_pay.storeId = localStorage.getItem("cartStoreId");
+		cart_pay.storeName = localStorage.getItem("cartStore");
+		//quantity 계산 할 것
+		
+		var cart_local_list = JSON.parse(localStorage.getItem("cartList"));
+		var cart_pay_list = [];
+		var cart_count = 0;
+		for(var one in cart_local_list)
+		{
+			// cart_local_list[one] == 6속성객체하나;
+			cart_pay_list.push(cart_local_list[one]);
+			cart_count += parseInt(cart_local_list[one].entity);
+		}
+		cart_pay.quantity = cart_count.toString();
+		cart_pay.totalPrice = localStorage.getItem("cartPrice");
+		cart_pay.orderList = cart_pay_list;
+		
+		//alert(JSON.stringify(cart_pay));
+
+		var address = $(this).parent().find("#address").val();
+		var telephone = $(this).parent().find("#telephone").val();
+		var orderRequirement = $(this).parent().find("#orderRequirement").val();
+		var paymentInfo = $(this).parent().find("#paymentInfo").val();
+		cart_pay.address = address;
+		cart_pay.telephone = telephone;
+		cart_pay.orderRequirement = orderRequirement;
+		cart_pay.paymentInfo = paymentInfo;
+		
+		alert(JSON.stringify(cart_pay));
+		
+		//http://112.169.196.76:47788/order
+		$.ajax({
+			type:"post",
+			url:"http://112.169.196.76:47788/order",
+			data:JSON.stringify(cart_pay),
+			dataType:"json",
+			credentials : 'include',
+			success:function(data){
+				alert("성공:"+data);
+			}
+		})
+		
 	})
 	
 	$("button#myBtn").click(function(){
@@ -109,28 +156,40 @@ function CartMain(){
 	for(var product in cart_list)
 	{
 		var product_name = cart_list[product].productName;
-		var price = cart_list[product].price;
+		var price = cart_list[product].productPrice;
 		var entity = cart_list[product].entity;
 		s+= "<tr>";
 		s+= "<td>"+product_name+"</td>";
 		s+= "<td>"+price+"</td>";
 		s+= "<td>"+entity+"</td>";
-		s+= "<td><button type='button' class='add btn-info'>추가</button></td>";
-		s+= "<td><button type='button' class='delete btn-info'>삭제</button></td>";
-		s+= "<td><button type='button' class='delete-line btn-info'>비우기</button></td>";
+		s+= "<td><button type='button' class='cart-add btn-info'>추가</button></td>";
+		s+= "<td><button type='button' class='cart-delete btn-info'>삭제</button></td>";
+		s+= "<td><button type='button' class='cart-delete-line btn-info'>비우기</button></td>";
 		s+= "</tr>";
 	}
 	s+= "<tr><td>총 주문액 : </td><td>";
 	s+= localStorage.getItem("cartPrice");
-	s+= "</td><td><button type='button' class='clear btn-info' data-dismiss='modal'>비우기</button></table>";
+	s+= "</td><td><button type='button' class='cart-clear btn-info' data-dismiss='modal'>비우기</button></td></tr></table>";
+	
+	//복사시작
+
+	s+= "<table><tr><td>주소</td><td><input type='text' id='address'></td></tr>";
+	s+= "<tr><td>연락처</td><td><input type='text' id='telephone'></td></tr>";
+	s+= "<tr><td>요청사항</td><td><input type='text' id='orderRequirement'></td></tr>";
+	s+= "<tr><td>결제수단</td><td><select id='paymentInfo'><option value='kakao'>카카오 페이</option></select></td></tr></table>";
+	
+	s+= "<br><button type='button' class='btn-info cart-order'>결제하기</button>";
+	s+= "<button type='button' class='btn-info cart-order-cancel' data-dismiss='modal'>취소하기</button>";
+	
 	$("div#test").html(s);
+	
 	$("#myModal").modal();
 
 	
 	
 }
 
-function CartParse(parseOne, storeName)
+/*function CartParse(parseOne, storeName)
 {
 	var cart_list = {};
 	//var parse_list = JSON.parse(parseOne)
@@ -145,11 +204,21 @@ function CartParse(parseOne, storeName)
 	console.log(JSON.stringify(cart33));
 	CartAdd(cart_list);
 	console.log("목록을넘김");
-}
+}*/
 
 //메뉴창에서 메뉴(들)을 담기 누르면 호출
 function CartLoad(cart_list, cart_store){
-	console.log("객체확인:"+JSON.stringify(cart_list));
+	/*
+	담기로 받아온 JSON 타입
+	{
+		productID:xx,
+		productName:xx,
+		productImage:xx,
+		storeId:xx,
+		productPrice:xx,
+		productDesc:xx
+	}
+	*/
 	console.log("CartLoad()실행");
 	var cartAdd = JSON.parse(localStorage.getItem("cartList"));
 	var cartStore = localStorage.getItem("cartStore");
@@ -173,6 +242,7 @@ function CartLoad(cart_list, cart_store){
 	CartAdd(cart_list);  // 전부 담기
 	console.log("cartAdd()실행후");
 	localStorage.setItem("cartStore",cart_store); // 담긴 업체명 수정
+	localStorage.setItem("cartStoreId",cart_list.storeId); // 담긴 업체명 ID 수정
 	//alert("장바구니에 메뉴를 추가했습니다.");
 	
 }
@@ -186,7 +256,17 @@ function CartAdd(cart){
 		console.log("카트가 없는경우 새로 추가");
 		// 카트리스트에 상품1개 새로 추가
 		var cartAdd = {}; 
-		cartAdd[cart.productName] = {"productName":cart.productName,"price":cart.productPrice,"entity":1};
+		//저장 포맷 변경은 여기서(1)!!
+		cartAdd[cart.productName] = 
+			{
+				"productId":cart.productId,
+				"productName":cart.productName,
+				"productImage":cart.productImage,
+				"storeId":cart.storeId,
+				"productPrice":cart.productPrice,
+				"productDesc":cart.productDesc,
+				"entity":1
+			};
 		
 		//console.log(JSON.stringify(cartAdd)); 여기까진 ok
 		
@@ -211,7 +291,17 @@ function CartAdd(cart){
 		else // 만약 해당상품이 리스트에 없으면,
 		{
 			//새로 JSON에 추가
-			cartAdd[cart.productName] = {"productName":cart.productName,"price":cart.productPrice,"entity":1};
+			//저장 포맷 변경은 여기서(2)!!
+			cartAdd[cart.productName] = 
+				{
+					"productId":cart.productId,
+					"productName":cart.productName,
+					"productImage":cart.productImage,
+					"storeId":cart.storeId,
+					"productPrice":cart.productPrice,
+					"productDesc":cart.productDesc,
+					"entity":1
+				};
 			//다시 로컬 스토리지로 올림
 			localStorage.setItem("cartList",JSON.stringify(cartAdd));
 		}
@@ -272,7 +362,7 @@ function CartRemoveLine(cart){
 		//해당상품 갯수 받아옴
 		var count = parseInt(cartAdd[cart.productName].entity);
 		//해당상품 가격 받아옴
-		var price = parseInt(cartAdd[cart.productName].price);
+		var price = parseInt(cartAdd[cart.productName].productPrice);
 		//현재 주문총액 받아옴
 		var total_price = parseInt(localStorage.getItem("cartPrice"));
 		//주문 총액에서 상품라인 가격 제거후 스토리지에 다시 올림
@@ -308,9 +398,7 @@ function CartClearCheck(){
 }
 
 function add(data) {
-	// const data =e.target.getAttribute("data-product");
-	console.log(typeof data)
-	
 	CartLoad(data, "포명청천");
 	CartMain();
-	}
+	
+}
