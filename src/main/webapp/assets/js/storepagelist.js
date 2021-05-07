@@ -103,7 +103,7 @@ $(function(){
 //상품리스트
 	$.ajax({
 		type:"get",
-		url:"http://112.169.196.76:47788/products/list/stid2",
+		url:"http://deli.alconn.co/products/list/stid2",
 		dataType:"json",
 		credentials : 'include',
 		success:function(data){
@@ -122,7 +122,7 @@ $(function(){
 	
 	$.ajax({
 		type:"get",
-		url:"http://112.169.196.76:47788/stores/stid3",
+		url:"http://deli.alconn.co/stores/stid3",
 		dataType:"json",
 		credentials : 'include',
 		success:function(data){

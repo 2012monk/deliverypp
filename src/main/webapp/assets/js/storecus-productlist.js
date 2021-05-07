@@ -1,7 +1,7 @@
 $(function(){
 	$.ajax({
 		type:"get",
-		url:"http://112.169.196.76:47788/products/list/stid2",
+		url:"http://deli.alconn.co/products/list/stid2",
 		dataType:"json",
 		credentials : 'include',
 		success:function(data){
