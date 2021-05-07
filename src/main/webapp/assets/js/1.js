@@ -1,5 +1,4 @@
 $(function() {
-
 	var s = "";
 	$.ajax({
 		credentials : "include",
