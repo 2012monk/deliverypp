@@ -48,9 +48,8 @@ $(function(){
 	function MemberLogin(data){
 		$.ajax({
 			type:"post",
-			//url:"http://deli.alconn.co/login",
-			url:"member_test_server.jsp",
-			data:data,
+			url:"http://112.169.196.76:47788/login",
+			data:JSON.stringify(data),
 			dataType:"json",
 			success:function(login_result){
 				alert("로그인 성공!");
@@ -59,7 +58,8 @@ $(function(){
 			}
 		})
 	}
-	//MemberLogin(1);
+	
+	MemberLogin(test_json);
 	
 	function MemberIdCheck(id){
 		$.ajax({
@@ -84,7 +84,7 @@ $(function(){
 		})
 	}
 	
-	MemberAdd(test_json);
+	//MemberAdd(test_json);
 })
 
 </script>
