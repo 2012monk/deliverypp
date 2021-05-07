@@ -1,9 +1,8 @@
 $(function(){
 	$.ajax({
 		type:"get",
-		url:"http://112.169.196.76:47788/stores/stid3",
+		url:"http://deli.alconn.co/stores/stid3",
 		dataType:"json",
-		credentials : 'include',
 		success:function(data){
 			var s="";
 				s+="<div>가게소개</div>"
