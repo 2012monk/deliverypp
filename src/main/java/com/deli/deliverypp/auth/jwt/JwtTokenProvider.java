@@ -1,17 +1,12 @@
 package com.deli.deliverypp.auth.jwt;
 
-import com.deli.deliverypp.DB.DeliUser;
 import com.deli.deliverypp.util.KeyLoad;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
