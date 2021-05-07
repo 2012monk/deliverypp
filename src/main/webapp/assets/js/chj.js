@@ -1,10 +1,9 @@
 $(function(){
 	var storeName = $("input#storeName").val();
 	$.ajax({
-		credentials : "include",
 		type:"get",
 		dataType:"json",
-		url:"http://112.169.196.76:47788/store/list",
+		url:"http://deli.alconn.co/stores/list",
 		data:{"storeName":storeName},
 		success:function(d){
 			console.log(d);
@@ -24,3 +23,6 @@ $(function(){
 		}
 	})
 })
+
+
+12388888
