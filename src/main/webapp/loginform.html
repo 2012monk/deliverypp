@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Document</title>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script type="text/javascript">
+$(function(){
+	var s="";
+	$(document).on("click","#logbtn",function(){
+		s+="<form>";
+		s+="<table>";
+		s+="<caption><b>로그인</b></caption>"
+		s+="<tr><td><input type='email' name='userEmail'pattern='[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}' required placeholder='E-MAIL'></td><td rowspan='2'><button>로그인</button><td></tr>";
+		s+="<tr><td><input type='password' name='userPw' required placeholder='PASSWORD'></td></tr>";
+		s+="</table>";
+		s+="</form>";
+		$("#show").html(s);
+	});
+});
+
+
+$(document).on("submit","form",function(e){
+	e.preventDefault();
+	console.log(this);
+	var userEmail = $(this).find('input[name="userEmail"]').val();
+	var userPw = $(this).find('input[name="userPw"]').val();
+	console.log(userEmail);
+	console.log(userPw);
+	
+	$.ajax({
+		type:"post",
+		//url:"<http://deli.alconn.co/login>",
+		url:"http://112.169.196.76:47788/login",
+		data:JSON.stringify({"userEmail":userEmail,"userPw":userPw}),
+		dataType:"json",
+		success:function(login_result){
+			var token = login_result.data;
+			localStorage.setItem("loginToken",JSON.stringify(token));
+			console.log(token);
+			console.log(login_result.message);
+		}
+	});
+});
+</script>
+</head>
+
+<body>
+<button id="logbtn">로그인</button>
+
+<div id="show"></div>
+</body>
+
+</html>

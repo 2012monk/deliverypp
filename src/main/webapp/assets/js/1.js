@@ -1,4 +1,5 @@
 $(function() {
+
 	var s = "";
 	$.ajax({
 		type:"get",
