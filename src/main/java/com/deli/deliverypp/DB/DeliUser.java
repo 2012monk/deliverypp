@@ -1,11 +1,26 @@
 package com.deli.deliverypp.DB;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DeliUser {
 
+
+    public enum UserRole{
+        CLIENT,
+        SELLER,
+        ADMIN,
+    }
+
+    public enum UserType {
+        KAKAO,
+        GOOGLE,
+        DELI
+    }
     private String userEmail;
     private String userPw;
-    private String userRole;
-    private String userType;
+    private UserRole userRole = UserRole.CLIENT;
+    private UserType userType = UserType.DELI;
 
     public String getUserEmail() {
         return userEmail;
@@ -23,19 +38,30 @@ public class DeliUser {
         this.userPw = userPw;
     }
 
-    public String getUserRole() {
+    public UserRole getUserRole() {
         return userRole;
     }
 
-    public void setUserRole(String userRole) {
+    public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
     }
 
-    public String getUserType() {
+    public UserType getUserType() {
         return userType;
     }
 
-    public void setUserType(String userType) {
+    public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+
+    @Override
+    public String toString() {
+        return "DeliUser{" +
+                "userEmail='" + userEmail + '\'' +
+                ", userPw='" + userPw + '\'' +
+                ", userRole=" + userRole +
+                ", userType=" + userType +
+                '}';
     }
 }

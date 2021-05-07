@@ -1,0 +1,12 @@
+{
+  "message" : "login success",
+  "data" : {
+    "access_token" : "token",
+    "auth_type" : "Bearer",
+    "user": {
+      "userEmail" : "email",
+      "userRole" : "role",
+      "userType" : "type"
+    }
+  }
+}

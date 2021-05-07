@@ -45,7 +45,7 @@ $(function(){
 	})
 	
 	$(document).on("click","button.cart-order",function(){
-		console.log("장바구니 주문하기 버튼");
+		console.log("장바구니 결제하기 버튼");
 		var cart_pay = {}
 		cart_pay.storeId = localStorage.getItem("cartStoreId");
 		cart_pay.storeName = localStorage.getItem("cartStore");
@@ -65,25 +65,26 @@ $(function(){
 		cart_pay.address = $(this).parent().find("#address").val();
 		cart_pay.telephone = $(this).parent().find("#telephone").val();
 		cart_pay.orderRequirement = $(this).parent().find("#orderRequirement").val();
-		cart_pay.paymentInfo = $(this).parent().find("#paymentInfo").val();
-		cart_pay.address = address;
-		cart_pay.telephone = telephone;
-		cart_pay.orderRequirement = orderRequirement;
-		cart_pay.paymentInfo = paymentInfo;
+		cart_pay.paymentType = $(this).parent().find("#paymentType").val();
 		
 		alert(JSON.stringify(cart_pay));
 		
 		$.ajax({
 			type:"post",
-			url:"http://deli.alconn.co/order",
+			url:"http://112.169.196.76:47788/order",
 			data:JSON.stringify(cart_pay),
 			dataType:"json",
 			success:function(data){
-				alert("성공:"+data);
+				//alert("성공:"+JSON.stringify(data)+"__"+data.data.redirect_url);
+				var url = data.data.redirect_url;
+				//window.open(url);
+				location.href=url;
 			}
 		})
 		
 	})
+	
+	
 	
 	$("button#myBtn").click(function(){
 		console.log("로그인버튼");
@@ -155,7 +156,7 @@ function CartMain(){
 	s+= "<table><tr><td>주소</td><td><input type='text' id='address'></td></tr>";
 	s+= "<tr><td>연락처</td><td><input type='text' id='telephone'></td></tr>";
 	s+= "<tr><td>요청사항</td><td><input type='text' id='orderRequirement'></td></tr>";
-	s+= "<tr><td>결제수단</td><td><select id='paymentInfo'><option value='kakao'>카카오 페이</option></select></td></tr></table>";
+	s+= "<tr><td>결제수단</td><td><select id='paymentType'><option value='kakao'>카카오 페이</option></select></td></tr></table>";
 	
 	s+= "<br><button type='button' class='btn-info cart-order'>결제하기</button>";
 	s+= "<button type='button' class='btn-info cart-order-cancel' data-dismiss='modal'>취소하기</button>";

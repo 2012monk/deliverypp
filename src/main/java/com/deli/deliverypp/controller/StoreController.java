@@ -2,6 +2,7 @@ package com.deli.deliverypp.controller;
 
 import com.deli.deliverypp.service.StoreService;
 import com.deli.deliverypp.util.ControlUtil;
+import com.deli.deliverypp.util.HttpConnectionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,6 +11,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @WebServlet(name = "StoreController", value = "/stores/*")
 public class StoreController extends HttpServlet {
@@ -66,13 +68,16 @@ public class StoreController extends HttpServlet {
         String uri = ControlUtil.getRequestUri(request);
 
 
-        System.out.println(uri);
+//        System.out.println(uri);
         switch (uri) {
             case "list":
                 sendStoreList(request,response);
                 break;
             case "by":
                 sendStore(request, response);
+                break;
+            case "check-name":
+                checkStoreName(request, response);
                 break;
             default:
                 sendStoreById(request, response);
@@ -145,7 +150,7 @@ public class StoreController extends HttpServlet {
 
     public void sendStoreById (HttpServletRequest request, HttpServletResponse response) throws IOException {
         String storeId = ControlUtil.getRequestUri(request);
-        System.out.println(storeId+"from con");
+//        System.out.println(storeId+"from con");
         String json = "null";
         if (storeId != null) {
             try {
@@ -168,6 +173,16 @@ public class StoreController extends HttpServlet {
 
     public void sendStore (HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    }
+
+    // TODO url encoding 되서 들어옴
+    // TODO url decoding 으로 해결했지만  issue 해결방안 필요
+    public void checkStoreName (HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setCharacterEncoding("utf-8");
+        String r = ControlUtil.getRequestUri(request, 2);
+        String name = java.net.URLDecoder.decode(r, "UTF-8");
+
+        ControlUtil.sendResponseData(response, name, service.checkStoreName(name) ? "overlap" : "free");
     }
 
 
