@@ -1,5 +1,8 @@
 package com.deli.deliverypp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Product {
 
     private String productId;
@@ -58,5 +61,17 @@ public class Product {
 
     public void setProductPrice(String productPrice) {
         this.productPrice = productPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", productImage='" + productImage + '\'' +
+                ", storeId='" + storeId + '\'' +
+                ", productPrice='" + productPrice + '\'' +
+                ", productDesc='" + productDesc + '\'' +
+                '}';
     }
 }

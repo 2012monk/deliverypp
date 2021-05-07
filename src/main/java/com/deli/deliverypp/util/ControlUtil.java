@@ -66,4 +66,9 @@ public class ControlUtil {
         }
         return "null";
     }
+
+
+    public static void sendResponseData(HttpServletResponse response, ResponseMessage msg) throws IOException {
+        response.getWriter().write(mapper.writeValueAsString(msg));
+    }
 }

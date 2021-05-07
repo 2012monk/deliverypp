@@ -19,8 +19,8 @@ public class UserAccess {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, user.getUserEmail());
             prst.setString(2, user.getUserPw());
-            prst.setString(3, user.getUserRole());
-            prst.setString(4, user.getUserType());
+            prst.setString(3, user.getUserRole().name());
+            prst.setString(4, user.getUserType().name());
 
             if (prst.executeUpdate() > 0) {
                 conn.commit();
@@ -40,7 +40,7 @@ public class UserAccess {
     public boolean loginUser (DeliUser user) {
         DeliUser savedUser = getUserInfo(user.getUserEmail());
 
-        if (user.getUserType().equals("NORMAL")) {
+        if (user.getUserType() == DeliUser.UserType.DELI) {
 
             if (user.getUserEmail().equals(savedUser.getUserEmail()) &&
                     user.getUserPw().equals(savedUser.getUserPw())) {
@@ -80,8 +80,8 @@ public class UserAccess {
             if (rs.next()) {
                 user.setUserEmail(rs.getString("USER_EMAIL"));
                 user.setUserPw(rs.getString("USER_PW"));
-                user.setUserType(rs.getString("USER_TYPE"));
-                user.setUserRole(rs.getString("USER_ROLE"));
+                user.setUserType(DeliUser.UserType.valueOf(rs.getString("USER_TYPE")));
+                user.setUserRole(DeliUser.UserRole.valueOf(rs.getString("USER_ROLE")));
                 return user;
             }
         } catch (Exception e) {
