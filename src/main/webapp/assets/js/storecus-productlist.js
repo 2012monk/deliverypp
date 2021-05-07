@@ -3,7 +3,6 @@ $(function(){
 		type:"get",
 		url:"http://deli.alconn.co/products/list/stid2",
 		dataType:"json",
-		credentials : 'include',
 		success:function(data){
 			var s="";
 				s+="<table>";

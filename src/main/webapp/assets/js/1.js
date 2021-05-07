@@ -1,7 +1,6 @@
 $(function() {
 	var s = "";
 	$.ajax({
-		credentials : "include",
 		type:"get",
 		url:"http://deli.alconn.co/stores/list",
 		dataType:"json",

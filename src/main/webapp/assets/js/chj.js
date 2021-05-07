@@ -1,7 +1,6 @@
 $(function(){
 	var storeName = $("input#storeName").val();
 	$.ajax({
-		credentials : "include",
 		type:"get",
 		dataType:"json",
 		url:"http://deli.alconn.co/stores/list",

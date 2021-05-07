@@ -82,10 +82,9 @@ $(function(){
 		//http://112.169.196.76:47788/order
 		$.ajax({
 			type:"post",
-			url:"http://112.169.196.76:47788/order",
+			url:"http://deli.alconn.co/order",
 			data:JSON.stringify(cart_pay),
 			dataType:"json",
-			credentials : 'include',
 			success:function(data){
 				alert("성공:"+data);
 			}
@@ -105,7 +104,6 @@ $(function(){
 		type:"get",
 		url:"http://deli.alconn.co/products/list/stid2",
 		dataType:"json",
-		credentials : 'include',
 		success:function(data){
 			var s="";
 				s+="<table>";
@@ -124,7 +122,6 @@ $(function(){
 		type:"get",
 		url:"http://deli.alconn.co/stores/stid3",
 		dataType:"json",
-		credentials : 'include',
 		success:function(data){
 			var s="";
 				s+="<div>가게소개</div>"
