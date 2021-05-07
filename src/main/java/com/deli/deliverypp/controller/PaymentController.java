@@ -1,6 +1,7 @@
 package com.deli.deliverypp.controller;
 
 import com.deli.deliverypp.filter.CORSFilter;
+import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.service.OrderService;
 import com.deli.deliverypp.util.ControlUtil;
 import org.apache.logging.log4j.LogManager;
@@ -40,6 +41,7 @@ public class PaymentController extends HttpServlet {
 
         switch (ControlUtil.getRequestUri(request)) {
             case "kakao":
+                onKaKaoSuccess(request, response);
                 break;
             default:
                 break;
@@ -56,9 +58,13 @@ public class PaymentController extends HttpServlet {
 
     public void onKaKaoSuccess(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String token = request.getParameter("pg_token");
+        String tid = request.getParameter("tid");
 
-        String res = service.sendKaKaoDone(token);
-        ControlUtil.sendResponseData(response, res, "payment success");
+        ResponseMessage res = service.sendKaKaoDone(token, tid);
+//        ControlUtil.sendResponseData(response,, "payment success");
+
+        ControlUtil.sendResponseData(response, res);
+        System.out.println(res.getData());
     }
 
 

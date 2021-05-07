@@ -1,15 +1,13 @@
 package com.deli.deliverypp.model;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRawValue;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.api.client.util.Value;
 
 import java.util.List;
 import java.util.UUID;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderInfo {
 
     private String orderId;
@@ -23,9 +21,10 @@ public class OrderInfo {
     private String storeName;
     private String quantity;
     private String totalPrice;
-    @JsonRawValue
+//    @JsonRawValue
     private List<Product> orderList;
     private String paymentType;
+    @JsonIgnoreProperties
     private Payment payment;
 
     public String getPaymentType() {

@@ -1,7 +1,10 @@
 package com.deli.deliverypp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class KaKaoPayment extends Payment{
 
     private String redirectUri;
@@ -67,5 +70,18 @@ public class KaKaoPayment extends Payment{
 
     public void setExtras(Map<String, String> extras) {
         this.extras = extras;
+    }
+
+    @Override
+    public String toString() {
+        return "KaKaoPayment{" +
+                "redirectUri='" + redirectUri + '\'' +
+                ", tid='" + tid + '\'' +
+                ", next_redirect_pc_url='" + next_redirect_pc_url + '\'' +
+                ", pg_token='" + pg_token + '\'' +
+                ", code='" + code + '\'' +
+                ", msg='" + msg + '\'' +
+                ", extras=" + extras +
+                '}';
     }
 }

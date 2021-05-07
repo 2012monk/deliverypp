@@ -27,6 +27,10 @@ public class OrderAccess {
         return null;
     }
 
+    public OrderInfo getOrderInfoByTid (String tid) {
+        return null;
+    }
+
     public boolean makeOrderFailed (String key) {
         return false;
     }

@@ -4,6 +4,8 @@ import com.deli.deliverypp.model.KaKaoPayment;
 import com.deli.deliverypp.model.OrderInfo;
 import com.deli.deliverypp.model.Product;
 import com.deli.deliverypp.util.HttpConnectionHandler;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
@@ -53,7 +55,10 @@ public class PaymentHandler {
         System.out.println(json);
 
         String redirectUri = "/kakao";
-        return new KaKaoPayment();
+        return new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false)
+                .readValue(json, KaKaoPayment.class
+                );
     }
 
 
@@ -73,7 +78,10 @@ public class PaymentHandler {
 
         String json = HttpConnectionHandler.POSTHttpRequest(reqUri, params, header);
         log.info(json);
-        return new KaKaoPayment();
+        return new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false)
+                .readValue(json, KaKaoPayment.class
+                );
     }
 
 

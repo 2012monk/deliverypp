@@ -19,10 +19,8 @@ public class DeliUser {
     }
     private String userEmail;
     private String userPw;
-//    private String userRole;
-//    private String userType;
     private UserRole userRole = UserRole.CLIENT;
-    private UserType userType;
+    private UserType userType = UserType.DELI;
 
     public String getUserEmail() {
         return userEmail;
