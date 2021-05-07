@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+/*
+ * 
+ JSON
+ {
+	userType : DELI (비밀번호 로그인 타입) , KAKAO, GOOGLE
+	userRole : CLIENT, SELLER, ADMIN
+	userEmail : email
+	userPw : pw
+	userName : xx
+	userTel : xx
+ }
+ 
+ */
+$(function(){
+	
+	//테스트 데이터
+	var test_json = 
+		{
+			userType : "DELI",
+			userRole : "CLIENT",
+			userEmail : "test@test.com",
+			userPw : "abcd1234",
+			userName : "kims",
+			userTel : "010-2345-2345"
+		};
+	// 회원가입 데이터 JSON으로 받아와서 서버로 전송처리
+	function MemberAdd(data){
+		$.ajax({
+			type:"post",
+			//url:"http://deli.alconn.co/signup",
+			url:"http://112.169.196.76:47788/signup",
+			data:JSON.stringify(data),
+			success:function(d){
+				alert("회원가입 성공!");
+			}
+		})
+	}
+	
+	function MemberLogin(data){
+		$.ajax({
+			type:"post",
+			url:"http://112.169.196.76:47788/login",
+			data:JSON.stringify(data),
+			dataType:"json",
+			success:function(login_result){
+				alert("로그인 성공!");
+				var token = login_result.data;
+				localStorage.setItem("loginToken",JSON.stringify(token));
+			}
+		})
+	}
+	
+	MemberLogin(test_json);
+	
+	function MemberIdCheck(id){
+		$.ajax({
+			type:"post",
+			url:"http://deli.alconn.co/login/id-check/"+id,
+			dataType:"json",
+			success:function(check_result){
+				alert("아이디 체크");
+				
+			}
+		})
+	}
+	
+	function MemberLogout(id){
+		$.ajax({
+			type:"get",
+			url:"http://deli.alconn.co/logout/"+id,
+			dataType:"json",
+			success:function(logout_result){
+				alert("로그아웃 성공");
+			}
+		})
+	}
+	
+	//MemberAdd(test_json);
+})
+
+</script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,27 +1,25 @@
 $(function(){
 
-		$(document).on("click","button.cart-add",function(){
+	$(document).on("click","button.cart-add",function(){
 		console.log("추가버튼");
-		var product_name = $(this).parent().prev().prev().prev().text();
-		var price = $(this).parent().prev().prev().text();
-		var entity = $(this).parent().prev().text();
+		var cart_list = JSON.parse(localStorage.getItem("cartList"));
+		var product = $(this).val();
+
 		var cart = {};
-		cart.productName = product_name;
-		cart.productPrice = price;
+		cart.productName = product;
+		cart.productPrice = cart_list[product].productPrice;
 		CartAdd(cart);
 		CartMain();
-		
-		//alert(product_name+"_"+price+"_"+entity);
 	})
 	
 	$(document).on("click","button.cart-delete",function(){
 		console.log("삭제버튼");
-		var product_name = $(this).parent().prev().prev().prev().prev().text();
-		var price = $(this).parent().prev().prev().prev().text();
-		var entity = $(this).parent().prev().prev().text();
+		var cart_list = JSON.parse(localStorage.getItem("cartList"));
+		var product = $(this).val();
+
 		var cart = {};
-		cart.productName = product_name;
-		cart.productPrice = price;
+		cart.productName = product;
+		cart.productPrice = cart_list[product].productPrice;
 		CartRemoveOne(cart);
 		CartMain();
 		//alert(product_name+"_"+price+"_"+entity);
@@ -29,12 +27,12 @@ $(function(){
 	
 	$(document).on("click","button.cart-delete-line",function(){
 		console.log("한줄삭제버튼");
-		var product_name = $(this).parent().prev().prev().prev().prev().prev().text();
-		var price = $(this).parent().prev().prev().prev().prev().text();
-		var entity = $(this).parent().prev().prev().prev().text();
+		var cart_list = JSON.parse(localStorage.getItem("cartList"));
+		var product = $(this).val();
+
 		var cart = {};
-		cart.productName = product_name;
-		cart.productPrice = price;
+		cart.productName = product;
+		cart.productPrice = cart_list[product].productPrice;
 		CartRemoveLine(cart);
 		CartMain();
 		//alert(product_name+"_"+price+"_"+entity);
@@ -58,20 +56,16 @@ $(function(){
 		var cart_count = 0;
 		for(var one in cart_local_list)
 		{
-			// cart_local_list[one] == 6속성객체하나;
 			cart_pay_list.push(cart_local_list[one]);
 			cart_count += parseInt(cart_local_list[one].entity);
 		}
 		cart_pay.quantity = cart_count.toString();
 		cart_pay.totalPrice = localStorage.getItem("cartPrice");
 		cart_pay.orderList = cart_pay_list;
-		
-		//alert(JSON.stringify(cart_pay));
-
-		var address = $(this).parent().find("#address").val();
-		var telephone = $(this).parent().find("#telephone").val();
-		var orderRequirement = $(this).parent().find("#orderRequirement").val();
-		var paymentInfo = $(this).parent().find("#paymentInfo").val();
+		cart_pay.address = $(this).parent().find("#address").val();
+		cart_pay.telephone = $(this).parent().find("#telephone").val();
+		cart_pay.orderRequirement = $(this).parent().find("#orderRequirement").val();
+		cart_pay.paymentInfo = $(this).parent().find("#paymentInfo").val();
 		cart_pay.address = address;
 		cart_pay.telephone = telephone;
 		cart_pay.orderRequirement = orderRequirement;
@@ -79,7 +73,6 @@ $(function(){
 		
 		alert(JSON.stringify(cart_pay));
 		
-		//http://112.169.196.76:47788/order
 		$.ajax({
 			type:"post",
 			url:"http://deli.alconn.co/order",
@@ -140,35 +133,24 @@ $(function(){
 function CartMain(){
 	console.log("CartMain()실행");
 	var cart_list = JSON.parse(localStorage.getItem("cartList"));
-	var cart_store = localStorage.getItem("cartStore");
-	var cart_price = localStorage.getItem("cartPrice");
 	
-	var s = "<table class='table table-bordered'>";
-	s += "<tr><td>상품명</td><td>가격</td><td>수량</td>";
-	s += "<td>추가</td>";
-	s += "<td>삭제</td>";
-	s += "<td>비우기</td>";
-	s += "</tr>";
+	var s = "<table class='table table-bordered'><tr><td>업체명</td><td>"+localStorage.getItem("cartStore")+"</td></tr>";
+	s += "<tr><td>상품명</td><td>가격</td><td>수량</td><td>추가</td><td>삭제</td><td>비우기</td></tr>";
 	
 	for(var product in cart_list)
 	{
-		var product_name = cart_list[product].productName;
-		var price = cart_list[product].productPrice;
-		var entity = cart_list[product].entity;
 		s+= "<tr>";
-		s+= "<td>"+product_name+"</td>";
-		s+= "<td>"+price+"</td>";
-		s+= "<td>"+entity+"</td>";
-		s+= "<td><button type='button' class='cart-add btn-info'>추가</button></td>";
-		s+= "<td><button type='button' class='cart-delete btn-info'>삭제</button></td>";
-		s+= "<td><button type='button' class='cart-delete-line btn-info'>비우기</button></td>";
+		s+= "<td>"+cart_list[product].productName+"</td>";
+		s+= "<td>"+cart_list[product].productPrice+"</td>";
+		s+= "<td>"+cart_list[product].entity+"</td>";
+		s+= "<td><button type='button' value='"+product+"' class='cart-add btn-info'>추가</button></td>";
+		s+= "<td><button type='button' value='"+product+"' class='cart-delete btn-info'>삭제</button></td>";
+		s+= "<td><button type='button' value='"+product+"' class='cart-delete-line btn-info'>비우기</button></td>";
 		s+= "</tr>";
 	}
 	s+= "<tr><td>총 주문액 : </td><td>";
 	s+= localStorage.getItem("cartPrice");
 	s+= "</td><td><button type='button' class='cart-clear btn-info' data-dismiss='modal'>비우기</button></td></tr></table>";
-	
-	//복사시작
 
 	s+= "<table><tr><td>주소</td><td><input type='text' id='address'></td></tr>";
 	s+= "<tr><td>연락처</td><td><input type='text' id='telephone'></td></tr>";
@@ -182,26 +164,7 @@ function CartMain(){
 	
 	$("#myModal").modal();
 
-	
-	
 }
-
-/*function CartParse(parseOne, storeName)
-{
-	var cart_list = {};
-	//var parse_list = JSON.parse(parseOne)
-	var parse_list = parseOne;
-	
-	//cart_list[parse_list.productName] = {store:storeName,product:parse_list.productName,price:parse_list.productPrice};
-	cart_list.store = storeName;
-	cart_list.product = parse_list.productName;
-	cart_list.price = parse_list.productPrice;
-	var cart33 = {"store":"store1","product":"product1","price":"2700"};
-	console.log(JSON.stringify(cart_list));
-	console.log(JSON.stringify(cart33));
-	CartAdd(cart_list);
-	console.log("목록을넘김");
-}*/
 
 //메뉴창에서 메뉴(들)을 담기 누르면 호출
 function CartLoad(cart_list, cart_store){
@@ -225,8 +188,8 @@ function CartLoad(cart_list, cart_store){
 	{
 		console.log("장바구니에 다른 가게 품목이 이미 담겨있으면 사용자체크");
 		//사용자에게 기존 장바구니 비우고 새로 담을지 물어봄
-		//alert("기존 목록을 비우고 다시 담으시겠습니까?");
-		if(true) // Yes 라고 답하면
+		var check = confirm("한 업체의 품목만 담을 수 있습니다. 기존 목록을 비우고 다시 담으시겠습니까?");
+		if(check = true) // Yes 라고 답하면
 		{
 			CartRemoveAll(); // 싹 비움
 		}
@@ -395,7 +358,8 @@ function CartClearCheck(){
 }
 
 function add(data) {
-	CartLoad(data, "포명청천");
+	var ran = Math.random()*100;
+	CartLoad(data, ran>50?"A업체":"B업체");
 	CartMain();
 	
 }
