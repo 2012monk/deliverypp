@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>kakao redirect</title>
+</head>
+<body>
+
+</body>
+
+<script>
+  const map = location.search.substr(1).split('&');
+  if (map.length !== 0) {
+    map.forEach((v) => {
+      if (v[0] === 'pg_token') {
+        fetch("http://localhost:47788/payment/kakao/success", {
+          body: v[1]
+        }).then(r => r.text())
+        .then(d => {
+          console.log(d);
+        })
+      }
+    })
+  }
+
+
+</script>
+</html>

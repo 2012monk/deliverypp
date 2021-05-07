@@ -93,7 +93,7 @@ public class ConfigLoader {
             File file = null;
             URI uri = null;
             if (configPath == null){
-//                file = new File("./src/main/resources/"+path);
+                file = new File("./src/main/resources/"+path);
             }else{
                 uri = configPath.toURI();
                 file = new File(uri);

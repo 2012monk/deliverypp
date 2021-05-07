@@ -110,11 +110,12 @@ public class StoreAccess {
         conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
-            prst.setString(1, sql);
+            prst.setString(1, name);
 
             ResultSet rs = prst.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1) == 1;
+                int l = rs.getInt(1) ;
+                return l >= 1;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,4 +124,5 @@ public class StoreAccess {
         }
         return false;
     }
+
 }

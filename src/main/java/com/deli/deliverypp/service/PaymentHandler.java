@@ -43,7 +43,8 @@ public class PaymentHandler {
         params.put("quantity", orderInfo.getQuantity());
         params.put("total_amount", orderInfo.getTotalPrice());
         params.put("tax_free_amount", "0");
-        params.put("approval_url", "http://localhost:47788/payment/kakao/success");
+//        params.put("approval_url", "http://localhost:47788/payment/kakao/success");
+        params.put("approval_url", "http://localhost:47788/kakao.redirect.html");
         params.put("cancel_url", "http://localhost:47788/cancel.html");
         params.put("fail_url", "http://localhost:47788/failed.html");
 
