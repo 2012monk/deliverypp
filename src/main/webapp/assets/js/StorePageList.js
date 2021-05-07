@@ -77,8 +77,8 @@ $(function(){
 			success:function(data){
 				//alert("성공:"+JSON.stringify(data)+"__"+data.data.redirect_url);
 				var url = data.data.redirect_url;
-				//window.open(url);
-				location.href=url;
+				window.open(url);
+				// location.href=url;
 			}
 		})
 		

@@ -9,10 +9,13 @@
 </body>
 
 <script>
+    alert('hihi')
   const map = location.search.substr(1).split('&');
+  console.log(map);
   if (map.length !== 0) {
     map.forEach((v) => {
       if (v[0] === 'pg_token') {
+          console.log(v[0])
         fetch("http://localhost:47788/payment/kakao/success", {
           body: v[1]
         }).then(r => r.text())
