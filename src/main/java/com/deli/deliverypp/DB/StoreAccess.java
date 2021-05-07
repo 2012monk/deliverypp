@@ -105,5 +105,22 @@ public class StoreAccess {
     }
 
 
+    public boolean isNameOverlap(String name) {
+        String sql = "SELECT COUNT(*) FROM STORE WHERE STORE_NAME=?";
+        conn = getConn();
+        try {
+            PreparedStatement prst = conn.prepareStatement(sql);
+            prst.setString(1, sql);
 
+            ResultSet rs = prst.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) == 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            close(conn);
+        }
+        return false;
+    }
 }

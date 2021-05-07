@@ -5,6 +5,7 @@ package com.deli.deliverypp.filter;
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.core.Logger;
 
+import com.deli.deliverypp.auth.jwt.JwtTokenProvider;
 import com.deli.deliverypp.util.ConfigLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,6 +37,7 @@ public class CORSFilter implements Filter {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 
     // TODO CORS issue
