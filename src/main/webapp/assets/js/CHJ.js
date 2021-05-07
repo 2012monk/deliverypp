@@ -23,6 +23,4 @@ $(function(){
 		}
 	})
 })
-
-
-12388888
+//sdafadsklfjdsalfjkasdlkdjsaklfjksljkfdsa
