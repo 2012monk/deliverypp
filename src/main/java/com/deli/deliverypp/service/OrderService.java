@@ -87,9 +87,7 @@ public class OrderService {
 
 
     public ResponseMessage sendKaKaoDone(String token, String tid) throws IOException {
-        OrderInfo info = access.getOrderInfoByTid(tid);
 
-        log.info(info);
         KaKaoPayment payment = new KaKaoPayment();
         payment.setPg_token(token);
         payment.setTid(tid);
@@ -106,6 +104,7 @@ public class OrderService {
             msg.setData(doneState.getCode());
         }else {
             access.makeOrderSuccessByTid(tid);
+            OrderInfo info = access.getOrderInfoByTid(tid);
             msg.setMessage("success");
             msg.setData(
                     new HashMap<String,Object>(){{

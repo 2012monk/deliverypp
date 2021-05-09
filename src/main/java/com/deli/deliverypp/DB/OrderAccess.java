@@ -106,13 +106,18 @@ public class OrderAccess {
             prst.setString(1, key);
             ResultSet rs = prst.executeQuery();
 
-            OrderInfo orderInfo = setPOJO(OrderInfo.class, rs);
-            System.out.println(orderInfo);
+            if (rs.next()){
+                OrderInfo orderInfo = setPOJO(OrderInfo.class, rs);
+                System.out.println(orderInfo);
 
-//            if (orderInfo!= null) {
-//
-//            }
-            return orderInfo;
+                try {
+                    List<Product> list = getOrderList(orderInfo.getOrderId());
+                    orderInfo.setOrderList(list);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return orderInfo;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
