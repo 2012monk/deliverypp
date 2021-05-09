@@ -11,6 +11,7 @@ public class Product {
     private String storeId;
     private String productPrice;
     private String productDesc;
+    private int quantity;
 
     public Product() {
     }
@@ -73,5 +74,13 @@ public class Product {
                 ", productPrice='" + productPrice + '\'' +
                 ", productDesc='" + productDesc + '\'' +
                 '}';
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 }

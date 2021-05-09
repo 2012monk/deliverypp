@@ -7,9 +7,28 @@ public class DeliUser {
 
 
     public enum UserRole{
-        CLIENT,
-        SELLER,
-        ADMIN,
+        GUEST(0),
+        CLIENT(1),
+        SELLER(2),
+        ADMIN(3);
+
+        private final int hierarchy;
+
+        UserRole(int i) {
+            hierarchy = i;
+        }
+
+        public int getHierarchy(){
+            return hierarchy;
+        }
+
+        public boolean isHigher(UserRole target, UserRole current) {
+            return target.getHierarchy() <= current.getHierarchy();
+        }
+
+        public boolean isHigher(UserRole target) {
+            return this.hierarchy <= target.hierarchy;
+        }
     }
 
     public enum UserType {

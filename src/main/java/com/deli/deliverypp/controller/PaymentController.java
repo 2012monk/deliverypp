@@ -38,7 +38,7 @@ public class PaymentController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        System.out.println("post");
         switch (ControlUtil.getRequestUri(request)) {
             case "kakao":
                 onKaKaoSuccess(request, response);
@@ -58,8 +58,7 @@ public class PaymentController extends HttpServlet {
 
     public void onKaKaoSuccess(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String token = request.getParameter("pg_token");
-        String tid = request.getParameter("tid");
-
+        String tid = (String) request.getSession().getAttribute("tid");
         ResponseMessage res = service.sendKaKaoDone(token, tid);
 //        ControlUtil.sendResponseData(response,, "payment success");
 

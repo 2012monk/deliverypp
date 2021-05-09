@@ -1,11 +1,8 @@
 package com.deli.deliverypp.controller;
 
-import com.deli.deliverypp.service.AuthService;
-import com.deli.deliverypp.util.Config;
+import com.deli.deliverypp.service.UserLoginService;
 import com.deli.deliverypp.util.ControlUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
-import javax.naming.ldap.Control;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -15,7 +12,7 @@ import java.io.IOException;
 public class SignUpController extends HttpServlet {
 
 
-    private static final AuthService service = new AuthService();
+    private static final UserLoginService service = new UserLoginService();
 
 
     @Override

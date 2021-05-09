@@ -1,8 +1,6 @@
 package com.deli.deliverypp.model;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.google.api.client.util.Value;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,22 +8,49 @@ import java.util.UUID;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderInfo {
 
+    public enum OrderState{
+        BEFORE_PAYMENT,
+        PAYMENT_SUCCESS,
+        PAYMENT_FAILED,
+        DONE
+    }
+
     private String orderId;
+    private String tid;
     private String userEmail;
-    private String address;
-    private String telephone;
+    private String userAddr;
+    private String userTelephone;
     private String orderRequirement;
-    private String orderState;
+//    private String orderState;
 
     private String storeId;
     private String storeName;
-    private String quantity;
-    private String totalPrice;
+    private int totalAmount;
+    private int totalPrice;
 //    @JsonRawValue
     private List<Product> orderList;
     private String paymentType;
     @JsonIgnoreProperties
     private Payment payment;
+    private OrderState orderState;
+    private String orderInitDate;
+
+
+    public String getOrderInitDate() {
+        return orderInitDate;
+    }
+
+    public void setOrderInitDate(String orderInitDate) {
+        this.orderInitDate = orderInitDate;
+    }
+
+    public String getTid() {
+        return tid;
+    }
+
+    public void setTid(String tid) {
+        this.tid = tid;
+    }
 
     public String getPaymentType() {
         return paymentType;
@@ -35,7 +60,7 @@ public class OrderInfo {
         this.paymentType = paymentType;
     }
 
-    public void makeNewOrder() {
+    public void generateOrderId() {
         this.orderId = UUID.randomUUID().toString();
     }
 
@@ -47,11 +72,20 @@ public class OrderInfo {
         this.orderId = orderId;
     }
 
-    public String getOrderState() {
+//    public String getOrderState() {
+//        return orderState;
+//    }
+//
+//    public void setOrderState(String orderState) {
+//        this.orderState = orderState;
+//    }
+
+
+    public OrderState getOrderState() {
         return orderState;
     }
 
-    public void setOrderState(String orderState) {
+    public void setOrderState(OrderState orderState) {
         this.orderState = orderState;
     }
 
@@ -63,20 +97,20 @@ public class OrderInfo {
         this.userEmail = userEmail;
     }
 
-    public String getAddress() {
-        return address;
+    public String getUserAddr() {
+        return userAddr;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setUserAddr(String userAddr) {
+        this.userAddr = userAddr;
     }
 
-    public String getTelephone() {
-        return telephone;
+    public String getUserTelephone() {
+        return userTelephone;
     }
 
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
+    public void setUserTelephone(String userTelephone) {
+        this.userTelephone = userTelephone;
     }
 
     public String getOrderRequirement() {
@@ -103,23 +137,38 @@ public class OrderInfo {
         this.storeName = storeName;
     }
 
-    public String getQuantity() {
-        return quantity;
+    public double getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public void setTotalAmount(int totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
-    public String getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(String totalPrice) {
+    public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
     }
+    // parse string
 
+    public String getQuantityString() {
+        return String.valueOf(totalAmount);
+    }
 
+    public void setQuantity(String quantity) {
+        this.totalAmount = Integer.parseInt(quantity);
+    }
+
+    public String  getTotalPriceString() {
+        return String.valueOf(totalPrice);
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = Integer.parseInt(totalPrice);
+    }
 
     public List<Product> getOrderList() {
         return orderList;
@@ -137,22 +186,25 @@ public class OrderInfo {
         this.payment = payment;
     }
 
+
     @Override
     public String toString() {
         return "OrderInfo{" +
                 "orderId='" + orderId + '\'' +
+                ", tid='" + tid + '\'' +
                 ", userEmail='" + userEmail + '\'' +
-                ", address='" + address + '\'' +
-                ", telephone='" + telephone + '\'' +
+                ", userAddr='" + userAddr + '\'' +
+                ", userTelephone='" + userTelephone + '\'' +
                 ", orderRequirement='" + orderRequirement + '\'' +
-                ", orderState='" + orderState + '\'' +
                 ", storeId='" + storeId + '\'' +
                 ", storeName='" + storeName + '\'' +
-                ", quantity='" + quantity + '\'' +
-                ", totalPrice='" + totalPrice + '\'' +
+                ", totalAmount=" + totalAmount +
+                ", totalPrice=" + totalPrice +
                 ", orderList=" + orderList +
                 ", paymentType='" + paymentType + '\'' +
                 ", payment=" + payment +
+                ", orderState=" + orderState +
+                ", orderInitDate='" + orderInitDate + '\'' +
                 '}';
     }
 }

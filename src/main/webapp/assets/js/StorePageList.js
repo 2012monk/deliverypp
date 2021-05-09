@@ -71,14 +71,16 @@ $(function(){
 		
 		$.ajax({
 			type:"post",
-			url:"http://112.169.196.76:47788/order",
+			// url:"http://112.169.196.76:47788/order",
+			url:"http://localhost:47788/order",
 			data:JSON.stringify(cart_pay),
 			dataType:"json",
 			success:function(data){
 				//alert("성공:"+JSON.stringify(data)+"__"+data.data.redirect_url);
 				var url = data.data.redirect_url;
-				window.open(url);
+				// window.open(url);
 				// location.href=url;
+				kakaoPopUp(url)
 			}
 		})
 		
@@ -363,4 +365,27 @@ function add(data) {
 	CartLoad(data, ran>50?"A업체":"B업체");
 	CartMain();
 	
+}
+
+// 추가 부분입니다!
+
+/**
+ *
+ * @param data 성공시 데이터 주문 정보
+ * @author monk
+ */
+function success(data) {
+	document.querySelector('.onsuccess-msg').innerHTML = data;
+}
+
+// 카카오 결제페이지 모달 팝업
+function kakaoPopUp (uri) {
+	$("#myModal").modal('hide');
+	$("#kakao-modal").modal()
+	$('.kakao-inner').attr('src', uri);
+}
+
+// 결제 종료후 리턴 함수
+function kakaoHide() {
+	$("#kakao-modal").modal('hide');
 }

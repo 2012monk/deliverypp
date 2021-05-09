@@ -2,30 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>kakao redirect</title>
+    <title>kakao success</title>
 </head>
 <body>
-
+<div style="text-align: center;">
+    <h1>카카오 결제 성공 페이지 입니다!</h1>
+</div>
 </body>
 
 <script>
+    // TODO kakao 결제시 polling 전에 결제끝내면 리다이렉트 안되는 버그!
     alert('hihi')
-  const map = location.search.substr(1).split('&');
-  console.log(map);
-  if (map.length !== 0) {
-    map.forEach((v) => {
-      if (v[0] === 'pg_token') {
-          console.log(v[0])
-        fetch("http://localhost:47788/payment/kakao/success", {
-          body: v[1]
-        }).then(r => r.text())
-        .then(d => {
-          console.log(d);
-        })
-      }
-    })
-  }
+    window.onload = () => {
+        alert('hi')
+        console.log(location.search);
+        const map = location.search.substr(1).split('&');
+        console.log(map);
+        if (map.length !== 0) {
+            map.forEach((v) => {
+                const k = v.split("=")[0];
+                const val = v.split("=")[1];
+              if (k === 'pg_token') {
+                  const data = new URLSearchParams();
+                  data.append(k, val);
+                  fetch("http://localhost:47788/payment/kakao/success",
+                      {
+                          method : "POST",
+                          body: data
+                      })
+                      .then(r => r.text())
+                      .then(d => {
+                          parent.success(d);
+                          parent.kakaoHide();
+                })
+              }
+            })
+          }
 
+    }
 
 </script>
 </html>

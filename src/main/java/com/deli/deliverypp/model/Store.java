@@ -16,7 +16,7 @@ public class Store implements Serializable {
     public Store() {
     }
 
-    public void setNewStore() {
+    public void generateStoreId() {
         this.storeId = UUID.randomUUID().toString();
     }
 

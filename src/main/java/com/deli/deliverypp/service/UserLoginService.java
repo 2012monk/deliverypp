@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Map;
 
-public class AuthService {
+public class UserLoginService {
 
     private static final JwtTokenProvider provider = new JwtTokenProvider();
     private static final ObjectMapper mapper = new ObjectMapper()
@@ -36,14 +36,25 @@ public class AuthService {
         return access.isUserEmailOverlap(userEmail);
     }
 
-    public DeliUser getUserInfo (String json) {
-        return access.getUserInfo(json);
+    public DeliUser getUserInfo (String email) {
+        return access.getUserInfo(email);
     }
 
     private DeliUser parseUser (String json) throws JsonProcessingException {
         if (json == null || json.equals("")) return null;
         return mapper.readValue(json, DeliUser.class);
     }
+
+
+//    public String generateAuthInfo (String json) throws JsonProcessingException {
+//        DeliUser user = access.signInUser(parseUser(json));
+//
+//        if (user != null) {
+////            return user.getUserEmail();
+//            return setAccess(user);
+//        }
+//        return null;
+//    }
 
     /**
      *
@@ -57,11 +68,14 @@ public class AuthService {
      *         -
      * @throws JsonProcessingException json parse exception
      */
-    public String loginUser (String json) throws JsonProcessingException {
+    public AuthInfo generateAuthInfo (String json) throws JsonProcessingException {
         DeliUser user = access.signInUser(parseUser(json));
+        return generateAuthInfo(user);
+    }
 
+    public AuthInfo generateAuthInfo (DeliUser user) throws JsonProcessingException {
         if (user != null) {
-//            return user.getUserEmail();
+
             return setAccess(user);
         }
         return null;
@@ -76,14 +90,12 @@ public class AuthService {
 
 
     public boolean getAuthentication(String jws) {
-        try {
-            if (jws != null){
+        if (jws != null) {
+            try {
                 provider.validateToken(jws);
-            }else {
-                return false;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            return false;
         }
         return true;
     }
@@ -100,7 +112,7 @@ public class AuthService {
      * @param user user information
      * @return json auth information
      */
-    public String setAccess (DeliUser user) throws JsonProcessingException {
+    private AuthInfo setAccess (DeliUser user) throws JsonProcessingException {
         String token = provider.generateToken(user.getUserEmail(),
                 user.getUserRole().name(), user.getUserType().name());
 
@@ -108,14 +120,25 @@ public class AuthService {
         auth.setAuth_type("Bearer");
         auth.setAccess_token(token);
         auth.setUser(user);
-
-        return mapper.writeValueAsString(auth);
+        auth.setExp(Long.parseLong((String) provider.getTokenBody(token).get("exp")));
+        return auth;
     }
 
 
     public DeliUser parseUserFromToken(String jws) {
-        Map<String, Object> map = provider.getTokenBody(jws);
+        return parse(provider.getTokenBody(jws));
+    }
 
+
+    public DeliUser parseUserFromRefreshToken(String jws) {
+        return parse(provider.getRefreshTokenBody(jws));
+    }
+
+    public String getRefreshToken(DeliUser user) {
+        return provider.generateRefreshToken(user);
+    }
+
+    private DeliUser parse(Map<String, Object> map) {
         String userEmail = (String) map.get("userEmail");
         String userRole = (String) map.get("userRole");
         String userType = (String) map.get("userType");
@@ -127,5 +150,4 @@ public class AuthService {
         user.setUserEmail(userEmail);
         return user;
     }
-
 }

@@ -28,7 +28,11 @@ public class ProductAccess {
             ResultSet rs = prst.executeQuery();
 
             while (rs.next()) {
-                list.add(setProduct(rs, new Product()));
+                try {
+                    list.add(setProduct(rs, new Product()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             return list;
@@ -42,14 +46,14 @@ public class ProductAccess {
     }
 
     private Product setProduct (ResultSet rs, Product product) throws SQLException {
-        if (rs.next()){
-            product.setProductId(rs.getString("PRODUCT_ID"));
-            product.setStoreId(rs.getString("STORE_ID"));
-            product.setProductName(rs.getString("PRODUCT_NAME"));
-            product.setProductImage(rs.getString("PRODUCT_IMAGE"));
-            product.setProductPrice(rs.getString("PRODUCT_PRICE"));
-            product.setProductDesc(rs.getString("PRODUCT_DESC"));
-        }
+//        if (rs.next()){
+        product.setProductId(rs.getString("PRODUCT_ID"));
+        product.setStoreId(rs.getString("STORE_ID"));
+        product.setProductName(rs.getString("PRODUCT_NAME"));
+        product.setProductImage(rs.getString("PRODUCT_IMAGE"));
+        product.setProductPrice(rs.getString("PRODUCT_PRICE"));
+        product.setProductDesc(rs.getString("PRODUCT_DESC"));
+//        }
         return product;
     }
 
