@@ -7,6 +7,7 @@ import com.deli.deliverypp.model.Product;
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.deli.deliverypp.DB.ConnHandler.close;
 import static com.deli.deliverypp.DB.ConnHandler.getConn;
@@ -72,6 +73,28 @@ public class OrderAccess {
         return false;
     }
 
+    public List<Product> getOrderList (String orderId) {
+        ArrayList<Product> list = new ArrayList<>();
+        String sql = "SELECT PRODUCT.*, QUANTITY, ORDER_ID FROM PRODUCT JOIN ORDER_LIST OL ON PRODUCT.PRODUCT_ID=OL.PRODUCT_ID WHERE ORDER_ID=?";
+        conn = getConn();
+        try {
+            PreparedStatement prst = conn.prepareStatement(sql);
+            prst.setString(1, orderId);
+            ResultSet rs = prst.executeQuery();
+
+            while (rs.next()) {
+                list.add(setPOJO(Product.class, rs));
+            }
+
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            close(conn);
+        }
+        return null;
+    }
+
 
     private OrderInfo getOrderInfo (String key, String subSql) {
         String sql = "SELECT * FROM ORDER_INFO WHERE ";
@@ -85,9 +108,9 @@ public class OrderAccess {
 
             OrderInfo orderInfo = setPOJO(OrderInfo.class, rs);
             System.out.println(orderInfo);
-//            if (rs.next()){
-//                System.out.println(orderInfo);
-//                return orderInfo;
+
+//            if (orderInfo!= null) {
+//
 //            }
             return orderInfo;
         } catch (Exception e) {
@@ -99,6 +122,7 @@ public class OrderAccess {
     public OrderInfo getOrderInfoByOrderId (String id) {
         return getOrderInfo(id, "ORDER_ID=?");
     }
+
 
     public OrderInfo getOrderInfoByTid (String tid) {
         return getOrderInfo(tid, "TID=?");

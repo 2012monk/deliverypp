@@ -4,7 +4,6 @@ import com.deli.deliverypp.DB.OrderAccess;
 import com.deli.deliverypp.model.KaKaoPayment;
 import com.deli.deliverypp.model.OrderInfo;
 import com.deli.deliverypp.model.ResponseMessage;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +25,7 @@ public class OrderService {
 
     public ResponseMessage startKaKaoPayment(String json) throws JsonProcessingException {
 
-        OrderInfo orderInfo = new OrderInfo();
+        OrderInfo orderInfo;
 
         try {
 
@@ -48,10 +47,10 @@ public class OrderService {
         // TODO 주문별로 라우팅 필요
         if (validateOrderInfo(orderInfo)){
             throw new IllegalArgumentException("주문 사항 누락");
-        };
+        }
 
         if (orderInfo.getPaymentType().equals("kakao")) {
-            KaKaoPayment paymentInfo = null;
+            KaKaoPayment paymentInfo;
             try {
                 paymentInfo = paymentHandler.kakaoPaymentReadyStage(orderInfo);
             }catch (Exception e) {
@@ -65,13 +64,10 @@ public class OrderService {
                 orderInfo.setTid(paymentInfo.getTid());
                 access.makeNewOrder(orderInfo);
 
-                OrderInfo finalOrderInfo = orderInfo;
-                KaKaoPayment finalPaymentInfo = paymentInfo;
-
                 Map<String, String> data = new HashMap<String ,String >(){{
-                    put("redirect_url", finalPaymentInfo.getNext_redirect_pc_url());
-                    put("tid", finalPaymentInfo.getTid());
-                    put("orderId", finalOrderInfo.getOrderId());
+                    put("redirect_url", paymentInfo.getNext_redirect_pc_url());
+                    put("tid", paymentInfo.getTid());
+                    put("orderId", orderInfo.getOrderId());
                 }};
 
                 msg.setData(mapper.writeValueAsString(data));
@@ -80,7 +76,7 @@ public class OrderService {
             else {
 //                msg.setMessage("failed");
 //                msg.setData("error");
-                throw new IllegalArgumentException("주문 실패!" + paymentInfo.getCode());
+                throw new IllegalArgumentException("주문 실패!");
             }
             return msg;
         }
@@ -109,7 +105,7 @@ public class OrderService {
             msg.setMessage("failed");
             msg.setData(doneState.getCode());
         }else {
-            access.makeOrderFailedByTid(tid);
+            access.makeOrderSuccessByTid(tid);
             msg.setMessage("success");
             msg.setData(
                     new HashMap<String,Object>(){{
@@ -122,6 +118,7 @@ public class OrderService {
     }
 
 
+    // TODO 주문 data 검증
     public boolean validateOrderInfo (OrderInfo info) {
 //        return info.getPaymentType() == null ||
 //                info.getAddress() == null ||
