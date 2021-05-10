@@ -59,11 +59,40 @@ body {
 	height:50px;
 }
 
+<!--        수정 한 부분 입니다 이성묵             -->
+
+<!-- iframe css style 안잡히는 이유? 해결해야됨 -->
+.kakao-inner{
+    width: 100%;
+    height: 100%;
+}
+
+#kakao-modal .modal-content{
+    height: 800px;
+    overflow: auto;
+}
+
+<!-- 스타일 수정 끝  -->
 
 </style>
 <script type="text/javascript" src="./assets/js/StorePageList.js"></script>
 </head>
 <body>
+
+
+<!-- 카카오 수정부분 -->
+<div class="onsuccess-msg">
+
+</div>
+<div id="kakao-modal" class="modal fade" tabindex="-1"  aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <iframe src="" class="kakao-inner" style="width: 100%;height: 100%;" ></iframe>
+        </div>
+    </div>
+</div>
+
+
 
 <div class="container">
   <h2>장바구니 테스트55</h2>
