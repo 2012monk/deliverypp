@@ -46,14 +46,25 @@ public class ControlUtil {
 
 
     public static void sendResponseData(HttpServletResponse response, String data) throws IOException {
-        sendResponseData(response, data, "null");
+        sendResponseData(response, data, "success");
     }
 
     public static void sendResponseData(HttpServletResponse response, String data, String message)
             throws IOException {
+        response.setContentType("application/json");
         response.getWriter().write(formatJson(message, data));
     }
 
+
+
+    // NOTE application/json 으로 설정안하면 한글깨짐
+    public static void sendResponseData(HttpServletResponse response, ResponseMessage msg) throws IOException {
+        response.setContentType("application/json");
+        response.getWriter().write(mapper.writeValueAsString(msg));
+    }
+
+
+    // TODO browser 요청시 stack over flow 발생
     private static String formatJson (String message, String data) {
         ResponseMessage msg = new ResponseMessage();
 

@@ -5,6 +5,7 @@ package com.deli.deliverypp.filter;
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.core.Logger;
 
+import com.deli.deliverypp.auth.jwt.JwtTokenProvider;
 import com.deli.deliverypp.util.ConfigLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,6 +37,7 @@ public class CORSFilter implements Filter {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 
     // TODO CORS issue
@@ -46,6 +48,8 @@ public class CORSFilter implements Filter {
         HttpServletResponse rs = (HttpServletResponse) servletResponse;
         rq.setCharacterEncoding("UTF-8");
         rs.setCharacterEncoding("UTF-8");
+//        rq.getServletContext().setResponseCharacterEncoding("UTF-8");
+//        rq.getServletContext().setResponseCharacterEncoding("UTF-8");
 
         String optionRes = "OPTIONS, GET, POST, HEAD";
         if (rq.getMethod().equals("OPTION")) {

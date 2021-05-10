@@ -9,6 +9,32 @@ public class GoogleUser {
     private String given_name;
     private String family_name;
     private String locale;
+    private boolean isDeliUser;
+    private String refreshToken;
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public boolean isDeliUser() {
+        return isDeliUser;
+    }
+
+    public void setDeliUser(boolean deliUser) {
+        isDeliUser = deliUser;
+    }
 
     public String getEmail() {
         return email;
