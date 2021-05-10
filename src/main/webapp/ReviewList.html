@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+$(function(){
+
+    function reviewLoad(){
+                
+        //ajax로부터 데이터 받아옴
+
+        var ajax_data = 
+        {
+            reviewList : [
+            
+            {
+                reviewId : "reviewid",
+                reviewPageview : "pageview",
+                reviewRate : "rate",
+                reviewPhoto : "photo",
+                userEmail : "writer",
+                reviewMemberContent : "content",
+                reviewMemberDate : "date",
+                reviewReplies : [
+                    { userEmail : "reple writer1", replyContent : "reple content1", replyDate : "reple date1" } ,
+                    { userEmail : "reple writer2", replyContent : "reple content2", replyDate : "reple date2" } ,
+                    { userEmail : "reple writer3", replyContent : "reple content3", replyDate : "reple date3" } 
+                ]
+            },
+            {
+                reviewId : "글번호2",
+                reviewPageview : "조회수",
+                reviewRate : "별점",
+                reviewPhoto : "사진",
+                userEmail : "리뷰작성자",
+                reviewMemberContent : "작성내용",
+                reviewMemberDate : "작성일시",
+                reviewReplies : [
+                    { userEmail : "리플 작성자4", replyContent : "리플 내용4", replyDate : "작성일시4" } ,
+                    { userEmail : "리플 작성자5", replyContent : "리플 내용5", replyDate : "작성일시5" } ,
+                    { userEmail : "리플 작성자6", replyContent : "리플 내용6", replyDate : "작성일시6" }
+                ]
+            }
+            
+            ]
+        }
+
+        //alert(JSON.stringify(ajax_data));
+
+        var s = "<h2>리뷰 게시판</h2><hr>";
+
+        s+= "<table class='table table-bordered'><tr><td>번호</td><td>작성자</td><td>내용</td><td>별점</td><td>작성일</td><td>조회수</td></tr>";
+        ajax_data.reviewList.forEach(function(w){
+            s+="<tr><td>"+w.reviewId+"</td><td>"+w.reviewMember+"</td><td class='content'>"+w.reviewMemberContent+"("+w.reviewReplies.length+")</td><td>"+w.reviewRate+"</td><td>"+w.reviewMemberDate+"</td><td>"+w.reviewPageview+"</td></tr>";
+            s+="<tr class='photo'><td>"+w.reviewPhoto+"</td></tr>";
+            w.reviewReplies.forEach(function(r){
+                s+="<tr class='reply'><td><span class='glyphicon glyphicon-arrow-right'></span></td>";
+                s+="<td>"+r.userEmail+"</td><td>"+r.replyContent+"</td><td>"+r.replyDate+"</td></tr>";
+            })
+        })
+        s+="</table>";
+        $("#test").html(s);
+
+    }
+
+    reviewLoad();
+})
+</script>
+<style>
+    div#test{
+        width:800px;
+        height:500px;
+        margin: 0 auto;
+        border: 2px solid gray;
+    }
+</style>
+<body>
+    <div id="test">
+        test한글
+    </div>
+</body>
+</html>
