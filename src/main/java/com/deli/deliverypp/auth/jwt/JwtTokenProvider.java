@@ -1,6 +1,7 @@
 package com.deli.deliverypp.auth.jwt;
 
-import com.deli.deliverypp.util.KeyLoad;
+import com.deli.deliverypp.DB.DeliUser;
+import com.deli.deliverypp.util.annotaions.KeyLoad;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,8 @@ public class JwtTokenProvider {
     private static String privateKey;
     @KeyLoad(path = "jwt.key.pem")
     private static SecretKey secretKey;
-    private static final long tokenValidateTime = 1000L * 60 * 60;
+    private static final long tokenValidateTime = 1000L * 60 * 60; // 1 hour
+    private static final long refreshTokenValidateTime = 1000L * 60 * 60 * 24 * 7; // 7days
     private final Logger log = LogManager.getLogger(JwtTokenProvider.class);
 
     static {
@@ -33,7 +35,7 @@ public class JwtTokenProvider {
         try {
             return Jwts
                     .parserBuilder()
-                    .requireIssuer("http://deli.alconn.co")
+                    .requireIssuer("https://deli.alconn.co")
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(jws);
@@ -48,6 +50,10 @@ public class JwtTokenProvider {
     public Map<String ,Object> getTokenBody(String jws) {
         Jws<Claims> claimsJws = validateToken(jws);
         return claimsJws.getBody();
+    }
+
+    public Map<String, Object> getRefreshTokenBody(String jws) {
+        return validateRefreshToken(jws).getBody();
     }
 
 
@@ -72,7 +78,7 @@ public class JwtTokenProvider {
                 .setId(userEmail)
                 .setExpiration(exp)
                 .setIssuedAt(date)
-                .setIssuer("http://deli.alconn.co")
+                .setIssuer("https://deli.alconn.co")
                 .claim("userEmail", userEmail)
                 .claim("userType", userType)
                 .claim("userRole", userRole)
@@ -80,6 +86,43 @@ public class JwtTokenProvider {
                 .signWith(secretKey)
                 .compact();
     }
+
+
+    public String generateRefreshToken (DeliUser user) {
+        Date date = new Date();
+        Date exp = new Date(date.getTime() + refreshTokenValidateTime);
+
+        return Jwts
+                .builder()
+                .setSubject("refresh")
+                .setId(user.getUserEmail())
+                .setIssuer("https://deli.alconn.co")
+                .setIssuedAt(date)
+                .setExpiration(exp)
+                .setAudience(user.getUserEmail())
+                .signWith(secretKey)
+                .compact();
+
+    }
+
+
+    public Jws<Claims> validateRefreshToken (String jws) {
+        try {
+            return Jwts
+                    .parserBuilder()
+                    .requireSubject("refresh")
+                    .requireIssuer("https://deli.alconn.co")
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(jws);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+
 
 
 

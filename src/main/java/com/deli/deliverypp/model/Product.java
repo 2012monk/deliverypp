@@ -11,6 +11,7 @@ public class Product {
     private String storeId;
     private String productPrice;
     private String productDesc;
+    private int quantity;
 
     public Product() {
     }
@@ -63,6 +64,14 @@ public class Product {
         this.productPrice = productPrice;
     }
 
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -72,6 +81,7 @@ public class Product {
                 ", storeId='" + storeId + '\'' +
                 ", productPrice='" + productPrice + '\'' +
                 ", productDesc='" + productDesc + '\'' +
+                ", quantity=" + quantity +
                 '}';
     }
 }

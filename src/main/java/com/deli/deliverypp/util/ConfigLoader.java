@@ -1,5 +1,7 @@
 package com.deli.deliverypp.util;
 
+import com.deli.deliverypp.util.annotaions.KeyLoad;
+import com.deli.deliverypp.util.annotaions.LoadConfig;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.reflections.Reflections;
 import org.reflections.scanners.FieldAnnotationsScanner;
@@ -9,14 +11,11 @@ import org.reflections.scanners.TypeAnnotationsScanner;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.security.interfaces.RSAPrivateKey;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Set;
@@ -26,6 +25,7 @@ public class ConfigLoader {
 
     private static final Logger log = Logger.getGlobal();
     private final HashMap<String, Properties> cache = new HashMap<>();
+
 
     static {
         Reflections reflections = new Reflections("com.deli.deliverypp", new FieldAnnotationsScanner(), new TypeAnnotationsScanner(), new SubTypesScanner());
@@ -40,8 +40,16 @@ public class ConfigLoader {
         for (Class<?> c: annotated) {
             try {
                 load(c.getDeclaredAnnotation(LoadConfig.class).path(), c);
-            } catch (ClassNotFoundException e) {
+            }
+            catch (ClassNotFoundException e) {
                 log.warning("load failed");
+                e.printStackTrace();
+            }
+            catch (IllegalArgumentException e){
+                throw new IllegalArgumentException("target filed is not a static filed");
+            } catch (URISyntaxException | IOException fe) {
+                fe.printStackTrace();
+            } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
@@ -85,11 +93,20 @@ public class ConfigLoader {
 //        RSAPrivateKey k = (SecretKey)
 //    }
 
-    static public void load(String path, Class<?> aClass) throws ClassNotFoundException {
+    /**
+     *
+     * Loading configuration files *.properties and set to static variable
+     *
+     * @param path config file path
+     * @param aClass target class
+     * @throws ClassNotFoundException target class not found
+     */
+
+    static public void load(String path, Class<?> aClass) throws ClassNotFoundException, IllegalArgumentException, IOException, URISyntaxException, IllegalAccessException {
         Properties p = new Properties();
 
         URL configPath = ConfigLoader.class.getClassLoader().getResource(path);
-        try {
+//        try {
             File file = null;
             URI uri = null;
             if (configPath == null){
@@ -115,14 +132,14 @@ public class ConfigLoader {
                     }
                 }
 
-                f.set(String.class, p.getProperty(f.getName()));
+                if (f.get(f.getType()) == null){
+                    f.set(aClass, p.getProperty(f.getName()));
+                }
             }
 
             log.info( "load Complete "  +"\n"+"[" + Thread.currentThread().getName() + Thread.currentThread().getId()+ "]"+ aClass.getName() );
 
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+//        }
     }
 
     public static Class<?> call() throws ClassNotFoundException {

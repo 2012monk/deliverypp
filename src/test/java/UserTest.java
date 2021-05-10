@@ -1,12 +1,11 @@
 import com.deli.deliverypp.DB.DeliUser;
-import com.deli.deliverypp.service.AuthService;
+import com.deli.deliverypp.service.UserLoginService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.tools.corba.se.idl.StringGen;
 
 public class UserTest {
 
-    static AuthService s = new AuthService();
+    static UserLoginService s = new UserLoginService();
     static ObjectMapper mapper = new ObjectMapper();
     public static void main(String[] args) throws JsonProcessingException {
         DeliUser user = new DeliUser();

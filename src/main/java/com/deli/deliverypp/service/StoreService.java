@@ -38,7 +38,7 @@ public class StoreService {
         Store store = jsonToStoreObject(json);
 
         if (store == null) return false;
-        store.setNewStore();
+        store.generateStoreId();
 
         return storeAccess.insertStore(store);
     }

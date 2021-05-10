@@ -48,6 +48,8 @@ public class CORSFilter implements Filter {
         HttpServletResponse rs = (HttpServletResponse) servletResponse;
         rq.setCharacterEncoding("UTF-8");
         rs.setCharacterEncoding("UTF-8");
+//        rq.getServletContext().setResponseCharacterEncoding("UTF-8");
+//        rq.getServletContext().setResponseCharacterEncoding("UTF-8");
 
         String optionRes = "OPTIONS, GET, POST, HEAD";
         if (rq.getMethod().equals("OPTION")) {
