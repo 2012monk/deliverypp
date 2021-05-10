@@ -17,6 +17,15 @@
     </properties>
 
     <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/com.google.firebase/firebase-admin -->
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>7.1.1</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
@@ -134,7 +143,13 @@
                 <include>**/jwt.key.pem</include>
                 <include>**/jwt.public.pem</include>
                 <include>**/jwtone.key.pem</include>
+                <include>**/test-c5caf-firebase-adminsdk-wi8s2-87418faf77.json</include>
             </includes>
+        </resource>
+        <resource>
+            <directory>/static</directory>
+            <targetPath>${project.build.directory}/</targetPath>
+<!--            <includes>/image</includes>-->
         </resource>
     </resources>
     </build>

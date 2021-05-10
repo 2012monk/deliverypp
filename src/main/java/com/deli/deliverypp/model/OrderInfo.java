@@ -145,7 +145,7 @@ public class OrderInfo {
         this.totalAmount = totalAmount;
     }
 
-    public double getTotalPrice() {
+    public int getTotalPrice() {
         return totalPrice;
     }
 

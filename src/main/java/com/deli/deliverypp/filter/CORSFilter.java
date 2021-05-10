@@ -64,8 +64,9 @@ public class CORSFilter implements Filter {
 //                log.debug(s+"  :  "+rq.getHeader(s));
             }
 
+            String local = "http://localhost:47788";
             rs.setHeader("Access-Control-Allow-Credentials", "true");
-            rs.setHeader("Access-Control-Allow-Origin", "*");
+            rs.setHeader("Access-Control-Allow-Origin", local);
             rs.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
             rs.setHeader("Access-Control-Max-Age", "3600");
             rs.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept, X-Requested-With, remember-me");

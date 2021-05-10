@@ -24,6 +24,7 @@ public class PaymentHandler {
      * @return redirectUrl
      */
 
+    // FIXME 일정 금액 이상일때 결제요청 실패하는 버그
     public KaKaoPayment kakaoPaymentReadyStage(OrderInfo orderInfo) throws IOException {
         String reqUri = "https://kapi.kakao.com/v1/payment/ready";
         Map<String, String > params = new HashMap<>();
