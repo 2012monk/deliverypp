@@ -154,8 +154,16 @@ function CartMain(){
 	s+= "<tr><td>총 주문액 : </td><td>";
 	s+= localStorage.getItem("cartPrice");
 	s+= "</td><td><button type='button' class='cart-clear btn-info' data-dismiss='modal'>비우기</button></td></tr></table>";
+	$("div#test").html(s);
+	
 
-	s+= "<table><tr><td>주소</td><td><input type='text' id='address'></td></tr>";
+	
+	$("#myModal").modal();
+
+}
+
+function CartMain2(){
+	var	s= "<table><tr><td>주소</td><td><input type='text' id='address'></td></tr>";
 	s+= "<tr><td>연락처</td><td><input type='text' id='telephone'></td></tr>";
 	s+= "<tr><td>요청사항</td><td><input type='text' id='orderRequirement'></td></tr>";
 	s+= "<tr><td>결제수단</td><td><select id='paymentType'><option value='kakao'>카카오 페이</option></select></td></tr></table>";
@@ -163,10 +171,7 @@ function CartMain(){
 	s+= "<br><button type='button' class='btn-info cart-order'>결제하기</button>";
 	s+= "<button type='button' class='btn-info cart-order-cancel' data-dismiss='modal'>취소하기</button>";
 	
-	$("div#test").html(s);
-	
-	$("#myModal").modal();
-
+	$("div#test2").html(s);
 }
 
 //메뉴창에서 메뉴(들)을 담기 누르면 호출
@@ -364,6 +369,7 @@ function add(data) {
 	var ran = Math.random()*100;
 	CartLoad(data, ran>50?"A업체":"B업체");
 	CartMain();
+	CartMain2();
 	
 }
 
