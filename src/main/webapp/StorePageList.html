@@ -60,6 +60,7 @@ body {
 }
 
 <!--        수정 한 부분 입니다 이성묵             -->
+<<<<<<< HEAD
 
 <!-- iframe css style 안잡히는 이유? 해결해야됨 -->
 .kakao-inner{
@@ -73,11 +74,39 @@ body {
 }
 
 <!-- 스타일 수정 끝  -->
+=======
+>>>>>>> f9eb5d2c4dde333fcc3a46cef249deb81ba8274c
 
+<!-- iframe css style 안잡히는 이유? 해결해야됨 -->
+.kakao-inner{
+    width: 100%;
+    height: 100%;
+}
+
+#kakao-modal .modal-content{
+    height: 800px;
+    overflow: auto;
+}
+
+<!-- 스타일 수정 끝  -->
 </style>
 <script type="text/javascript" src="./assets/js/StorePageList.js"></script>
 </head>
 <body>
+<!-- html 수정 부분입니다 이성묵 -->
+
+<div class="onsuccess-msg">
+
+</div>
+<div id="kakao-modal" class="modal fade" tabindex="-1"  aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <iframe src="" class="kakao-inner" style="width: 100%;height: 100%;" ></iframe>
+        </div>
+    </div>
+</div>
+
+<!--                            수정 끝                                   -->
 
 
 <!-- 카카오 수정부분 -->

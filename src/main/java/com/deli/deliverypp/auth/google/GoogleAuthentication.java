@@ -3,6 +3,7 @@ package com.deli.deliverypp.auth.google;
 import com.deli.deliverypp.model.GoogleToken;
 import com.deli.deliverypp.model.GoogleUser;
 import com.deli.deliverypp.util.ControlUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
@@ -28,32 +29,50 @@ public class GoogleAuthentication {
 
     private static final Logger log = LogManager.getLogger(LogManager.class);
     private static final ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    public static void googleLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        String param = ControlUtil.getJson(request);
 
-        GoogleToken googleToken = mapper.readValue(param, GoogleToken.class);
+    /**
+     *
+     * @param json google access information
+     * @throws IOException http connection exception
+     */
+    public static GoogleUser accessGoogleInfo(String json) throws IOException {
+
+
+
+        GoogleToken googleToken = mapper.readValue(json, GoogleToken.class);
         log.info(googleToken);
 
+//        String tokenUri = "https://oauth2.googleapis.com/token";
 
-        String tokenUri = "https://oauth2.googleapis.com/token";
-
-//        String res = getHttpConnection(url);
         GoogleToken token = getGoogleRefreshToken(googleToken);
+
         log.info(token);
+        return getGoogleProfile(googleToken);
+
+
     }
 
 
-    public GoogleUser getGoogleProfile (String token) throws IOException {
-        String url = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token;
-        URL uri = new URL(url);
+    private static GoogleUser getGoogleProfile (GoogleToken initToken) throws IOException {
+//        GoogleToken initToken = mapper.readValue(json, GoogleToken.class);
 
+        GoogleToken resToken = getGoogleRefreshToken(initToken);
+
+        String url = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + resToken.getAccess_token();
+        URL uri = new URL(url);
 
         HttpURLConnection conn = (HttpURLConnection) uri.openConnection();
         conn.setRequestMethod("GET");
 
         String res = ControlUtil.getJson((HttpServletRequest) conn);
-        return mapper.readValue(res, GoogleUser.class);
+        GoogleUser user = mapper.readValue(res, GoogleUser.class);
+        if (resToken.getRefresh_token() != null) {
+            user.setDeliUser(false);
+            user.setRefreshToken(resToken.getRefresh_token());
+        }
+
+        return user;
     }
 
     private static GoogleToken getGoogleRefreshToken(GoogleToken token) throws IOException {

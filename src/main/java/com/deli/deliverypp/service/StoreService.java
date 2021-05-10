@@ -19,6 +19,9 @@ public class StoreService {
     private static final StoreAccess storeAccess = new StoreAccess();
     private static final ProductAccess productAccess = new ProductAccess();
 
+    public boolean checkStoreName (String name) {
+        return storeAccess.isNameOverlap(name);
+    }
 
     public Store jsonToStoreObject (String json) {
         Store store = null;
@@ -35,6 +38,7 @@ public class StoreService {
         Store store = jsonToStoreObject(json);
 
         if (store == null) return false;
+        store.generateStoreId();
 
         return storeAccess.insertStore(store);
     }

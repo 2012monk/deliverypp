@@ -1,9 +1,10 @@
 package com.deli.deliverypp.DB;
 
 import com.deli.deliverypp.util.ConfigLoader;
-import com.deli.deliverypp.util.LoadConfig;
+import com.deli.deliverypp.util.annotaions.LoadConfig;
 
 import java.sql.*;
+import java.util.logging.Logger;
 
 /**
  *  간단한 커넥션 핸들러 입니다
@@ -11,19 +12,25 @@ import java.sql.*;
  *
  *  close 명령어로 꼭 닫아주세요
  */
-@LoadConfig(path = "config.properties")
+@LoadConfig()
 public class ConnHandler {
 
     private static String DB_URL;
     private static String DB_ID;
     private static String DB_PW;
     private static String DRIVER;
+    private static final Logger log = Logger.getGlobal();
 
 
     public static void init() {
         try {
+            if (DB_URL == null) {
+                Class.forName("com.deli.deliverypp.util.ConfigLoader");
+            }
             Class.forName(DRIVER);
+            log.info("DB Handler Load Completed");
         } catch (ClassNotFoundException e) {
+            log.info("DB Handler load failed");
             e.printStackTrace();
 
         }
@@ -38,6 +45,9 @@ public class ConnHandler {
     public static Connection getConn() {
         Connection conn = null;
         try {
+            if (DB_URL == null) {
+                init();
+            }
             conn = DriverManager.getConnection(DB_URL, DB_ID, DB_PW);
             conn.setAutoCommit(false);
         }catch (SQLException e){

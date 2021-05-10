@@ -2,6 +2,7 @@ package com.deli.deliverypp.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 public class Store implements Serializable {
 
@@ -15,6 +16,9 @@ public class Store implements Serializable {
     public Store() {
     }
 
+    public void generateStoreId() {
+        this.storeId = UUID.randomUUID().toString();
+    }
 
     public String getStoreAddr() {
         return storeAddr;
