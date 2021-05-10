@@ -35,7 +35,7 @@ $(function(){
 		console.log(productImage)
 		$.ajax({
 			type:"post",
-			url:"http://112.169.196.76:47788/product",
+			url:"http://deli.alconn.co/product",
 			dataType:"json",
 			data:JSON.stringify({"productName":productName, "productPrice":productPrice,"productImage":productImage,"storeId":storeId}),
 			success:function(data){
