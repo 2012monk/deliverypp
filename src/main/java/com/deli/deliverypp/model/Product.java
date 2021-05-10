@@ -1,6 +1,9 @@
 package com.deli.deliverypp.model;
 
+import com.deli.deliverypp.util.ParseUtil;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Product {
@@ -9,11 +12,15 @@ public class Product {
     private String productName;
     private String productImage;
     private String storeId;
-    private String productPrice;
+    private int productPrice;
     private String productDesc;
     private int quantity;
 
     public Product() {
+    }
+
+    public void generateId() {
+        this.productId = UUID.randomUUID().toString();
     }
 
     public String getProductDesc() {
@@ -44,8 +51,9 @@ public class Product {
         return productImage;
     }
 
+    // parse needed
     public void setProductImage(String productImage) {
-        this.productImage = productImage;
+        this.productImage = ParseUtil.parseImgPath(productImage);
     }
 
     public String getStoreId() {
@@ -56,11 +64,11 @@ public class Product {
         this.storeId = storeId;
     }
 
-    public String getProductPrice() {
+    public int getProductPrice() {
         return productPrice;
     }
 
-    public void setProductPrice(String productPrice) {
+    public void setProductPrice(int productPrice) {
         this.productPrice = productPrice;
     }
 

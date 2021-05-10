@@ -6,6 +6,7 @@ import com.deli.deliverypp.auth.google.GoogleAuthentication;
 import com.deli.deliverypp.auth.jwt.JwtTokenProvider;
 import com.deli.deliverypp.model.AuthInfo;
 import com.deli.deliverypp.model.GoogleUser;
+import com.deli.deliverypp.model.ResponseMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -28,6 +29,22 @@ public class UserLoginService {
         return access.registerUser(parseUser(json));
     }
 
+    public boolean signUpSeller (String json) {
+        DeliUser user = null;
+        try {
+            user = parseUser(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (user != null){
+            user.setUserRole(DeliUser.UserRole.SELLER);
+            return access.registerUser(user);
+        }
+
+        return false;
+    }
+
     public boolean userLogin(String json) throws JsonProcessingException {
         return access.loginUser(parseUser(json));
     }
@@ -45,16 +62,6 @@ public class UserLoginService {
         return mapper.readValue(json, DeliUser.class);
     }
 
-
-//    public String generateAuthInfo (String json) throws JsonProcessingException {
-//        DeliUser user = access.signInUser(parseUser(json));
-//
-//        if (user != null) {
-////            return user.getUserEmail();
-//            return setAccess(user);
-//        }
-//        return null;
-//    }
 
     /**
      *
@@ -83,10 +90,47 @@ public class UserLoginService {
 
 
 
-    public void googleAuth(String json) throws IOException {
-        GoogleUser user = GoogleAuthentication.accessGoogleInfo(json);
+    public ResponseMessage googleAuth(String json) {
+        GoogleUser user = null;
+        ResponseMessage msg = new ResponseMessage();
+        AuthInfo info = null;
+        try {
+            user = GoogleAuthentication.accessGoogleInfo(json);
+        } catch (IOException e) {
 
+            e.printStackTrace();
+            return null;
+        }
+
+        DeliUser regUser = access.getUserInfo(user.getEmail());
+
+        DeliUser googleUser = null;
+        // sign up process
+        if (regUser == null) {
+            googleUser = new DeliUser();
+            googleUser.setUserEmail(user.getEmail());
+            googleUser.setUserType(DeliUser.UserType.GOOGLE);
+
+            // user register
+            regUser = access.registerUser(googleUser, true);
+            msg.setCode("signup_required");
+        }
+        try {
+            if (regUser != null){
+                info = generateAuthInfo(regUser);
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        if (info != null) {
+            msg.setMessage("login success");
+            msg.setData(info);
+        }
+        return msg;
     }
+
+
 
 
     public boolean getAuthentication(String jws) {
@@ -103,9 +147,6 @@ public class UserLoginService {
     public void getAuthorized (String jws) {
 
     }
-
-
-
 
     /**
      *
@@ -149,5 +190,18 @@ public class UserLoginService {
         user.setUserType(DeliUser.UserType.valueOf(userType));
         user.setUserEmail(userEmail);
         return user;
+    }
+
+    public boolean updateUser(String json) {
+        try {
+            return access.updateUser(mapper.readValue(json, DeliUser.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deleteUser(String userEmail) {
+        return access.deleteUser(userEmail);
     }
 }
