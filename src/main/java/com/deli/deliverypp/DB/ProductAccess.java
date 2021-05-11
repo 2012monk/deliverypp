@@ -28,7 +28,11 @@ public class ProductAccess {
             ResultSet rs = prst.executeQuery();
 
             while (rs.next()) {
-                list.add(setProduct(rs, new Product()));
+                try {
+                    list.add(setProduct(rs, new Product()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             return list;
@@ -42,14 +46,14 @@ public class ProductAccess {
     }
 
     private Product setProduct (ResultSet rs, Product product) throws SQLException {
-        if (rs.next()){
-            product.setProductId(rs.getString("PRODUCT_ID"));
-            product.setStoreId(rs.getString("STORE_ID"));
-            product.setProductName(rs.getString("PRODUCT_NAME"));
-            product.setProductImage(rs.getString("PRODUCT_IMAGE"));
-            product.setProductPrice(rs.getString("PRODUCT_PRICE"));
-            product.setProductDesc(rs.getString("PRODUCT_DESC"));
-        }
+//        if (rs.next()){
+        product.setProductId(rs.getString("PRODUCT_ID"));
+        product.setStoreId(rs.getString("STORE_ID"));
+        product.setProductName(rs.getString("PRODUCT_NAME"));
+        product.setProductImage(rs.getString("PRODUCT_IMAGE"));
+        product.setProductPrice(rs.getInt("PRODUCT_PRICE"));
+        product.setProductDesc(rs.getString("PRODUCT_DESC"));
+//        }
         return product;
     }
 
@@ -66,6 +70,9 @@ public class ProductAccess {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        finally {
+            close(conn);
+        }
         return null;
     }
 
@@ -80,7 +87,7 @@ public class ProductAccess {
             prst.setString(2, product.getStoreId());
             prst.setString(3, product.getProductName());
             prst.setString(4, product.getProductImage());
-            prst.setString(5, product.getProductPrice());
+            prst.setInt(5, product.getProductPrice());
             prst.setString(6, product.getProductDesc());
 
             if (prst.executeUpdate() > 0) {
@@ -97,11 +104,48 @@ public class ProductAccess {
     }
 
     public boolean updateProduct(Product product) {
+        String sql = "UPDATE PRODUCT SET PRODUCT_DESC=?,PRODUCT_IMAGE=?,PRODUCT_NAME=?,PRODUCT_PRICE=? WHERE PRODUCT_ID=?";
+        conn = getConn();
+        try {
+            PreparedStatement prst = conn.prepareStatement(sql);
+            prst.setString(1, product.getProductDesc());
+            prst.setString(2, product.getProductImage());
+            prst.setString(3, product.getProductName());
+            prst.setInt(4, product.getProductPrice());
+            prst.setString(5, product.getProductId());
+
+            if (prst.executeUpdate() > 0) {
+                conn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            close(conn);
+        }
         return false;
     }
 
 
+
     public boolean deleteProduct(String productId) {
+        String sql = "DELETE FROM PRODUCT WHERE PRODUCT_ID=?";
+        conn = getConn();
+        try {
+            PreparedStatement prst = conn.prepareStatement(sql);
+            prst.setString(1, productId);
+
+            if (prst.executeUpdate() > 0) {
+                conn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            close(conn);
+        }
         return false;
     }
 

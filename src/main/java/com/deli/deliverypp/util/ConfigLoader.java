@@ -1,5 +1,7 @@
 package com.deli.deliverypp.util;
 
+import com.deli.deliverypp.util.annotaions.KeyLoad;
+import com.deli.deliverypp.util.annotaions.LoadConfig;
 import org.reflections.Reflections;
 
 import java.io.BufferedReader;

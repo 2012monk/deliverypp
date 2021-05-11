@@ -50,6 +50,27 @@ public class StoreAccess {
         return store;
     }
 
+    public Store getStoreByName(String storeName) {
+        Store store = new Store();
+        String sql = "SELECT * FROM STORE WHERE STORE_NAME=?";
+        conn = getConn();
+        try {
+            PreparedStatement prst = conn.prepareStatement(sql);
+            prst.setString(1, storeName);
+            ResultSet rs = prst.executeQuery();
+
+            if (rs.next()) {
+                store = rollUpStore(rs, store);
+            }
+            return store;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            close(conn);
+        }
+        return store;
+    }
+
     public Store getStoreById(String storeId) {
         Store store = new Store();
         String sql = "SELECT * FROM STORE WHERE STORE_ID=?";
@@ -97,10 +118,46 @@ public class StoreAccess {
     }
 
     public boolean updateStore (Store store) {
+        String sql = "UPDATE STORE SET STORE_IMAGE=?,STORE_TELEPHONE=?,STORE_DESC=?,STORE_NAME=? WHERE STORE_ID=?";
+        conn = getConn();
+        try {
+            PreparedStatement prst = conn.prepareStatement(sql);
+            prst.setString(1, store.getStoreImage());
+            prst.setString(2, store.getStoreTelephone());
+            prst.setString(3, store.getStoreDesc());
+            prst.setString(4, store.getStoreName());
+            prst.setString(5, store.getStoreId());
+
+            if (prst.executeUpdate() > 0) {
+                conn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            close(conn);
+        }
         return false;
     }
 
     public boolean deleteStore (String storeId) {
+        String sql = "DELETE FROM STORE WHERE STORE_ID=?";
+        conn = getConn();
+        try {
+            PreparedStatement prst = conn.prepareStatement(sql);
+            prst.setString(1, storeId);
+
+            if (prst.executeUpdate() > 0) {
+                conn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            close(conn);
+        }
         return false;
     }
 
