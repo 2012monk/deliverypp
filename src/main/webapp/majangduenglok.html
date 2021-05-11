@@ -45,7 +45,7 @@ $(function(){
 		console.log(storeAddr);
 		$.ajax({
 			type:"post",
-			url:"http://deli.alconn.co/stores",
+			url:"http://112.169.196.76:47788/stores",
 			data:JSON.stringify({"storeName":storeName, "storeDesc":storeDesc, "storeImage":storeImage, "storeAddr":storeAddr}),
 			success:function(data){
 				//alert("success");
@@ -54,7 +54,7 @@ $(function(){
 		});
 	});
 	
-	//아이디 중복체크
+	//매장이름 중복체크
 	$(document).on("click","#idcheckbtn",function(e){
 		e.preventDefault();
 		console.log(this);
@@ -62,7 +62,7 @@ $(function(){
 		console.log(storeName);
 		$.ajax({
 			type:"get",
-			url:"http://deli.alconn.co/stores/check-name/"+storeName,
+			url:"http://112.169.196.76:47788/stores/check-name/"+storeName,
 			success:function(data){
 				console.log(data);
 					if(storeName==JSON.stringify(data.storeName))
@@ -73,6 +73,7 @@ $(function(){
 		});
 		
 	});
+	
 
 });
 </script>
