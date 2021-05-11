@@ -2,6 +2,7 @@ package com.deli.deliverypp.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class Review {
 
@@ -13,6 +14,7 @@ public class Review {
     private String userEmail;
     private String reviewContent;
     private String reviewDate;
+    private List<Reply> replyList;
 
     public Review() {
     }
@@ -90,5 +92,13 @@ public class Review {
     public void setReviewDate(String reviewDate) {
         SimpleDateFormat fmt = new SimpleDateFormat("yy-MM-dd hh-mm");
         this.reviewDate = fmt.format(new Date());
+    }
+
+    public List<Reply> getReplyList() {
+        return replyList;
+    }
+
+    public void setReplyList(List<Reply> replyList) {
+        this.replyList = replyList;
     }
 }

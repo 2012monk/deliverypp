@@ -5,6 +5,7 @@ import com.deli.deliverypp.DB.UserAccess;
 import com.deli.deliverypp.auth.google.GoogleAuthentication;
 import com.deli.deliverypp.auth.jwt.JwtTokenProvider;
 import com.deli.deliverypp.model.AuthInfo;
+import com.deli.deliverypp.model.GoogleToken;
 import com.deli.deliverypp.model.GoogleUser;
 import com.deli.deliverypp.model.ResponseMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,12 +13,15 @@ import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Map;
 
 public class UserLoginService {
 
+    private static final Logger log = LogManager.getLogger(UserLoginService.class);
     private static final JwtTokenProvider provider = new JwtTokenProvider();
     private static final ObjectMapper mapper = new ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -26,7 +30,9 @@ public class UserLoginService {
     private static final UserAccess access = new UserAccess();
 
     public boolean signUpUser (String json) throws JsonProcessingException {
-        return access.registerUser(parseUser(json));
+        DeliUser user = parseUser(json);
+        user.setUserRole(DeliUser.UserRole.CLIENT);
+        return access.registerUser(user);
     }
 
     public boolean signUpSeller (String json) {
@@ -82,7 +88,6 @@ public class UserLoginService {
 
     public AuthInfo generateAuthInfo (DeliUser user) throws JsonProcessingException {
         if (user != null) {
-
             return setAccess(user);
         }
         return null;
@@ -90,44 +95,49 @@ public class UserLoginService {
 
 
 
-    public ResponseMessage googleAuth(String json) {
+    public ResponseMessage<AuthInfo> googleAuth(String json) {
         GoogleUser user = null;
-        ResponseMessage msg = new ResponseMessage();
+        ResponseMessage<AuthInfo> msg = new ResponseMessage<>();
         AuthInfo info = null;
         try {
-            user = GoogleAuthentication.accessGoogleInfo(json);
+            GoogleToken googleToken = mapper.readValue(json, GoogleToken.class);
+            user = GoogleAuthentication.accessGoogleInfo(googleToken);
+            log.info(user);
         } catch (IOException e) {
-
             e.printStackTrace();
             return null;
         }
 
         DeliUser regUser = access.getUserInfo(user.getEmail());
 
-        DeliUser googleUser = null;
         // sign up process
         if (regUser == null) {
-            googleUser = new DeliUser();
-            googleUser.setUserEmail(user.getEmail());
-            googleUser.setUserType(DeliUser.UserType.GOOGLE);
-
-            // user register
-            regUser = access.registerUser(googleUser, true);
-            msg.setCode("signup_required");
+            registerGoogleUser(user);
+            msg.setMessage("register_info_required");
+            msg.setCode("877");
         }
-        try {
-            if (regUser != null){
+        else {
+            try {
                 info = generateAuthInfo(regUser);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                msg.setMessage("generate_auth_failed");
+                msg.setCode("999");
+                return msg;
             }
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
         }
 
-        if (info != null) {
-            msg.setMessage("login success");
-            msg.setData(info);
-        }
+        msg.setMessage("login success");
+        msg.setData(info);
+
         return msg;
+    }
+
+    public boolean registerGoogleUser (GoogleUser googleUser) {
+        DeliUser user = new DeliUser();
+        user.setUserEmail(googleUser.getEmail());
+        user.setUserType(DeliUser.UserType.GOOGLE);
+        return access.registerUser(user);
     }
 
 
@@ -161,7 +171,7 @@ public class UserLoginService {
         auth.setAuth_type("Bearer");
         auth.setAccess_token(token);
         auth.setUser(user);
-        auth.setExp(Long.parseLong((String) provider.getTokenBody(token).get("exp")));
+        auth.setExp(Long.parseLong(String.valueOf(provider.getTokenBody(token).get("exp"))));
         return auth;
     }
 
@@ -186,9 +196,13 @@ public class UserLoginService {
 
         DeliUser user = new DeliUser();
 
-        user.setUserRole(DeliUser.UserRole.valueOf(userRole));
-        user.setUserType(DeliUser.UserType.valueOf(userType));
-        user.setUserEmail(userEmail);
+        try {
+            user.setUserRole(DeliUser.UserRole.valueOf(userRole));
+            user.setUserType(DeliUser.UserType.valueOf(userType));
+            user.setUserEmail(userEmail);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return user;
     }
 

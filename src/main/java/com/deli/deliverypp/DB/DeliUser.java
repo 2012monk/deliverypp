@@ -40,6 +40,24 @@ public class DeliUser {
     private String userPw;
     private UserRole userRole = UserRole.CLIENT;
     private UserType userType = UserType.DELI;
+    private String userAddr;
+    private String userTelephone;
+
+    public String getUserAddr() {
+        return userAddr;
+    }
+
+    public void setUserAddr(String userAddr) {
+        this.userAddr = userAddr;
+    }
+
+    public String getUserTelephone() {
+        return userTelephone;
+    }
+
+    public void setUserTelephone(String userTelephone) {
+        this.userTelephone = userTelephone;
+    }
 
     public String getUserEmail() {
         return userEmail;

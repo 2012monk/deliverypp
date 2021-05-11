@@ -13,6 +13,11 @@ public class ControlUtil {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    /**
+     *
+     * @param response send obj
+     * @param success if true send success else failed
+     */
     public static void responseMsg(HttpServletResponse response, boolean success) {
         response.setContentType("text/html");
         try {
@@ -60,16 +65,24 @@ public class ControlUtil {
         sendResponseData(response, data, "success");
     }
 
-    public static void sendResponseData(HttpServletResponse response, String data, String message)
-            throws IOException {
+    public static void sendResponseData(HttpServletResponse response, String data, String message){
         response.setContentType("application/json");
-        response.getWriter().write(formatJson(message, data));
+        try {
+            response.getWriter().write(formatJson(message, data));
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                response.getWriter().write("failed server error");
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
     }
 
 
 
     // NOTE application/json 으로 설정안하면 한글깨짐
-    public static void sendResponseData(HttpServletResponse response, ResponseMessage msg) {
+    public static void sendResponseData(HttpServletResponse response, ResponseMessage<?> msg) {
         response.setContentType("application/json");
         try {
             response.getWriter().write(mapper.writeValueAsString(msg));
