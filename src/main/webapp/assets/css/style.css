@@ -1,0 +1,77 @@
+* {
+	margin:0px;
+	padding:0;
+	box-sizing:border-box;
+	
+}
+
+a {
+	color:black;
+	text-decoration: none;
+}
+
+a:visited {
+	text-decoration: none;
+}
+
+a:hover {
+	color:black;
+	text-decoration: none;
+}
+
+li {
+	list-style: none;
+}
+
+#index-header {
+	display:flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color:skyblue;
+	padding:10px 12px;
+	
+}
+.navbar-logo{
+	font-size:24px;
+}
+.navbar-menu{
+	display:flex;
+	justify-content: space-between;
+	font-size:18px;
+	padding-left:0;
+}
+
+.navbar-menu li:hover {
+	background-color: gray;
+}
+
+.navbar-menu li {
+	padding:10px 12px;
+}
+
+.navbar-login {
+	display:flex;
+}
+.navbar-login li {
+	padding:10px 12px;
+}
+
+
+/* main-page */
+#main-searchbar {
+	top: 400px;
+	margin: 0 auto;
+	border: 5px solid black;
+	padding: 20px;
+	width: 400px;
+}
+
+#main-storelist {
+	border: 5px solid black;
+	padding: 10px;
+	margin: 20px;
+	top: 600px;
+	width: 700px;
+	height: 300px;
+	margin: 0 auto;
+}
