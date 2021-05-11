@@ -73,6 +73,11 @@ $(function(){
 			type:"post",
 			url:"http://112.169.196.76:47788/order",
 			// url:"http://localhost:47788/order",
+
+			// url:"http://112.169.196.76:47788/order",
+			// url:"http://localhost:47788/order",
+			// url:"https://deli.alconn.co/order",
+
 			data:JSON.stringify(cart_pay),
 			dataType:"json",
 			success:function(data){
@@ -98,7 +103,8 @@ $(function(){
 //상품리스트
 	$.ajax({
 		type:"get",
-		url:"http://112.169.196.76:47788/products/list/stid3",
+//		url:"http://112.169.196.76:47788/products/list/stid3",
+		url:"http://deli.alconn.co/products/list/stid3",
 		dataType:"json",
 		success:function(data){
 			var s="";
@@ -394,3 +400,12 @@ function kakaoPopUp (uri) {
 function kakaoHide() {
 	$("#kakao-modal").modal('hide');
 } 
+
+window.addEventListener("message", function (e){
+	console.log(e);
+	console.log(e.data)
+	if (e.msg === "kakao"){
+		success(e.data);
+		kakaoHide();
+	}
+})

@@ -57,8 +57,6 @@ public class OrderController extends HttpServlet {
             msg.setData(e.getMessage());
         }
 
-//        if (msg != null) {
-//        }
         log.info(msg.getData());
 
         try {

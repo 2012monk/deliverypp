@@ -51,27 +51,40 @@ public class CORSFilter implements Filter {
 //        rq.getServletContext().setResponseCharacterEncoding("UTF-8");
 //        rq.getServletContext().setResponseCharacterEncoding("UTF-8");
 
-        String optionRes = "OPTIONS, GET, POST, HEAD";
-        if (rq.getMethod().equals("OPTION")) {
+        log.info(rq.getRemoteAddr()+"   port :   " + rq.getRemotePort());
+
+        String local = "http://localhost:47788";
+        String optionRes = "OPTIONS, GET, POST, HEAD, DELETE, PUT";
+        // TODO options header request intercepted after the filter fix me
+//        log.info(rq.getMethod());
+        if (rq.getMethod().equals("OPTIONS")) {
+            log.info(rq.getMethod());
             rs.setHeader("Allow", optionRes);
+            rs.setHeader("Access-Control-Allow-Origin", local);
+            rs.setHeader("Access-Control-Allow-Methods", optionRes);
+            rs.setStatus(200);
+            rs.getWriter().close();
         }
 
 
-        if (rq.getHeader("origin") != null) {
+        else if (rq.getHeader("origin") != null) {
             Enumeration<String> e = rq.getHeaderNames();
             while (e.hasMoreElements()){
                 String s = e.nextElement();
-//                log.debug(s+"  :  "+rq.getHeader(s));
+//                log.info(s+"  :  "+rq.getHeader(s));
             }
 
-            String local = "http://localhost:47788";
             rs.setHeader("Access-Control-Allow-Credentials", "true");
-            rs.setHeader("Access-Control-Allow-Origin", local);
-            rs.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+//            rs.setHeader("Access-Control-Allow-Origin", local);
+            rs.setHeader("Access-Control-Allow-Origin", "*");
+            rs.setHeader("Access-Control-Allow-Methods", optionRes);
+            rs.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, Accept, X-Requested-With, remember-me,");
             rs.setHeader("Access-Control-Max-Age", "3600");
-            rs.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept, X-Requested-With, remember-me");
+            filterChain.doFilter(servletRequest, servletResponse);
+        }else{
+            filterChain.doFilter(servletRequest, servletResponse);
+
         }
-        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override

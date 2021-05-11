@@ -8,13 +8,16 @@
 <div style="text-align: center;">
     <h1>카카오 결제 성공 페이지 입니다!</h1>
 </div>
+<div class="msg">
+
+</div>
 </body>
 
 <script>
     // TODO kakao 결제시 polling 전에 결제끝내면 리다이렉트 안되는 버그!
-    alert('hihi')
+    // alert('hihi')
     window.onload = () => {
-        alert('hi')
+        alert('success')
         console.log(location.search);
         const map = location.search.substr(1).split('&');
         console.log(map);
@@ -26,14 +29,20 @@
                   const data = new URLSearchParams();
                   data.append(k, val);
                   fetch("http://localhost:47788/payment/kakao/success",
+                  // fetch("https://deli.alconn.co/payment/kako/success",
                       {
                           method : "POST",
                           body: data
                       })
-                      .then(r => r.text())
+                      .then(r => r.json())
                       .then(d => {
-                          parent.success(d);
-                          parent.kakaoHide();
+                          d.msg = "kakao";
+                          parent.postMessage(d,"*");
+                          try{
+                            parent.success(d);
+                            parent.kakaoHide();
+                          }catch (err) {
+                          }
                 })
               }
             })

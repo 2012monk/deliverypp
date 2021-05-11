@@ -48,16 +48,13 @@ public class StoreService {
     }
 
 
-    public Store getStoreByName (String storeName) {
-        return null;
-    }
-
 
     public boolean insertProductService (String json) {
         Product product = null;
         log.info(json);
         try {
             product = mapper.readValue(json, Product.class);
+            product.generateId();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -103,5 +100,42 @@ public class StoreService {
         return "";
     }
 
+
+    public boolean deleteStore(String storeId) {
+        return storeAccess.deleteStore(storeId);
+    }
+
+    public boolean updateStore(String json){
+        try {
+            return storeAccess.updateStore(mapper.readValue(json, Store.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public String getStoreByName(String storeName) {
+        try {
+            return mapper.writeValueAsString(storeAccess.getStoreByName(storeName));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+
+        }
+    }
+
+    public boolean deleteProduct(String productId) {
+        return productAccess.deleteProduct(productId);
+    }
+
+    public boolean updateProduct (String json) {
+        try {
+            return productAccess.updateProduct(mapper.readValue(json, Product.class));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 }

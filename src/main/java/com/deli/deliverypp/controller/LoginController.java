@@ -47,7 +47,7 @@ public class LoginController extends HttpServlet {
                 checkId(request, response);
                 break;
             case "google":
-                googleLogin(request, response);
+                proceedWithGoogle(request, response);
                 break;
             case "exchange":
                 exchangeToken(request, response);
@@ -70,6 +70,7 @@ public class LoginController extends HttpServlet {
     }
 
 
+
     private void checkId (HttpServletRequest request, HttpServletResponse response) throws IOException {
         String id = ControlUtil.getRequestUri(request, 2);
         ResponseMessage msg = new ResponseMessage();
@@ -79,6 +80,8 @@ public class LoginController extends HttpServlet {
     }
 
 
+
+    // TODO set exp time with options
     private void setRefreshToken(HttpServletResponse response, String token) {
 //        String refreshToken = service
         Cookie authCookie = new Cookie("SID", token);
@@ -87,6 +90,7 @@ public class LoginController extends HttpServlet {
         authCookie.setMaxAge(60 * 60 * 24 * 7); // 7days
         response.addCookie(authCookie);
     }
+
 
     private void invalidateAuth (HttpServletRequest request,HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
@@ -99,9 +103,13 @@ public class LoginController extends HttpServlet {
         }
     }
 
-    public void googleLogin (HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // NOTE sign up and login integration
+    public void proceedWithGoogle(HttpServletRequest request, HttpServletResponse response) throws IOException {
         System.out.println(ControlUtil.getJson(request));
+
+        // NOTE DB query to check if user exist
         service.googleAuth(ControlUtil.getJson(request));
+
     }
 
     public void exchangeToken (HttpServletRequest request, HttpServletResponse response) throws IOException {
