@@ -87,6 +87,10 @@ public class ReviewAccess {
         return null;
     }
 
+    public List<Review> getReviewsByStore (String storeId) {
+        return null;
+    }
+
 
 
     public Review getReview (String reviewId) {

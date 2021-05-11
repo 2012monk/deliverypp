@@ -25,11 +25,15 @@ public class MappingLoader {
     public static Map<String , DeliUser.UserRole> protectedUriProperties;
     private static final Logger log = Logger.getGlobal();
     static {
-        load();
+        try {
+            load();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         log.info("Mapping Load Complete");
     }
 
-    private static void load() throws IllegalAnnotationException{
+    private static void load() {
         Reflections reflections = new Reflections("com.deli.deliverypp",
                 new SubTypesScanner(),
                 new TypeAnnotationsScanner(),
