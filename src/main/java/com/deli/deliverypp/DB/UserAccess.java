@@ -109,12 +109,45 @@ public class UserAccess {
     }
 
     public boolean updateUser (DeliUser user) {
+        String sql = "UPDATE USER SET USER_ADDR=?,USER_ROLE=?,USER_TELEPHONE=? WHERE USER_EMAIL=?";
+        conn = getConn();
+        try {
+            PreparedStatement prst = conn.prepareStatement(sql);
+            prst.setString(1, user.getUserAddr());
+            prst.setString(2, user.getUserRole().name());
+            prst.setString(3, user.getUserTelephone());
+            prst.setString(4, user.getUserEmail());
 
+            if (prst.executeUpdate() > 0) {
+                conn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            close(conn);
+        }
         return false;
     }
 
-    public boolean deleteUser (String userId) {
+    public boolean deleteUser (String userEmail) {
+        String sql = "DELETE FROM USER WHERE USER_EMAIL=?";
+        conn = getConn();
+        try {
+            PreparedStatement prst = conn.prepareStatement(sql);
+            prst.setString(1, userEmail);
 
+            if (prst.executeUpdate() > 0) {
+                conn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            close(conn);
+        }
         return false;
     }
 

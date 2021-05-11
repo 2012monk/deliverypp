@@ -44,21 +44,57 @@ public class ReviewAccess {
     }
 
     public Review updateReview (Review review) {
+        String sql = "UPDATE REVIEW SET  REVIEW_CONTENT=?,REVIEW_IMAGE=?, REVIEW_RATING=? WHERE REVIEW_ID=?";
+        conn = getConn();
+        try {
+            PreparedStatement prst = conn.prepareStatement(sql);
+            prst.setString(1, review.getReviewId());
 
+            if (prst.executeUpdate() > 0) {
+                conn.commit();
+                return review;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            close(conn);
+        }
         return null;
     }
 
     public boolean deleteReview (String reviewId) {
+        String sql = "DELETE FROM REVIEW WHERE REVIEW_ID=?";
+        conn = getConn();
+        try {
+            PreparedStatement prst = conn.prepareStatement(sql);
+            prst.setString(1, reviewId);
 
+            if (prst.executeUpdate() > 0) {
+                conn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            close(conn);
+        }
         return false;
     }
 
+    // NOTE 수정가능성있음 테스트코드 작성 필요!
     public List<Review> getReviewsByKey (@FindColumn(target = Review.class) String key, String value) {
         try {
             Field f = Review.class.getField(key);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
+            return null;
         }
+
+        if (key.equals("storeId")){
+            return getReviewsByStore(value);
+        }
+
         List<Review> list = new ArrayList<>();
         String dbKey = convertToDbNameConvention(key);
         String sql = "SELECT * FROM REVIEW WHERE " + dbKey+"=?";
@@ -76,9 +112,13 @@ public class ReviewAccess {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        finally {
+            close(conn);
+        }
         return null;
     }
 
+    // writer , store id , review id
     public Review getReviewByKey (@FindColumn(target = Review.class) String key, String value) {
         List<Review> list = getReviewsByKey(key, value);
         if (list !=null && !list.isEmpty()) {
@@ -88,6 +128,25 @@ public class ReviewAccess {
     }
 
     public List<Review> getReviewsByStore (String storeId) {
+        List<Review> list = new ArrayList<>();
+        String sql = "SELECT * FROM REVIEW WHERE STORE_ID=?";
+        conn = getConn();
+        try {
+            PreparedStatement prst = conn.prepareStatement(sql);
+            prst.setString(1, storeId);
+            ResultSet rs = prst.executeQuery();
+            while (rs.next()) {
+                try {
+                    list.add(setPOJO(Review.class, rs));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -97,6 +156,8 @@ public class ReviewAccess {
 
         return null;
     }
+
+
 
 
 

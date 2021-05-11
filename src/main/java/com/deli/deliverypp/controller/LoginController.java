@@ -32,7 +32,6 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        invalidateAuth(request, response);
     }
 
 
@@ -43,9 +42,6 @@ public class LoginController extends HttpServlet {
         System.out.println(request.getRequestURL().toString());
 
         switch (ControlUtil.getRequestUri(request)) {
-            case "id-check":
-                checkId(request, response);
-                break;
             case "google":
                 proceedWithGoogle(request, response);
                 break;
@@ -104,11 +100,10 @@ public class LoginController extends HttpServlet {
     }
 
     // NOTE sign up and login integration
-    public void proceedWithGoogle(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println(ControlUtil.getJson(request));
+    public void proceedWithGoogle(HttpServletRequest request, HttpServletResponse response)  {
 
         // NOTE DB query to check if user exist
-        service.googleAuth(ControlUtil.getJson(request));
+        ControlUtil.sendResponseData(response, service.googleAuth(ControlUtil.getJson(request)));
 
     }
 
@@ -117,19 +112,22 @@ public class LoginController extends HttpServlet {
                 .stream(request.getCookies())
                 .filter(c -> c.getName().equals("SID"))
                 .collect(Collectors.toList()).get(0);
+
+
         if (refreshCookie != null && provider.checkRefreshToken(refreshCookie.getValue())) {
             String token = refreshCookie.getValue();
             DeliUser user = service.parseUserFromRefreshToken(token);
 
             AuthInfo info = service.generateAuthInfo(user);
-            ResponseMessage msg = authInfoMsg(info);
+
+            ResponseMessage<AuthInfo> msg = authInfoMsg(info);
             msg.setMessage("exchange success");
             ControlUtil.sendResponseData(response, msg);
         }
     }
 
-    private ResponseMessage authInfoMsg(AuthInfo authInfo) {
-        ResponseMessage msg = new ResponseMessage();
+    private ResponseMessage<AuthInfo> authInfoMsg(AuthInfo authInfo) {
+        ResponseMessage<AuthInfo> msg = new ResponseMessage<>();
         if (authInfo != null) {
             msg.setMessage("Login Success");
             msg.setData(authInfo);

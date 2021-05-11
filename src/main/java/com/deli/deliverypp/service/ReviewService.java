@@ -1,6 +1,8 @@
 package com.deli.deliverypp.service;
 
+import com.deli.deliverypp.DB.ReplyAccess;
 import com.deli.deliverypp.DB.ReviewAccess;
+import com.deli.deliverypp.model.Reply;
 import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.model.Review;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +14,7 @@ public class ReviewService {
 
     private static final ReviewAccess access = new ReviewAccess();
     private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ReplyAccess replyAccess = new ReplyAccess();
 
     public boolean insertNewReview (String json) {
         return false;
@@ -45,24 +48,31 @@ public class ReviewService {
 
     public ResponseMessage<Review> getReviewById (String reviewId) {
         Review review = access.getReviewByKey("reviewId", reviewId);
+        review.setReplyList(replyAccess.getRepliesBiReview(reviewId));
         return makeMsg(review);
     }
 
     public ResponseMessage<List<Review>> getReviewsByStore (String storeId) {
         List<Review> list = access.getReviewsByKey("storeId", storeId);
+        for (Review r: list) {
+            List<Reply> replies = replyAccess.getRepliesBiReview(r.getReviewId());
+            r.setReplyList(replies);
+        }
         return makeMsg(list);
     }
 
     public ResponseMessage<List<Review>> getReviewsByWriter (String writer) {
         List<Review> list = access.getReviewsByKey("userEmail", writer);
+        for (Review r: list) {
+            List<Reply> replies = replyAccess.getRepliesBiReview(r.getReviewId());
+            r.setReplyList(replies);
+        }
         return makeMsg(list);
     }
 
 
-    //
+    // fill me
     public ResponseMessage<Review> getReviewsByOptions(Map<String, String[]> parameterMap){
-
-
         return null;
     }
 
@@ -80,6 +90,7 @@ public class ReviewService {
     public <T> ResponseMessage<T> makeMsg(T data) {
         return new ResponseMessage<T>(data == null ? "failed" : "success", data);
     }
+
 
 
 }
