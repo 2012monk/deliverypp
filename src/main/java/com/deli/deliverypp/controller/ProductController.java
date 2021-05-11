@@ -61,8 +61,7 @@ public class ProductController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
-
+        ControlUtil.responseMsg(resp, service.updateProduct(ControlUtil.getJson(req)));
     }
 
 
@@ -70,8 +69,10 @@ public class ProductController extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
-
+        System.out.println("slakdfjalkdsjf");
+        System.out.println(ControlUtil.getRequestUri(req, 1));
+//        System.out.println(ControlUtil.getRequestUri(req, 2));
+        ControlUtil.responseMsg(resp, service.deleteProduct(ControlUtil.getRequestUri(req, 1)));
     }
 
 

@@ -36,6 +36,13 @@ public class UserAccess {
 
     }
 
+    public DeliUser registerUser(DeliUser user, boolean getInfo) {
+        if (getInfo && registerUser(user)){
+            return user;
+        }
+        return null;
+    }
+
 
     public boolean loginUser (DeliUser user) {
         DeliUser savedUser = getUserInfo(user.getUserEmail());
@@ -91,7 +98,7 @@ public class UserAccess {
             close(conn);
         }
 
-        return user;
+        return null;
     }
 
     public DeliUser signInUser (DeliUser user) {
@@ -99,6 +106,16 @@ public class UserAccess {
             return user;
         }
         return null;
+    }
+
+    public boolean updateUser (DeliUser user) {
+
+        return false;
+    }
+
+    public boolean deleteUser (String userId) {
+
+        return false;
     }
 
 

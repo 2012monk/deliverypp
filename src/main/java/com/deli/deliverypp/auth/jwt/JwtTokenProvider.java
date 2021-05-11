@@ -31,7 +31,7 @@ public class JwtTokenProvider {
 
 
 
-    public Jws<Claims> validateToken(String jws){
+    public Jws<Claims> getClaims(String jws){
         try {
             return Jwts
                     .parserBuilder()
@@ -48,12 +48,12 @@ public class JwtTokenProvider {
     }
 
     public Map<String ,Object> getTokenBody(String jws) {
-        Jws<Claims> claimsJws = validateToken(jws);
+        Jws<Claims> claimsJws = getClaims(jws);
         return claimsJws.getBody();
     }
 
     public Map<String, Object> getRefreshTokenBody(String jws) {
-        return validateRefreshToken(jws).getBody();
+        return getClaimsFromRefresh(jws).getBody();
     }
 
 
@@ -106,7 +106,7 @@ public class JwtTokenProvider {
     }
 
 
-    public Jws<Claims> validateRefreshToken (String jws) {
+    public Jws<Claims> getClaimsFromRefresh (String jws) {
         try {
             return Jwts
                     .parserBuilder()
@@ -120,6 +120,26 @@ public class JwtTokenProvider {
 
         }
         return null;
+    }
+
+    public boolean validateToken (String jws) {
+        try{
+            validateToken(jws);
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean validateRefreshToken (String jws) {
+        try {
+            getClaimsFromRefresh(jws);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 

@@ -13,8 +13,19 @@ public class ControlUtil {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    public static void responseMsg(HttpServletResponse response, boolean success) throws IOException {
-        response.getWriter().write(success ? "SUCCESS" : "FAILED");
+    public static void responseMsg(HttpServletResponse response, boolean success) {
+        response.setContentType("text/html");
+        try {
+            response.getWriter().write(success ? "SUCCESS" : "FAILED");
+        } catch (Exception e) {
+            e.printStackTrace();
+            try{
+                response.getWriter().write("failed server error");
+
+            }catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
     }
 
     public static String getRequestUri(HttpServletRequest rq, int num) {
@@ -58,9 +69,18 @@ public class ControlUtil {
 
 
     // NOTE application/json 으로 설정안하면 한글깨짐
-    public static void sendResponseData(HttpServletResponse response, ResponseMessage msg) throws IOException {
+    public static void sendResponseData(HttpServletResponse response, ResponseMessage msg) {
         response.setContentType("application/json");
-        response.getWriter().write(mapper.writeValueAsString(msg));
+        try {
+            response.getWriter().write(mapper.writeValueAsString(msg));
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                response.getWriter().write("failed server error");
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
     }
 
 
