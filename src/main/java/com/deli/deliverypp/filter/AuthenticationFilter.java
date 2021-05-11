@@ -62,7 +62,7 @@ public class AuthenticationFilter implements Filter {
         // TODO 요청이 2번씩 들어감 왜?
 
         // check if resource protected
-        if (resources.get(fullUri) != null) {
+        if (resources != null && resources.get(fullUri) != null) {
             log.info(resources.get(fullUri));
 
             String token = getToken(rq);

@@ -60,7 +60,7 @@ public class CORSFilter implements Filter {
         if (rq.getMethod().equals("OPTIONS")) {
             log.info(rq.getMethod());
             rs.setHeader("Allow", optionRes);
-            rs.setHeader("Access-Control-Allow-Origin", local);
+            rs.setHeader("Access-Control-Allow-Origin", "*");
             rs.setHeader("Access-Control-Allow-Methods", optionRes);
             rs.setStatus(200);
             rs.getWriter().close();

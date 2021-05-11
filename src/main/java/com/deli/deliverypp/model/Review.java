@@ -6,6 +6,7 @@ import java.util.Date;
 public class Review {
 
     private String storeId;
+    private String storeName;
     private String reviewId;
     private int reviewRating;
     private String reviewImage;
@@ -24,6 +25,14 @@ public class Review {
         this.userEmail = userEmail;
         this.reviewContent = reviewContent;
         this.reviewDate = reviewDate;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     public String getStoreId() {
