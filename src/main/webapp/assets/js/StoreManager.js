@@ -45,22 +45,10 @@ Order JSON 포맷
   }
  * 
  */
-$(function(){
 
-//주문리스트
-$("button#order").click(function(){
-	// ajax에서 데이터 받아와서 처리
-	/*
-	$.ajax({
-		type:"post",
-		dataType:"json",
-		url:"http://112.169.196.76:47788/",
-	})
-	
-	
-	*/
-	
-	
+
+function orderListPage(userEmail){
+	// userEmail 계정에서 소유한 주문리스트 샘플데이터
 	var order_list = {
 		"order1":
 	{
@@ -159,10 +147,29 @@ $("button#order").click(function(){
 		}
 	
 		// 주문리스트 띄울 div 태그 지정
-		$("div#body").html(s);
+		$("body").html(s);
 	}
 
 	orderList(order_list);
+}
+
+$(function(){
+
+//주문리스트
+$("button#order").click(function(){
+	// ajax에서 데이터 받아와서 처리
+	/*
+	$.ajax({
+		type:"post",
+		dataType:"json",
+		url:"http://112.169.196.76:47788/",
+	})
+	
+	
+	*/
+	
+	
+	
 })
 
 

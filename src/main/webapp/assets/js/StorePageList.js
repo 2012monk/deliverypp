@@ -1,101 +1,45 @@
-$(function(){
+// 가게 상세 출력 : $("#storecus-storelist-detail").html(s);
+// 상품리스트 출력 : $("#storecus-productlist").html(s);
+// 장바구니 모달창 띄움 $("#myModal").modal();
+// 장바구니 cartmain 출력 $("div#test").html(s);
+// 장바구니 cartmain2 출력 $("div#test2").html(s);
 
-	$(document).on("click","button.cart-add",function(){
-		console.log("추가버튼");
-		var cart_list = JSON.parse(localStorage.getItem("cartList"));
-		var product = $(this).val();
+// 카카오 모달창 출력
+// function kakaoPopUp (uri) {
+// 	$("#myModal").modal('hide');
+// 	$("#kakao-modal").modal()
+// 	$('.kakao-inner').attr('src', uri);
+// }
 
-		var cart = {};
-		cart.productName = product;
-		cart.productPrice = cart_list[product].productPrice;
-		CartAdd(cart);
-		CartMain();
-	})
-	
-	$(document).on("click","button.cart-delete",function(){
-		console.log("삭제버튼");
-		var cart_list = JSON.parse(localStorage.getItem("cartList"));
-		var product = $(this).val();
+function cartPage(){
 
-		var cart = {};
-		cart.productName = product;
-		cart.productPrice = cart_list[product].productPrice;
-		CartRemoveOne(cart);
-		CartMain();
-		//alert(product_name+"_"+price+"_"+quantity);
-	})
-	
-	$(document).on("click","button.cart-delete-line",function(){
-		console.log("한줄삭제버튼");
-		var cart_list = JSON.parse(localStorage.getItem("cartList"));
-		var product = $(this).val();
+	var s = "";
+	s+="<div class='onsuccess-msg'>";
 
-		var cart = {};
-		cart.productName = product;
-		cart.productPrice = cart_list[product].productPrice;
-		CartRemoveLine(cart);
-		CartMain();
-		//alert(product_name+"_"+price+"_"+quantity);
-	})
-	
-	$(document).on("click","button.cart-clear",function(){
-		console.log("장바구니비움버튼");
-		CartRemoveAll();
-		alert("장바구니를 비웠습니다");
-	})
-	
-	$(document).on("click","button.cart-order",function(){
-		console.log("장바구니 결제하기 버튼");
-		var cart_pay = {}
-		cart_pay.storeId = localStorage.getItem("cartStoreId");
-		cart_pay.storeName = localStorage.getItem("cartStore");
-		//quantity 계산 할 것
-		
-		var cart_local_list = JSON.parse(localStorage.getItem("cartList"));
-		var cart_pay_list = [];
-		var cart_count = 0;
-		for(var one in cart_local_list)
-		{
-			cart_pay_list.push(cart_local_list[one]);
-			cart_count += parseInt(cart_local_list[one].quantity);
-		}
-		cart_pay.quantity = cart_count.toString();
-		cart_pay.totalPrice = localStorage.getItem("cartPrice");
-		cart_pay.orderList = cart_pay_list;
-		cart_pay.address = $(this).parent().find("#address").val();
-		cart_pay.telephone = $(this).parent().find("#telephone").val();
-		cart_pay.orderRequirement = $(this).parent().find("#orderRequirement").val();
-		cart_pay.paymentType = $(this).parent().find("#paymentType").val();
-		
-		alert(JSON.stringify(cart_pay));
-		
-		$.ajax({
-			type:"post",
-			url:"http://112.169.196.76:47788/order",
-			// url:"http://localhost:47788/order",
-			data:JSON.stringify(cart_pay),
-			dataType:"json",
-			success:function(data){
-				//alert("성공:"+JSON.stringify(data)+"__"+data.data.redirect_url);
-				var url = data.data.redirect_url;
-				//window.open(url);
-				//location.href=url;
-				kakaoPopUp(url);
-			}
-		})
-		
-	})
-	
-	
-	
-	$("button#myBtn").click(function(){
-		console.log("로그인버튼");
-		CartMain();
-	})
+	s+="</div><div id='kakao-modal' class='modal fade' tabindex='-1'  aria-hidden='true'>";
+    s+="<div class='modal-dialog' role='document'><div class='modal-content'>";
+    s+="<iframe src='' class='kakao-inner' style='width: 100%;height: 100%;' ></iframe>";
+	s+="</div></div></div>";
 
 
+	s+="<div class='container'><h2>장바구니 테스트55</h2>";
+  	s+="<button type='button' class='btn btn-default btn-lg' id='myBtn'>장바구니</button>";
+	s+="<div class='modal fade' id='myModal' role='dialog'><div class='modal-dialog'>";
+    s+="<div class='modal-content'><div class='modal-header' style='padding:35px 50px;'>";
+	s+="<button type='button' class='close' data-dismiss='modal'>&times;</button>";
+    s+="<h2 style='font-weight:bold;'><span class='glyphicon glyphicon-shopping-cart'></span> 장바구니</h2></div>";
+        
+	s+="<div class='modal-body' style='padding:40px 50px;'>";
+    s+="<div id='test'></div><div id='test2'></div></div>";
+    s+="<div class='modal-footer' style='padding:20px 20px;'>test2</div>";
+    s+="</div></div></div></div>";
 
-//상품리스트
+	s+="<div id='storecus-header'></div><div id='storecus-btn-crud'></div>";
+	s+="<div id='storecus-storelist-detail'></div><div id='storecus-productlist'></div>";
+	s+="<div id='storecus-btn-order'></div>";
+	$("body").html(s);
+
+	//상품리스트
 	$.ajax({
 		type:"get",
 		url:"http://112.169.196.76:47788/products/list/stid3",
@@ -129,8 +73,95 @@ $(function(){
 			$("#storecus-storelist-detail").html(s);
 		}
 	});
-});
 
+}
+
+
+$(document).on("click","button.cart-add",function(){
+	console.log("추가버튼");
+	var cart_list = JSON.parse(localStorage.getItem("cartList"));
+	var product = $(this).val();
+
+	var cart = {};
+	cart.productName = product;
+	cart.productPrice = cart_list[product].productPrice;
+	CartAdd(cart);
+	CartMain();
+})
+
+$(document).on("click","button.cart-delete",function(){
+	console.log("삭제버튼");
+	var cart_list = JSON.parse(localStorage.getItem("cartList"));
+	var product = $(this).val();
+
+	var cart = {};
+	cart.productName = product;
+	cart.productPrice = cart_list[product].productPrice;
+	CartRemoveOne(cart);
+	CartMain();
+	//alert(product_name+"_"+price+"_"+quantity);
+})
+
+$(document).on("click","button.cart-delete-line",function(){
+	console.log("한줄삭제버튼");
+	var cart_list = JSON.parse(localStorage.getItem("cartList"));
+	var product = $(this).val();
+
+	var cart = {};
+	cart.productName = product;
+	cart.productPrice = cart_list[product].productPrice;
+	CartRemoveLine(cart);
+	CartMain();
+	//alert(product_name+"_"+price+"_"+quantity);
+})
+
+$(document).on("click","button.cart-clear",function(){
+	console.log("장바구니비움버튼");
+	CartRemoveAll();
+	alert("장바구니를 비웠습니다");
+})
+
+$(document).on("click","button.cart-order",function(){
+	console.log("장바구니 결제하기 버튼");
+	var cart_pay = {}
+	cart_pay.storeId = localStorage.getItem("cartStoreId");
+	cart_pay.storeName = localStorage.getItem("cartStore");
+	//quantity 계산 할 것
+	
+	var cart_local_list = JSON.parse(localStorage.getItem("cartList"));
+	var cart_pay_list = [];
+	var cart_count = 0;
+	for(var one in cart_local_list)
+	{
+		cart_pay_list.push(cart_local_list[one]);
+		cart_count += parseInt(cart_local_list[one].quantity);
+	}
+	cart_pay.quantity = cart_count.toString();
+	cart_pay.totalPrice = localStorage.getItem("cartPrice");
+	cart_pay.orderList = cart_pay_list;
+	cart_pay.address = $(this).parent().find("#address").val();
+	cart_pay.telephone = $(this).parent().find("#telephone").val();
+	cart_pay.orderRequirement = $(this).parent().find("#orderRequirement").val();
+	cart_pay.paymentType = $(this).parent().find("#paymentType").val();
+	
+	alert(JSON.stringify(cart_pay));
+	
+	$.ajax({
+		type:"post",
+		url:"http://112.169.196.76:47788/order",
+		// url:"http://localhost:47788/order",
+		data:JSON.stringify(cart_pay),
+		dataType:"json",
+		success:function(data){
+			//alert("성공:"+JSON.stringify(data)+"__"+data.data.redirect_url);
+			var url = data.data.redirect_url;
+			//window.open(url);
+			//location.href=url;
+			kakaoPopUp(url);
+		}
+	})
+	
+})
 
 function CartMain(){
 	console.log("CartMain()실행");
