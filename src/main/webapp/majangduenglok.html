@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<title>Document</title>
+<script type="text/javascript">
+$(function(){
+	//매장 등록 폼
+	var s="";
+	$(document).on("click","#storesign", function(){
+		s+="<form id='mdform'>";
+		s+="<input type='hidden' id='storeId' value=''>";
+		s+="<table>";
+		s+="<caption><b>매장등록</b></caption>";
+		s+="<tr><td>매장명</td><td><input type='text' name='storeName' required></td><td><button id='idcheckbtn'>중복확인</button></td></tr>";
+		s+="<tr><td>매장소개</td><td><textarea name='storeDesc' required></textarea></td></tr>";
+		s+="<tr><td>매장사진</td><td><input type='text' name='storeImage' required></td></tr>";
+		s+="<tr><td>매장주소</td><td><input type='text' name='storeAddr' required></td></tr>";
+		s+="<tr><td colspan='2' align='center'><button>등록 완료</button></td></tr>";
+		s+="</table>";
+		s+="</form>";
+		$("#show").html(s);
+	});
+	
+	//매장 등록
+	$(document).on("submit", "form", function(e){
+		e.preventDefault();
+		console.log(this);
+		var storeName = $(this).find('input[name="storeName"]').val();
+		var storeDesc = $(this).find('textarea[name="storeDesc"]').val();
+		var storeImage = $(this).find('input[name="storeImage"]').val();
+		var storeAddr = $(this).find('input[name="storeAddr"]').val();
+		var storeId = $(this).find('input[id="storeId"]').val();
+		console.log(storeName);
+		console.log(storeDesc);
+		console.log(storeImage);
+		console.log(storeAddr);
+		$.ajax({
+			type:"post",
+			url:"http://112.169.196.76:47788/stores",
+			data:JSON.stringify({"storeName":storeName, "storeDesc":storeDesc, "storeImage":storeImage, "storeAddr":storeAddr}),
+			success:function(data){
+				//alert("success");
+				console.log(data);
+			}
+		});
+	});
+	
+	//매장이름 중복체크
+	$(document).on("click","#idcheckbtn",function(e){
+		e.preventDefault();
+		console.log(this);
+		var storeName = $("#mdform").find('input[name="storeName"]').val();
+		console.log(storeName);
+		$.ajax({
+			type:"get",
+			url:"http://112.169.196.76:47788/stores/check-name/"+storeName,
+			success:function(data){
+				console.log(data);
+					if(storeName==JSON.stringify(data.storeName))
+						alert("이미 존재하는 매장명입니다.");
+					else
+						alert("사용 가능한 매장명입니다.");
+			}
+		});
+		
+	});
+	
+
+});
+</script>
+</head>
+
+<body>
+<button id="storesign">매장등록하기</button>
+
+<div id="show">show</div>
+</body>
+
+</html>
