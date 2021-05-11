@@ -22,7 +22,7 @@ $(function(){
 		cart.productPrice = cart_list[product].productPrice;
 		CartRemoveOne(cart);
 		CartMain();
-		//alert(product_name+"_"+price+"_"+entity);
+		//alert(product_name+"_"+price+"_"+quantity);
 	})
 	
 	$(document).on("click","button.cart-delete-line",function(){
@@ -35,7 +35,7 @@ $(function(){
 		cart.productPrice = cart_list[product].productPrice;
 		CartRemoveLine(cart);
 		CartMain();
-		//alert(product_name+"_"+price+"_"+entity);
+		//alert(product_name+"_"+price+"_"+quantity);
 	})
 	
 	$(document).on("click","button.cart-clear",function(){
@@ -57,7 +57,7 @@ $(function(){
 		for(var one in cart_local_list)
 		{
 			cart_pay_list.push(cart_local_list[one]);
-			cart_count += parseInt(cart_local_list[one].entity);
+			cart_count += parseInt(cart_local_list[one].quantity);
 		}
 		cart_pay.quantity = cart_count.toString();
 		cart_pay.totalPrice = localStorage.getItem("cartPrice");
@@ -71,17 +71,21 @@ $(function(){
 		
 		$.ajax({
 			type:"post",
+			url:"http://112.169.196.76:47788/order",
+			// url:"http://localhost:47788/order",
+
 			// url:"http://112.169.196.76:47788/order",
-			url:"http://localhost:47788/order",
+			// url:"http://localhost:47788/order",
 			// url:"https://deli.alconn.co/order",
+
 			data:JSON.stringify(cart_pay),
 			dataType:"json",
 			success:function(data){
 				//alert("성공:"+JSON.stringify(data)+"__"+data.data.redirect_url);
 				var url = data.data.redirect_url;
-				// window.open(url);
-				// location.href=url;
-				kakaoPopUp(url)
+				//window.open(url);
+				//location.href=url;
+				kakaoPopUp(url);
 			}
 		})
 		
@@ -99,6 +103,7 @@ $(function(){
 //상품리스트
 	$.ajax({
 		type:"get",
+//		url:"http://112.169.196.76:47788/products/list/stid3",
 		url:"http://deli.alconn.co/products/list/stid3",
 		dataType:"json",
 		success:function(data){
@@ -117,7 +122,7 @@ $(function(){
 	
 	$.ajax({
 		type:"get",
-		url:"http://deli.alconn.co/stores/stid3",
+		url:"http://112.169.196.76:47788/stores/stid3",
 		dataType:"json",
 		success:function(data){
 			var s="";
@@ -125,8 +130,7 @@ $(function(){
 				s+="<div>가게이름 : "+data.data.storeName+"</div>";
 				s+="<div>가게주소 : "+data.data.storeAddr+"</div>";
 				s+="<div>가게소개 : "+data.data.storeDesc+"</div>";
-				s+="<div>가게사진 : "+data.data.storeImage+"</div>";
-				s+="<div>가게메뉴 : "+data.data.productList+"</div>";				
+				s+="<div>가게사진 : "+data.data.storeImage+"</div>";			
 			
 			$("#storecus-storelist-detail").html(s);
 		}
@@ -146,7 +150,7 @@ function CartMain(){
 		s+= "<tr>";
 		s+= "<td>"+cart_list[product].productName+"</td>";
 		s+= "<td>"+cart_list[product].productPrice+"</td>";
-		s+= "<td>"+cart_list[product].entity+"</td>";
+		s+= "<td>"+cart_list[product].quantity+"</td>";
 		s+= "<td><button type='button' value='"+product+"' class='cart-add btn-info'>추가</button></td>";
 		s+= "<td><button type='button' value='"+product+"' class='cart-delete btn-info'>삭제</button></td>";
 		s+= "<td><button type='button' value='"+product+"' class='cart-delete-line btn-info'>비우기</button></td>";
@@ -234,7 +238,7 @@ function CartAdd(cart){
 				"storeId":cart.storeId,
 				"productPrice":cart.productPrice,
 				"productDesc":cart.productDesc,
-				"entity":1
+				"quantity":1
 			};
 		
 		//console.log(JSON.stringify(cartAdd)); 여기까진 ok
@@ -253,7 +257,7 @@ function CartAdd(cart){
 		if(cartAdd[cart.productName]!=null)
 		{
 			//해당상품의 카운트 ++
-			cartAdd[cart.productName].entity++;
+			cartAdd[cart.productName].quantity++;
 			//다시 로컬스토리지로 올림
 			localStorage.setItem("cartList",JSON.stringify(cartAdd));
 		}
@@ -269,7 +273,7 @@ function CartAdd(cart){
 					"storeId":cart.storeId,
 					"productPrice":cart.productPrice,
 					"productDesc":cart.productDesc,
-					"entity":1
+					"quantity":1
 				};
 			//다시 로컬 스토리지로 올림
 			localStorage.setItem("cartList",JSON.stringify(cartAdd));
@@ -302,9 +306,9 @@ function CartRemoveOne(cart){
 	if(cartAdd[cart.productName]!=null)
 	{
 		//개수가 2개이상이면, count--
-		if(cartAdd[cart.productName].entity>1)
+		if(cartAdd[cart.productName].quantity>1)
 		{
-			cartAdd[cart.productName].entity--;
+			cartAdd[cart.productName].quantity--;
 		}
 		else //개수가 1개라면 목록에서 삭제
 		{
@@ -329,7 +333,7 @@ function CartRemoveLine(cart){
 	if(cartAdd[cart.productName]!=null)
 	{
 		//해당상품 갯수 받아옴
-		var count = parseInt(cartAdd[cart.productName].entity);
+		var count = parseInt(cartAdd[cart.productName].quantity);
 		//해당상품 가격 받아옴
 		var price = parseInt(cartAdd[cart.productName].productPrice);
 		//현재 주문총액 받아옴
@@ -371,8 +375,8 @@ function add(data) {
 	CartLoad(data, ran>50?"A업체":"B업체");
 	CartMain();
 	CartMain2();
-	
 }
+
 
 // 추가 부분입니다!
 
@@ -381,7 +385,7 @@ function add(data) {
  * @param data 성공시 데이터 주문 정보
  * @author monk
  */
-function success(data) {
+ function success(data) {
 	document.querySelector('.onsuccess-msg').innerHTML = data;
 }
 
@@ -395,7 +399,7 @@ function kakaoPopUp (uri) {
 // 결제 종료후 리턴 함수
 function kakaoHide() {
 	$("#kakao-modal").modal('hide');
-}
+} 
 
 window.addEventListener("message", function (e){
 	console.log(e);

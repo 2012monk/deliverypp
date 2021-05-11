@@ -126,59 +126,44 @@ $("button#order").click(function(){
 
     }
 	}; // ajax에서 받아온 주문 리스트
-	
-	var s = "";
-	for(var order in order_list)
+	function orderList(order_list)
 	{
-		console.log(JSON.stringify(order_list[order]));
-		s += "<table class='table table-bordered'>";
-		s += "<tr><td>상품명</td><td>가격</td><td>수량</td>";
-		s += "</tr>";
-		var product_list = order_list[order].orderList;
-		for(var product in product_list)
+		var s = "";
+		for(var order in order_list)
 		{
-			var product_name = product_list[product].productName;
-			var price = product_list[product].productPrice;
-			//var entity = order_list[order][product].entity;
-			var entity = "x";
-			s+= "<tr>";
-			s+= "<td>"+product_name+"</td>";
-			s+= "<td>"+price+"</td>";
-			s+= "<td>"+entity+"</td>";
-			s+= "</tr>";
+			console.log(JSON.stringify(order_list[order]));
+			s += "<table class='table table-bordered'>";
+			s += "<tr><td>상품명</td><td>가격</td><td>수량</td>";
+			s += "</tr>";
+			var product_list = order_list[order].orderList;
+			for(var product in product_list)
+			{
+				var product_name = product_list[product].productName;
+				var price = product_list[product].productPrice;
+				//var entity = order_list[order][product].entity;
+				var entity = "x";
+				s+= "<tr>";
+				s+= "<td>"+product_name+"</td>";
+				s+= "<td>"+price+"</td>";
+				s+= "<td>"+entity+"</td>";
+				s+= "</tr>";
+			}
+			
+			s+= "<tr><td>총 주문액 : </td><td>";
+			s+= order_list[order].totalPrice + "</td></tr>";
+			s+= "<tr><td>주소</td><td>"+order_list[order].address+"</td></tr>";
+			s+= "<tr><td>연락처</td><td>"+order_list[order].telephone+"</td></tr>";
+			s+= "<tr><td>요청사항</td><td>"+order_list[order].orderRequirement+"</td></tr>";
+			s+= "<tr><td>결제수단</td><td>"+order_list[order].paymentInfo+"</td></tr></table>";
+
 		}
-		
-		s+= "<tr><td>총 주문액 : </td><td>";
-		s+= order_list[order].totalPrice + "</td></tr>";
-		s+= "<tr><td>주소</td><td>"+order_list[order].address+"</td></tr>";
-		s+= "<tr><td>연락처</td><td>"+order_list[order].telephone+"</td></tr>";
-		s+= "<tr><td>요청사항</td><td>"+order_list[order].orderRequirement+"</td></tr>";
-		s+= "<tr><td>결제수단</td><td>"+order_list[order].paymentInfo+"</td></tr></table>";
-
+	
+		// 주문리스트 띄울 div 태그 지정
+		$("div#body").html(s);
 	}
-	
-	$("div#body").html(s);
-	
+
+	orderList(order_list);
 })
-
-//업체 상세
-$("button#store").click(function(){
-	alert(2);
-})
-
-//상품 리스트
-$("button#product").click(function(){
-	alert(3);
-})
-
-
-
-
-
-
-
-
-
 
 
 })

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    div#review-main{
+        width:800px;
+        height:500px;
+        margin: 0 auto;
+    }
+</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+$(function(){
+
+    var storeId = "stid22";
+    var userEmail = "abc@abc.net";
+
+    var ajax_data = 
+        {
+            reviewList : [
+            
+            {
+                reviewId : "reviewid",
+                storeId: "stid",
+                reviewRating : "rate",
+                reviewImage : "photo",
+                userEmail : "writer",
+                reviewContent : "content300제한",
+                reviewDate : "date",
+                reviewReplies : [
+                    { replyId : "ida",userEmail : "reple writer1", replyContent : "reple content1", replyDate : "reple date1" } ,
+                    { replyId : "idb",userEmail : "reple writer2", replyContent : "reple content2", replyDate : "reple date2" } ,
+                    { replyId : "idc",userEmail : "reple writer3", replyContent : "reple content3", replyDate : "reple date3" } 
+                ]
+            },
+            {
+                reviewId : "글번호2",
+                storeId: "stid2",
+                reviewRating : "별점",
+                reviewImage : "사진",
+                userEmail : "리뷰작성자",
+                reviewContent : "작성내용300자제한",
+                reviewDate : "작성일시",
+                reviewReplies : [
+                    { replyId : "id1", userEmail : "리플 작성자4", replyContent : "리플 내용4", replyDate : "작성일시4" } ,
+                    { replyId : "id2",userEmail : "리플 작성자5", replyContent : "리플 내용5", replyDate : "작성일시5" } ,
+                    { replyId : "id3",userEmail : "리플 작성자6", replyContent : "리플 내용6", replyDate : "작성일시6" }
+                ]
+            }
+            
+            ]
+        }
+
+    localStorage.setItem("reviewList",JSON.stringify(ajax_data));
+
+    function reviewLoad(){
+     var ajax_data = JSON.parse(localStorage.getItem("reviewList"));
+
+        // 리뷰목록 출력
+        var s="";
+        var idx=0;
+        ajax_data.reviewList.forEach(function(w){
+            s+="<div>";
+            //리뷰수정,삭제버튼
+            s+="<button id='review-mod' idx='"+idx+"'>수정</button><button id='review-del' idx='"+idx+"'>삭제</button>";
+            //리뷰 테이블
+            s+= "<table class='table table-bordered'><tr><td>번호</td><td>작성자</td><td>내용</td><td>별점</td><td>작성일</td></tr>";
+            s+="<tr><td>"+w.reviewId+"</td><td>"+w.userEmail+"</td><td class='content'>"+w.reviewContent+"("+w.reviewReplies.length+")</td><td>"+w.reviewRating+"</td><td>"+w.reviewDate+"</td></tr>";
+            s+="<tr class='photo'><td><img src='"+w.reviewImage+"'>"+w.reviewImage+"</td></tr></table>";
+            //댓글 등록버튼
+            s+="<div><button idx='"+idx+"' id='reply-write'>Reply</button></div>";
+            //댓글 테이블
+            s+="<table class='table table-bordered'>";
+            var idx_reply = 0;
+            w.reviewReplies.forEach(function(r){
+                if(r!=null)
+                {
+                    s+="<tr class='reply'><td><span class='glyphicon glyphicon-arrow-right'></span></td>";
+                    s+="<td>"+r.userEmail+"</td><td>"+r.replyContent+"</td><td>"+r.replyDate+"</td>";
+                    //댓글 수정,삭제 버튼
+                    s+="<td><button idx='"+idx+"' idx_reply='"+idx_reply+"' id='reply-mod'>수정</button><button idx='"+idx+"' idx_reply='"+idx_reply+"' id='reply-del'>삭제</button></tr>";
+                    idx_reply++;
+                }
+            })
+            s+="</table></div>";
+            idx++;
+        })
+        s+="";
+        $("#test").html(s);
+
+    }
+
+    // 리뷰 작성폼 출력
+    $(document).on("click","#review-write",function(){
+        // 로그인 정보에서 접속중인 아이디정보 가져오기 ->작성자명(이메일)
+        var s = "<table class='table table-bordered'>";
+        s += "<tr><td>작성자</td><td id='userEmail'>"+userEmail+"</td></tr>";
+        s += "<tr><td>별점</td><td><select id='review-rate'><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></td></tr>";
+        s += "<tr><td>사진 첨부</td><td><input id='photo' type='file'></td></tr>";
+        s += "<tr><td>리뷰</td><td><textarea id='content' style='width:500px;height:150px;'></textarea></td></tr>";
+        s += "<tr><td><button id='review-submit'>등록</button><button id='review-cancel'>취소</button></td></tr>";
+        s += "</table>";
+        $("#write-form").html(s);
+    })
+
+    // 리뷰 작성/수정폼 닫기
+    $(document).on("click","#review-cancel",function(){
+        $("#write-form").html("");
+        reviewLoad();
+    })
+    
+    // 리뷰 작성후 전송
+    $(document).on("click","#review-submit",function(){
+        var table = $(this).closest("table");
+        var review_json = {};
+        review_json.userEmail = table.find("#userEmail").text();
+        review_json.reviewRating = table.find("#review-rate").val();
+        review_json.reviewImage = table.find("#photo").val();
+        review_json.reviewContent = table.find("#content").val();
+        review_json.userEmail = userEmail;
+        review_json.storeId = storeId;
+        review_json.reviewReplies = [];
+        
+        var ajax_data = JSON.parse(localStorage.getItem("reviewList"));
+        ajax_data.reviewList.push(review_json);
+        localStorage.setItem("reviewList",JSON.stringify(ajax_data));
+
+        //alert(JSON.stringify(review_json));
+
+        //ajax 전송 처리할 것
+
+        $("#write-form").html("");
+        reviewLoad();
+    })
+
+    //리뷰 수정폼 출력
+    $(document).on("click","#review-mod",function(){
+        var idx = $(this).attr("idx");
+        var ajax_data = JSON.parse(localStorage.getItem("reviewList"));
+        var w = ajax_data.reviewList[parseInt(idx)];
+
+        var s = "<table class='table table-bordered'>";
+        s += "<tr><td>작성자</td><td id='userEmail'>"+userEmail+"</td></tr>";
+        s += "<tr><td>별점</td><td><select value='"+w.reviewrating+"' id='review-rate'><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></td></tr>";
+        s += "<tr><td>사진 첨부</td><td><input value='"+w.reviewImage+"' id='photo' type='file'></td></tr>";
+        s += "<tr><td>리뷰</td><td><textarea id='content' style='width:500px;height:150px;'>"+w.reviewContent+"</textarea></td></tr>";
+        s += "<tr><td><button id='review-mod-submit'>등록</button><button id='review-cancel'>취소</button></td></tr>";
+        s += "</table>";
+        //수정버튼 아래 테이블 지워버리기
+        $(this).parent().html(s);
+        //기존 값들 불러와서 입력창들에 띄움
+        
+        
+    })
+
+    //리뷰 수정후 전송
+    $(document).on("click","#review-mod-submit",function(){
+        var table = $(this).closest("table");
+        var review_json = {};
+        review_json.userEmail = table.find("#userEmail").text();
+        review_json.reviewRating = table.find("#review-rate").val();
+        review_json.reviewImage = table.find("#photo").val();
+        review_json.reviewContent = table.find("#content").val();
+        review_json.userEmail = userEmail;
+        review_json.storeId = storeId;
+        review_json.reviewReplies = [];
+        
+        var ajax_data = JSON.parse(localStorage.getItem("reviewList"));
+        ajax_data.reviewList.push(review_json);
+        localStorage.setItem("reviewList",JSON.stringify(ajax_data));
+
+        //alert(JSON.stringify(review_json));
+
+        //ajax 전송 처리할 것
+        reviewLoad();
+    })
+
+    //리뷰 삭제 처리
+    $(document).on("click","#review-del",function(){
+        
+    })
+
+
+    // 리뷰 댓글 작성폼 출력
+    $(document).on("click","#reply-write",function(){
+        var idx = $(this).attr("idx");
+        var s = "<table class='table table-bordered'>";
+        s += "<tr><td>작성자</td><td>"+userEmail+"</td></tr>";
+        s += "<tr><td>댓글 내용</td><td><textarea style='width:500px;height:150px;'></textarea></td></tr>";
+        s += "<tr><td><button idx='"+idx+"' id='reply-submit'>등록</button><button id='reply-cancel'>취소</button></td></tr>";
+        s += "</table>";
+        $(this).parent().html(s);
+    })
+
+    //리뷰 댓글 작성/수정폼 닫기
+    $(document).on("click","#reply-cancel",function(){
+        reviewLoad();
+    })
+
+    //리뷰 댓글 작성후 전송
+    $(document).on("click","#reply-submit",function(){
+        var idx = $(this).attr("idx");
+        var reply = {};
+        reply.userEmail = userEmail;
+        reply.replyContent = $(this).closest("table").find("textarea").val();
+
+        //로컬 꺼내와서 댓글 추가후 다시 저장
+        var ajax_data = JSON.parse(localStorage.getItem("reviewList"));
+        ajax_data.reviewList[parseInt(idx)].reviewReplies.push(reply);
+        localStorage.setItem("reviewList",JSON.stringify(ajax_data));
+
+        reviewLoad();
+    })
+
+    //리뷰 댓글 삭제 버튼
+    $(document).on("click","#reply-del",function(){
+        var idx = $(this).attr("idx");
+        var idx_reply = $(this).attr("idx_reply");
+        var ajax_data = JSON.parse(localStorage.getItem("reviewList"));
+        ajax_data.reviewList[parseInt(idx)].reviewReplies[idx_reply] = null;
+        localStorage.setItem("reviewList",JSON.stringify(ajax_data));
+        //수정할것 
+        reviewLoad();
+    })
+
+    //리뷰 댓글 수정폼 출력
+    $(document).on("click","#reply-mod",function(){
+        var idx = $(this).attr("idx");
+        var idx_reply = $(this).attr("idx_reply");
+
+        var s = "<table class='table table-bordered'>";
+        s += "<tr><td>작성자</td><td>"+userEmail+"</td></tr>";
+        s += "<tr><td>댓글 내용</td><td><textarea style='width:300px;height:25px;'></textarea></td></tr>";
+        s += "<tr><td><button id='reply-mod-submit'>등록</button><button id='reply-cancel'>취소</button></td></tr>";
+        s += "</table>";
+        $(this).closest("tr").html(s);
+    })
+
+
+    reviewLoad();
+})
+</script>
+
+<body>
+    <div id="review-main">
+        <h2>리뷰 게시판</h2><button id='review-write'>리뷰 쓰기</button><hr>
+        <div id="write-form">
+
+        </div>
+        <div id="test">
+            test한글
+        </div>
+    </div>
+</body>
+</html>
