@@ -1,3 +1,16 @@
+
+function storehostdetailtest(){
+    var s="";
+	s+="<div id='storehostdetail-header'>홈</div>";
+	s+="<div id='storehostdetail-storelist'></div>";
+	s+="<div id='storehostdetail-productlist'></div>";
+	s+="<button type='button' id='spadd'>상품추가</button>";
+	s+="<div id='show4'></div>";
+	s+="<div id='show3'></div>";
+
+    $("body").html(s);
+}
+
 $(function(){
     //상품리스트
         $.ajax({
@@ -85,6 +98,7 @@ $(function(){
         $.ajax({
             type:"get",
             url:"http://112.169.196.76:47788/stores/stid3", 
+            dataType:"json",
             success:function(data){
                 var s="";
                     s+="<b>매장소개</b>";
