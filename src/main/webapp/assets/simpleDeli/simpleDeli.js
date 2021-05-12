@@ -40,36 +40,7 @@ window.simpleDeli = {
     },
 
 
-    // sub : {
-    //     getUserEmail() {
-            
-    //     },
-    //     getUserRole() {
-
-    //     },
-
-    //     getUserInfo() {
-    //         const data = localStorage.getItem("sub");
-    //         return user;
-    //     },
-
-    //     onSuccess(data){
-    //         const sub = {};
-    //         const res = data.data;
-    //         sub.deliUser = data.data.user;
-    //         sub.auth = {
-    //             "type" : res["auth_type"],
-    //             "token" : res["access_token"],
-    //             "exp" : parseInt(res["exp"])
-    //         };
-            
-    //         localStorage.setItem("sub", JSON.stringify(sub))
-    //     },
-
-    //     isLoggedIn(){
-    //         return this.getUserInfo !== null;
-    //     }
-    // },
+    
 
     async handleLogOut() {
         await fetch(simpleDeli.host + "logout")
@@ -82,7 +53,6 @@ window.simpleDeli = {
      * @returns {null|string|*} if logged in return role or return null
      */
     checkUserRole() {
-        console.log(this.user)
         console.log(simpleDeli.deliUser)
         if (this.deliUser.userRole !== null && this.deliUser.userRole !== undefined) {
             return simpleDeli.deliUser.userRole;
@@ -149,8 +119,8 @@ window.simpleDeli = {
 $.ajaxSetup({
     beforeSend:function(xhr) {
         xhr.withCredentials = true;
-        if (simpleDeli.user.token){
-            xhr.setRequestHeader("authorization", "Bearer "+simpleDeli.user.token)
+        if (simpleDeli.deliUser.token){
+            xhr.setRequestHeader("authorization", "Bearer "+simpleDeli.deliUSer.token)
         }
     }
 })
@@ -297,6 +267,36 @@ simpleDeli.unit = {
     deliAuth(header) {
     
     }
+    // sub : {
+    //     getUserEmail() {
+            
+    //     },
+    //     getUserRole() {
+
+    //     },
+
+    //     getUserInfo() {
+    //         const data = localStorage.getItem("sub");
+    //         return user;
+    //     },
+
+    //     onSuccess(data){
+    //         const sub = {};
+    //         const res = data.data;
+    //         sub.deliUser = data.data.user;
+    //         sub.auth = {
+    //             "type" : res["auth_type"],
+    //             "token" : res["access_token"],
+    //             "exp" : parseInt(res["exp"])
+    //         };
+            
+    //         localStorage.setItem("sub", JSON.stringify(sub))
+    //     },
+
+    //     isLoggedIn(){
+    //         return this.getUserInfo !== null;
+    //     }
+    // },
 }
 
 
@@ -331,19 +331,10 @@ simpleDeli.unit = {
 //     }
 // });
 
-// simpleDeli.loginAttempt({
-//     "userEmail" : "test@test.com",
-//     "userPw" : "1234",
-//     "userType" : "DELI"
-// })
-window.onload = () => {
-}
-
-setTimeout(() => {
-    console.log(simpleDeli.checkUserRole());
-    console.log(simpleDeli.checkUserType())
-    console.log(simpleDeli.isLoggedIn());
-
-},1000)
+simpleDeli.loginAttempt({
+    "userEmail" : "test@test.com",
+    "userPw" : "1234",
+    "userType" : "DELI"
+})
 
 simpleDeli.unit.init();
