@@ -1,5 +1,7 @@
 package com.deli.deliverypp.model;
 
+import com.deli.deliverypp.util.ParseUtil;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
@@ -9,11 +11,21 @@ public class Store implements Serializable {
     private String storeId;
     private String storeName;
     private String storeDesc;
+    // img 경로 수정 Method
     private String storeImage;
     private List<Product> productList;
     private String storeAddr;
+    private String storeTelephone;
 
     public Store() {
+    }
+
+    public String getStoreTelephone() {
+        return storeTelephone;
+    }
+
+    public void setStoreTelephone(String storeTelephone) {
+        this.storeTelephone = storeTelephone;
     }
 
     public void generateStoreId() {
@@ -65,8 +77,9 @@ public class Store implements Serializable {
     }
 
     public void setStoreImage(String storeImage) {
-        this.storeImage = storeImage;
+        this.storeImage = ParseUtil.parseImgPath(storeImage);
     }
+
 
     @Override
     public String toString() {

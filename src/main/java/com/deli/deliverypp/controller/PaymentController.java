@@ -4,6 +4,7 @@ import com.deli.deliverypp.filter.CORSFilter;
 import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.service.OrderService;
 import com.deli.deliverypp.util.ControlUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -59,11 +60,22 @@ public class PaymentController extends HttpServlet {
     public void onKaKaoSuccess(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String token = request.getParameter("pg_token");
         String tid = (String) request.getSession().getAttribute("tid");
-        ResponseMessage res = service.sendKaKaoDone(token, tid);
+        try {
+            ResponseMessage res = service.sendKaKaoDone(token, tid);
+            log.info(new ObjectMapper().writeValueAsString(res));
+            try {
+                ControlUtil.sendResponseData(response, res);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            log.info(res.getData());
+            System.out.println(res.getData());
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.info("failed");
+        }
 //        ControlUtil.sendResponseData(response,, "payment success");
 
-        ControlUtil.sendResponseData(response, res);
-        System.out.println(res.getData());
     }
 
 

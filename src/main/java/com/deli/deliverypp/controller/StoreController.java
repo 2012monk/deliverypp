@@ -122,7 +122,11 @@ public class StoreController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
+        try{
+            ControlUtil.responseMsg(resp, service.updateStore(ControlUtil.getJson(req)));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -130,7 +134,11 @@ public class StoreController extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
+        try {
+            ControlUtil.responseMsg(resp, service.deleteStore(ControlUtil.getRequestUri(req, 1)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -184,6 +192,8 @@ public class StoreController extends HttpServlet {
 
         ControlUtil.sendResponseData(response, name, service.checkStoreName(name) ? "overlap" : "free");
     }
+
+
 
 
 }

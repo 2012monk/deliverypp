@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,21 +37,17 @@ public class GoogleAuthentication {
      * @param json google access information
      * @throws IOException http connection exception
      */
-    public static GoogleUser accessGoogleInfo(String json) throws IOException {
+    public static GoogleUser accessGoogleInfo(String json) throws IOException, JsonProcessingException {
 
 
-
-        GoogleToken googleToken = mapper.readValue(json, GoogleToken.class);
+        GoogleToken googleToken = null;
+        googleToken = mapper.readValue(json, GoogleToken.class);
         log.info(googleToken);
 
 //        String tokenUri = "https://oauth2.googleapis.com/token";
 
         GoogleToken token = getGoogleRefreshToken(googleToken);
-
-        log.info(token);
         return getGoogleProfile(googleToken);
-
-
     }
 
 

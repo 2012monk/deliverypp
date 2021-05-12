@@ -1,15 +1,9 @@
+
 // 가게 상세 출력 : $("#storecus-storelist-detail").html(s);
 // 상품리스트 출력 : $("#storecus-productlist").html(s);
 // 장바구니 모달창 띄움 $("#myModal").modal();
 // 장바구니 cartmain 출력 $("div#test").html(s);
 // 장바구니 cartmain2 출력 $("div#test2").html(s);
-
-// 카카오 모달창 출력
-// function kakaoPopUp (uri) {
-// 	$("#myModal").modal('hide');
-// 	$("#kakao-modal").modal()
-// 	$('.kakao-inner').attr('src', uri);
-// }
 
 function cartPage(){
 
@@ -58,6 +52,7 @@ function cartPage(){
 		}
 	});
 	
+	//가게리스트
 	$.ajax({
 		type:"get",
 		url:"http://112.169.196.76:47788/stores/stid3",
@@ -78,7 +73,7 @@ function cartPage(){
 
 
 $(document).on("click","button.cart-add",function(){
-	console.log("추가버튼");
+	//console.log("추가버튼");
 	var cart_list = JSON.parse(localStorage.getItem("cartList"));
 	var product = $(this).val();
 
@@ -90,7 +85,7 @@ $(document).on("click","button.cart-add",function(){
 })
 
 $(document).on("click","button.cart-delete",function(){
-	console.log("삭제버튼");
+	//console.log("삭제버튼");
 	var cart_list = JSON.parse(localStorage.getItem("cartList"));
 	var product = $(this).val();
 
@@ -99,11 +94,10 @@ $(document).on("click","button.cart-delete",function(){
 	cart.productPrice = cart_list[product].productPrice;
 	CartRemoveOne(cart);
 	CartMain();
-	//alert(product_name+"_"+price+"_"+quantity);
 })
 
 $(document).on("click","button.cart-delete-line",function(){
-	console.log("한줄삭제버튼");
+	//console.log("한줄삭제버튼");
 	var cart_list = JSON.parse(localStorage.getItem("cartList"));
 	var product = $(this).val();
 
@@ -112,21 +106,19 @@ $(document).on("click","button.cart-delete-line",function(){
 	cart.productPrice = cart_list[product].productPrice;
 	CartRemoveLine(cart);
 	CartMain();
-	//alert(product_name+"_"+price+"_"+quantity);
 })
 
 $(document).on("click","button.cart-clear",function(){
-	console.log("장바구니비움버튼");
+	//console.log("장바구니비움버튼");
 	CartRemoveAll();
 	alert("장바구니를 비웠습니다");
 })
 
 $(document).on("click","button.cart-order",function(){
-	console.log("장바구니 결제하기 버튼");
+	//console.log("장바구니 결제하기 버튼");
 	var cart_pay = {}
 	cart_pay.storeId = localStorage.getItem("cartStoreId");
 	cart_pay.storeName = localStorage.getItem("cartStore");
-	//quantity 계산 할 것
 	
 	var cart_local_list = JSON.parse(localStorage.getItem("cartList"));
 	var cart_pay_list = [];
@@ -149,14 +141,10 @@ $(document).on("click","button.cart-order",function(){
 	$.ajax({
 		type:"post",
 		url:"http://112.169.196.76:47788/order",
-		// url:"http://localhost:47788/order",
 		data:JSON.stringify(cart_pay),
 		dataType:"json",
 		success:function(data){
-			//alert("성공:"+JSON.stringify(data)+"__"+data.data.redirect_url);
 			var url = data.data.redirect_url;
-			//window.open(url);
-			//location.href=url;
 			kakaoPopUp(url);
 		}
 	})
@@ -184,12 +172,9 @@ function CartMain(){
 	s+= "<tr><td>총 주문액 : </td><td>";
 	s+= localStorage.getItem("cartPrice");
 	s+= "</td><td><button type='button' class='cart-clear btn-info' data-dismiss='modal'>비우기</button></td></tr></table>";
+
 	$("div#test").html(s);
-	
-
-	
 	$("#myModal").modal();
-
 }
 
 function CartMain2(){
@@ -217,14 +202,14 @@ function CartLoad(cart_list, cart_store){
 		productDesc:xx
 	}
 	*/
-	console.log("CartLoad()실행");
+	//console.log("CartLoad()실행");
 	var cartAdd = JSON.parse(localStorage.getItem("cartList"));
 	var cartStore = localStorage.getItem("cartStore");
 	
 	//장바구니에 다른 가게 품목이 이미 담겨있으면
 	if(cartAdd != null && cartStore != cart_store)
 	{
-		console.log("장바구니에 다른 가게 품목이 이미 담겨있으면 사용자체크");
+		//console.log("장바구니에 다른 가게 품목이 이미 담겨있으면 사용자체크");
 		//사용자에게 기존 장바구니 비우고 새로 담을지 물어봄
 		var check = confirm("한 업체의 품목만 담을 수 있습니다. 기존 목록을 비우고 다시 담으시겠습니까?");
 		if(check = true) // Yes 라고 답하면
@@ -236,13 +221,9 @@ function CartLoad(cart_list, cart_store){
 			return; // 돌아감
 		}
 	}
-	console.log("cartAdd()실행전");
 	CartAdd(cart_list);  // 전부 담기
-	console.log("cartAdd()실행후");
 	localStorage.setItem("cartStore",cart_store); // 담긴 업체명 수정
 	localStorage.setItem("cartStoreId",cart_list.storeId); // 담긴 업체명 ID 수정
-	//alert("장바구니에 메뉴를 추가했습니다.");
-	
 }
 
 function CartAdd(cart){
@@ -250,8 +231,6 @@ function CartAdd(cart){
 	
 	if(JSON.parse(localStorage.getItem("cartList")) == null) //카트가 없는경우
 	{
-		console.log("CartAdd()실행:카트가없는경우");	
-		console.log("카트가 없는경우 새로 추가");
 		// 카트리스트에 상품1개 새로 추가
 		var cartAdd = {}; 
 		//저장 포맷 변경은 여기서(1)!!
@@ -266,15 +245,12 @@ function CartAdd(cart){
 				"quantity":1
 			};
 		
-		//console.log(JSON.stringify(cartAdd)); 여기까진 ok
-		
 		localStorage.setItem("cartList",JSON.stringify(cartAdd));
 		//주문 총액에 상품가격 추가
 		localStorage.setItem("cartPrice",cart.productPrice);
 	}
 	else //카트가 이미 하나이상 있는경우, (기존에 있는상품 count++ or 새상품 추가)
 	{
-		console.log("CartAdd()실행:카트가 이미 하나이상 있는경우");
 		//일단 기존에 있는 카트의 리스트 JSON객체로 꺼내오기
 		var cartAdd = JSON.parse(localStorage.getItem("cartList"));
 		
@@ -312,7 +288,7 @@ function CartAdd(cart){
 } 
 
 function CartAddAll(cart_all){
-	console.log("CartAddAll()실행");
+	//console.log("CartAddAll()실행");
 	for(var product in cart_all)
 	{
 		CartAdd(cart_all[product]);
@@ -322,8 +298,6 @@ function CartAddAll(cart_all){
 
 
 function CartRemoveOne(cart){
-	console.log("CartRemoveOne()실행");
-	// 삭제처리. 
 	//일단 기존에 있는 카트의 리스트 JSON객체로 꺼내오기
 	var cartAdd = JSON.parse(localStorage.getItem("cartList"));
 	
@@ -425,3 +399,12 @@ function kakaoPopUp (uri) {
 function kakaoHide() {
 	$("#kakao-modal").modal('hide');
 } 
+
+window.addEventListener("message", function (e){
+	console.log(e);
+	console.log(e.data)
+	if (e.msg === "kakao"){
+		success(e.data);
+		kakaoHide();
+	}
+})

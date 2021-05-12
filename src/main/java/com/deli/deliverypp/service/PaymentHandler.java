@@ -40,10 +40,13 @@ public class PaymentHandler {
         params.put("quantity", String.valueOf((int) orderInfo.getTotalAmount()));
         params.put("total_amount", String.valueOf((int) orderInfo.getTotalPrice()));
         params.put("tax_free_amount", "0");
+//        String server = "https://deli.alconn.co/";
+        String server = "http://localhost:47788/";
 //        params.put("approval_url", "http://localhost:47788/payment/kakao/success");
-        params.put("approval_url", "http://localhost:47788/kakao.redirect.html");
-        params.put("cancel_url", "http://localhost:47788/kakao.cancel.html");
-        params.put("fail_url", "http://localhost:47788/kakao.failed.html");
+        params.put("approval_url", server+"kakao.redirect.html");
+//        params.put("approval_url", server);
+        params.put("cancel_url", server+"kakao.cancel.html");
+        params.put("fail_url", server+"kakao.failed.html");
 
         header.put("Authorization", "KakaoAK 896429d8b61fe0fcb3795728adba6047");
         header.put("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
