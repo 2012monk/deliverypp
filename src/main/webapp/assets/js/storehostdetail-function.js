@@ -1,4 +1,3 @@
-
 function storehostdetailtest(){
     var s="";
 	s+="<div id='storehostdetail-header'>홈</div>";
@@ -30,11 +29,11 @@ $(function(){
                 });
                     s+="</table>"; 
                     s+="</form>";
-            
+
                 $("#storehostdetail-productlist").html(s);
             }
         });
-        
+
         //상품삭제이벤트
         $(document).on("click", "#deletebtn", function(){
             var productId=$(this).attr("value");
@@ -44,7 +43,7 @@ $(function(){
                 url:"http://112.169.196.76:47788/products/"+productId,
                 success:function(data){
                     console.log(data);
-                    
+
                 }
             });
         });
@@ -92,8 +91,8 @@ $(function(){
                 }
             });
         });
-        
-        
+
+
         //매장정보
         $.ajax({
             type:"get",
@@ -106,11 +105,11 @@ $(function(){
                     s+="<div>매장소개 : "+data.data.storeDesc+"</div>";
                     s+="<div>매장사진 : "+data.data.storeImage+"</div>";
                     s+="<div>매장주소 : "+data.data.storeAddr+"</div>";
-                
+
                 $("#storehostdetail-storelist").html(s);
             }
         });
-        
+
         //상품등록폼
         var s="";
         $(document).on("click","#spadd",function(){
@@ -149,4 +148,4 @@ $(function(){
                 }
             });
         });
-    });
+    }); 
