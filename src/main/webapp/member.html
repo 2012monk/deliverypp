@@ -34,7 +34,7 @@ $(function(){
 		s+="<tr><td><span id='pw_check_msg' style='color:red;'></span></td></tr>"
 		s+="<tr><td><input type='text' name='userName' placeholder='이름' required></td></tr>";
 		s+="<tr><td><input type='text' name='userPhone' placeholder='전화번호' required></td><td><button type='submit'>인증번호받기</button></td></tr>";
-		s+="<tr><td><input type='checkbox' name='userRoll' value='seller'>SELLER</td><td><input type='checkbox' name='userRoll' value='client'>CLIENT</td></tr>";
+		s+="<tr><td><input type='checkbox' name='userRole' value='seller'>SELLER</td><td><input type='checkbox' name='userRole' value='client'>CLIENT</td></tr>";
 		s+="<tr><td colspan='2' align='center'><button type='submit'>회원가입</button></td></tr>";
 		s+="</table>";
 		s+="</form>";
@@ -51,7 +51,7 @@ $(function(){
 		s+="<table>";
 		s+="<caption><b>KAKAO회원가입</b></caption>";
 		s+="<tr><td><input type='email' name='userEmail' pattern='[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}' required placeholder='예) id@domain.com'></td></tr>";
-		s+="<tr><td><input type='checkbox' name='userRoll' value='seller'>SELLER</td><td><input type='checkbox' name='userRoll' value='client'>CLIENT</td></tr>";
+		s+="<tr><td><input type='checkbox' name='userRole' value='seller'>SELLER</td><td><input type='checkbox' name='userRole' value='client'>CLIENT</td></tr>";
 		s+="<tr><td colspan='2' align='center'><button type='submit'>회원가입</button></td></tr>";
 		s+="</table>";
 		s+="</form>";
@@ -68,7 +68,7 @@ $(function(){
 		s+="<table>";
 		s+="<caption><b>GOOGLE회원가입</b></caption>";
 		s+="<tr><td><input type='email' name='userEmail' pattern='[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}' required placeholder='예) id@domain.com'></td></tr>";
-		s+="<tr><td><input type='checkbox' name='userRoll' value='seller'>SELLER</td><td><input type='checkbox' name='userRoll' value='client'>CLIENT</td></tr>";
+		s+="<tr><td><input type='checkbox' name='userRole' value='seller'>SELLER</td><td><input type='checkbox' name='userRole' value='client'>CLIENT</td></tr>";
 		s+="<tr><td colspan='2' align='center'><button type='submit'>회원가입</button></td></tr>";
 		s+="</table>";
 		s+="</form>";
@@ -86,19 +86,19 @@ $(function(){
 		var userEmail = $(this).find('input[name="userEmail"]').val();
 		var userPw = $(this).find('input[name="userPw"]').val();
 		var userName = $(this).find('input[name="userName"]').val();
-		var userPhone = $(this).find('input[name="userPhone"]').val();
-		var userRoll= $(this).find('input:checkbox[name="userRoll"]:checked').val();
+		//var userPhone = $(this).find('input[name="userPhone"]').val();
+		var userRole= $(this).find('input:checkbox[name="userRole"]:checked').val();
 		
 		console.log(userType);
 		console.log(userEmail);
 		console.log(userPw);
 		console.log(userName);
-		console.log(userRoll);
-		console.log(userPhone);
+		console.log(userRole);
+		
 		$.ajax({
 			type:"post",
-			url:"http://112.169.196.76:47788/signup",
-			data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRoll":userRoll, "userType":userType, "userPhone":userPhone}),
+			url:"http://112.169.196.76:47788/user/signup",
+			data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole, "userType":userType,}),
 			success:function(d){
 				alert("회원가입 성공!");
 				console.log(d);

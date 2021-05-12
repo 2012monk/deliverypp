@@ -31,8 +31,8 @@ public class AuthProvider {
         return provider.validateRefreshToken(token);
     }
 
-    public boolean checkUserStatus(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
+    public boolean checkUserStatusValid(HttpServletRequest request) {
+        String token = getToken(request.getHeader("Authorization"));
         if (token == null) return false;
 
         if (!provider.validateToken(token)) return false;
@@ -42,9 +42,24 @@ public class AuthProvider {
 
         if (sid == null) return false;
 
-        if (provider.validateRefreshToken(sid.getValue())) return false;
+        return provider.validateRefreshToken(sid.getValue());
+    }
 
-        return true;
+
+
+    public String getToken (String header) {
+        if (header == null) return null;
+        try {
+            String type = header.split(" ")[0];
+            String token = header.split(" ")[1];
+            if (!type.equals("Bearer")) {
+                return null;
+            }
+            return token;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

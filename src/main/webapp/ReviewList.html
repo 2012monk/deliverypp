@@ -34,10 +34,10 @@ $(function(){
                 userEmail : "writer",
                 reviewContent : "content300제한",
                 reviewDate : "date",
-                reviewReplies : [
-                    { replyId : "ida",userEmail : "reple writer1", replyContent : "reple content1", replyDate : "reple date1" } ,
-                    { replyId : "idb",userEmail : "reple writer2", replyContent : "reple content2", replyDate : "reple date2" } ,
-                    { replyId : "idc",userEmail : "reple writer3", replyContent : "reple content3", replyDate : "reple date3" } 
+                replyList : [
+                    { reviewId:"72495aa-fff", replyId : "ida",userEmail : "reple writer1", replyContent : "reple content1", replyDate : "reple date1" } ,
+                    { reviewId:"72495aa-fff", replyId : "idb",userEmail : "reple writer2", replyContent : "reple content2", replyDate : "reple date2" } ,
+                    { reviewId:"72495aa-fff", replyId : "idc",userEmail : "reple writer3", replyContent : "reple content3", replyDate : "reple date3" } 
                 ]
             },
             {
@@ -49,9 +49,9 @@ $(function(){
                 reviewContent : "작성내용300자제한",
                 reviewDate : "작성일시",
                 reviewReplies : [
-                    { replyId : "id1", userEmail : "리플 작성자4", replyContent : "리플 내용4", replyDate : "작성일시4" } ,
-                    { replyId : "id2",userEmail : "리플 작성자5", replyContent : "리플 내용5", replyDate : "작성일시5" } ,
-                    { replyId : "id3",userEmail : "리플 작성자6", replyContent : "리플 내용6", replyDate : "작성일시6" }
+                    { reviewId:"72495aa-ttt", replyId : "id1", userEmail : "리플 작성자4", replyContent : "리플 내용4", replyDate : "작성일시4" } ,
+                    { reviewId:"72495aa-ttt", replyId : "id2",userEmail : "리플 작성자5", replyContent : "리플 내용5", replyDate : "작성일시5" } ,
+                    { reviewId:"72495aa-ttt", replyId : "id3",userEmail : "리플 작성자6", replyContent : "리플 내용6", replyDate : "작성일시6" }
                 ]
             }
             
@@ -60,45 +60,103 @@ $(function(){
 
     localStorage.setItem("reviewList",JSON.stringify(ajax_data));
 
+    // 데이터 수정된것
+    // reviewList -> data
+    // reviewReplies -> replyList
+
     function reviewLoad(){
-     var ajax_data = JSON.parse(localStorage.getItem("reviewList"));
+
+        //출력할 리뷰목록 DB에서 store id 로 받아오기
+        $.ajax({
+            type:"get",
+            url:"http://112.169.196.76:47788/review/store/stid22",
+            dataType:"json",
+            success:function(ajax_data){
+                alert("리뷰 출력 성공:"+JSON.stringify(ajax_data));
+
+                var s="";
+                var idx=0;
+                ajax_data.data.forEach(function(w){
+                    s+="<div id='abcde' review_id='"+w.reviewId+"'>";
+                    //리뷰수정,삭제버튼
+                    s+="<button id='review-mod' idx='"+idx+"'>수정</button><button id='review-del' idx='"+idx+"'>삭제</button>";
+                    //리뷰 테이블
+                    s+= "<table class='table table-bordered'><tr><td>번호</td><td>작성자</td><td>내용</td><td>별점</td><td>작성일</td></tr>";
+                    s+="<tr><td>"+w.reviewId+"</td><td>"+w.userEmail+"</td><td class='content'>"+w.reviewContent+"("+w.replyList.length+")</td><td>"+w.reviewRating+"</td><td>"+w.reviewDate+"</td></tr>";
+                    s+="<tr class='photo'><td><img src='"+w.reviewImage+"'>"+w.reviewImage+"</td></tr></table>";
+                    //댓글 등록버튼
+                    s+="<div><button idx='"+idx+"' id='reply-write'>Reply</button></div>";
+                    //댓글 테이블
+                    s+="<table review_id='"+w.reviewId+"' class='table table-bordered'>";
+                    var idx_reply = 0;
+                    console.log("댓글 foreach 진입전");
+                    w.replyList.forEach(function(r){
+                        if(r!=null)
+                        {
+                            console.log("r!=null");
+                            s+="<tr review_id='"+w.reviewId+"' reply_id='"+r.replyId+"'><td><span class='glyphicon glyphicon-arrow-right'></span></td>";
+                            s+="<td>"+r.userEmail+"</td><td>"+r.replyContent+"</td><td>"+r.replyDate+"</td>";
+                            //댓글 수정,삭제 버튼
+                            s+="<td><button "+idx+"='"+idx+"' "+idx_reply+"='"+idx_reply+"' id='reply-mod'>수정</button><button idx='"+idx+"' idx_reply='"+idx_reply+"' id='reply-del'>삭제</button></tr>";
+                            idx_reply++;
+                        }
+                        else
+                            console.log("r=null");
+                    })
+                    console.log("댓글 foreach 진입후");
+                    s+="</table></div>";
+                    idx++;
+                })
+                s+="";
+                $("#test").html(s);
+
+
+
+
+
+            }
+        })
+
+
+        var ajax_data = JSON.parse(localStorage.getItem("reviewList"));
 
         // 리뷰목록 출력
-        var s="";
-        var idx=0;
-        ajax_data.reviewList.forEach(function(w){
-            s+="<div>";
-            //리뷰수정,삭제버튼
-            s+="<button id='review-mod' idx='"+idx+"'>수정</button><button id='review-del' idx='"+idx+"'>삭제</button>";
-            //리뷰 테이블
-            s+= "<table class='table table-bordered'><tr><td>번호</td><td>작성자</td><td>내용</td><td>별점</td><td>작성일</td></tr>";
-            s+="<tr><td>"+w.reviewId+"</td><td>"+w.userEmail+"</td><td class='content'>"+w.reviewContent+"("+w.reviewReplies.length+")</td><td>"+w.reviewRating+"</td><td>"+w.reviewDate+"</td></tr>";
-            s+="<tr class='photo'><td><img src='"+w.reviewImage+"'>"+w.reviewImage+"</td></tr></table>";
-            //댓글 등록버튼
-            s+="<div><button idx='"+idx+"' id='reply-write'>Reply</button></div>";
-            //댓글 테이블
-            s+="<table class='table table-bordered'>";
-            var idx_reply = 0;
-            w.reviewReplies.forEach(function(r){
-                if(r!=null)
-                {
-                    s+="<tr class='reply'><td><span class='glyphicon glyphicon-arrow-right'></span></td>";
-                    s+="<td>"+r.userEmail+"</td><td>"+r.replyContent+"</td><td>"+r.replyDate+"</td>";
-                    //댓글 수정,삭제 버튼
-                    s+="<td><button idx='"+idx+"' idx_reply='"+idx_reply+"' id='reply-mod'>수정</button><button idx='"+idx+"' idx_reply='"+idx_reply+"' id='reply-del'>삭제</button></tr>";
-                    idx_reply++;
-                }
-            })
-            s+="</table></div>";
-            idx++;
-        })
-        s+="";
-        $("#test").html(s);
+        // var s="";
+        // var idx=0;
+        // ajax_data.reviewList.forEach(function(w){
+        //     s+="<div review_id='"+w.reviewId+"'>";
+        //     //리뷰수정,삭제버튼
+        //     s+="<button id='review-mod' idx='"+idx+"'>수정</button><button id='review-del' idx='"+idx+"'>삭제</button>";
+        //     //리뷰 테이블
+        //     s+= "<table class='table table-bordered'><tr><td>번호</td><td>작성자</td><td>내용</td><td>별점</td><td>작성일</td></tr>";
+        //     s+="<tr><td>"+w.reviewId+"</td><td>"+w.userEmail+"</td><td class='content'>"+w.reviewContent+"("+w.reviewReplies.length+")</td><td>"+w.reviewRating+"</td><td>"+w.reviewDate+"</td></tr>";
+        //     s+="<tr class='photo'><td><img src='"+w.reviewImage+"'>"+w.reviewImage+"</td></tr></table>";
+        //     //댓글 등록버튼
+        //     s+="<div><button idx='"+idx+"' id='reply-write'>Reply</button></div>";
+        //     //댓글 테이블
+        //     s+="<table review_id='"+w.reviewId+"' class='table table-bordered'>";
+        //     var idx_reply = 0;
+        //     w.reviewReplies.forEach(function(r){
+        //         if(r!=null)
+        //         {
+        //             s+="<tr review_id='"+w.reviewId+"' reply_id='"+r.replyId+"'><td><span class='glyphicon glyphicon-arrow-right'></span></td>";
+        //             s+="<td>"+r.userEmail+"</td><td>"+r.replyContent+"</td><td>"+r.replyDate+"</td>";
+        //             //댓글 수정,삭제 버튼
+        //             s+="<td><button "+idx+"='"+idx+"' "+idx_reply+"='"+idx_reply+"' id='reply-mod'>수정</button><button idx='"+idx+"' idx_reply='"+idx_reply+"' id='reply-del'>삭제</button></tr>";
+        //             idx_reply++;
+        //         }
+        //     })
+        //     s+="</table></div>";
+        //     idx++;
+        // })
+        // s+="";
+        // $("#test").html(s);
 
     }
 
     // 리뷰 작성폼 출력
     $(document).on("click","#review-write",function(){
+        
         // 로그인 정보에서 접속중인 아이디정보 가져오기 ->작성자명(이메일)
         var s = "<table class='table table-bordered'>";
         s += "<tr><td>작성자</td><td id='userEmail'>"+userEmail+"</td></tr>";
@@ -126,8 +184,20 @@ $(function(){
         review_json.reviewContent = table.find("#content").val();
         review_json.userEmail = userEmail;
         review_json.storeId = storeId;
-        review_json.reviewReplies = [];
+        review_json.replyLIst = [];
         
+        $.ajax({
+            type:"post",
+            data:JSON.stringify(review_json),
+            url:"http://112.169.196.76:47788/review",
+            dataType:"json",
+            success:function(d){
+                alert("작성 성공:"+d);
+            }
+        })
+
+
+
         var ajax_data = JSON.parse(localStorage.getItem("reviewList"));
         ajax_data.reviewList.push(review_json);
         localStorage.setItem("reviewList",JSON.stringify(ajax_data));
@@ -142,9 +212,17 @@ $(function(){
 
     //리뷰 수정폼 출력
     $(document).on("click","#review-mod",function(){
-        var idx = $(this).attr("idx");
+       // var idx = $(this).attr("idx");
         var ajax_data = JSON.parse(localStorage.getItem("reviewList"));
-        var w = ajax_data.reviewList[parseInt(idx)];
+       // var w = ajax_data.reviewList[parseInt(idx)];
+        var w;
+        ajax_data.reviewList.forEach(function(item){
+            if(item.reviewId == $(this).closest("div").attr("review_id"))
+            {
+                w = item.reviewId;
+            }
+
+        })
 
         var s = "<table class='table table-bordered'>";
         s += "<tr><td>작성자</td><td id='userEmail'>"+userEmail+"</td></tr>";
@@ -170,8 +248,20 @@ $(function(){
         review_json.reviewContent = table.find("#content").val();
         review_json.userEmail = userEmail;
         review_json.storeId = storeId;
-        review_json.reviewReplies = [];
+        review_json.replyList = [];
         
+
+        $.ajax({
+            type:"put",
+            data:JSON.stringify(review_json),
+            url:"http://112.169.196.76:47788/review",
+            dataType:"json",
+            success:function(d){
+                alert("리뷰 수정 성공:"+d);
+            }
+        })
+
+
         var ajax_data = JSON.parse(localStorage.getItem("reviewList"));
         ajax_data.reviewList.push(review_json);
         localStorage.setItem("reviewList",JSON.stringify(ajax_data));
@@ -184,17 +274,27 @@ $(function(){
 
     //리뷰 삭제 처리
     $(document).on("click","#review-del",function(){
-        
+        var review_id = $(this).parent().attr("review_id");
+        console.log(review_id);
+        $.ajax({
+            type:"delete",
+            url:"http://112.169.196.76:47788/review/"+review_id,
+            dataType:"json",
+            success:function(d){
+                alert("리뷰삭제 성공:"+d);
+            }
+        })
     })
 
 
     // 리뷰 댓글 작성폼 출력
     $(document).on("click","#reply-write",function(){
+        var review_id = $(this).parent().parent().attr("review_id");
         var idx = $(this).attr("idx");
         var s = "<table class='table table-bordered'>";
         s += "<tr><td>작성자</td><td>"+userEmail+"</td></tr>";
         s += "<tr><td>댓글 내용</td><td><textarea style='width:500px;height:150px;'></textarea></td></tr>";
-        s += "<tr><td><button idx='"+idx+"' id='reply-submit'>등록</button><button id='reply-cancel'>취소</button></td></tr>";
+        s += "<tr><td><button review_id='"+review_id+"' idx='"+idx+"' id='reply-submit'>등록</button><button id='reply-cancel'>취소</button></td></tr>";
         s += "</table>";
         $(this).parent().html(s);
     })
@@ -206,25 +306,48 @@ $(function(){
 
     //리뷰 댓글 작성후 전송
     $(document).on("click","#reply-submit",function(){
-        var idx = $(this).attr("idx");
+        var review_id = $(this).attr("review_id");
         var reply = {};
+        reply.reviewId = review_id;
         reply.userEmail = userEmail;
         reply.replyContent = $(this).closest("table").find("textarea").val();
 
+
+        $.ajax({
+            type:"post",
+            data:JSON.stringify(reply),
+            url:"http://112.169.196.76:47788/reply",
+            dataType:"json",
+            success:function(d){
+                alert("댓글 작성 성공"+d);
+            }
+        })
+
         //로컬 꺼내와서 댓글 추가후 다시 저장
-        var ajax_data = JSON.parse(localStorage.getItem("reviewList"));
-        ajax_data.reviewList[parseInt(idx)].reviewReplies.push(reply);
-        localStorage.setItem("reviewList",JSON.stringify(ajax_data));
+        // var ajax_data = JSON.parse(localStorage.getItem("reviewList"));
+        // ajax_data.reviewList[parseInt(idx)].reviewReplies.push(reply);
+        // localStorage.setItem("reviewList",JSON.stringify(ajax_data));
 
         reviewLoad();
     })
 
     //리뷰 댓글 삭제 버튼
     $(document).on("click","#reply-del",function(){
-        var idx = $(this).attr("idx");
-        var idx_reply = $(this).attr("idx_reply");
+        var review_id = $(this).closest("tr").attr("review_id");
+        var reply_id = $(this).closest("tr").attr("reply_id");
+        
+        $.ajax({
+            type:"delete",
+            url:"http://112.169.196.76:47788/reply/삭제할댓글아이디",
+            dataType:"json",
+            success:function(d){
+                alert("댓글 삭제 성공!:"+d);
+            }
+        })
+
+
         var ajax_data = JSON.parse(localStorage.getItem("reviewList"));
-        ajax_data.reviewList[parseInt(idx)].reviewReplies[idx_reply] = null;
+ 
         localStorage.setItem("reviewList",JSON.stringify(ajax_data));
         //수정할것 
         reviewLoad();
@@ -232,15 +355,57 @@ $(function(){
 
     //리뷰 댓글 수정폼 출력
     $(document).on("click","#reply-mod",function(){
-        var idx = $(this).attr("idx");
-        var idx_reply = $(this).attr("idx_reply");
+        var this_tr = $(this).closest("tr");
 
+        // 이미 열려있는 다른 댓글수정폼 닫기
+        ajax_data.reviewList.forEach(function(d){
+            d.reviewReplies.forEach(function(r){
+                $("tr[reply_id]").each(function(index,item){
+                    var reply_id = $(this).attr("reply_id");
+                    var review_id = $(this).attr("review_id");
+                    if(d.reviewId == review_id && r.replyId == reply_id)
+                    {
+                        var s="";
+                        s+="<td><span class='glyphicon glyphicon-arrow-right'></span></td>";
+                        s+="<td>"+r.userEmail+"</td><td>"+r.replyContent+"</td><td>"+r.replyDate+"</td>";
+                        //댓글 수정,삭제 버튼
+                        s+="<td><button id='reply-mod'>수정</button><button id='reply-del'>삭제</button>";
+                        $(this).html(s);
+                    }
+                })
+            })
+        })
+
+        //현재 클릭한 댓글 수정폼 열기
         var s = "<table class='table table-bordered'>";
         s += "<tr><td>작성자</td><td>"+userEmail+"</td></tr>";
         s += "<tr><td>댓글 내용</td><td><textarea style='width:300px;height:25px;'></textarea></td></tr>";
         s += "<tr><td><button id='reply-mod-submit'>등록</button><button id='reply-cancel'>취소</button></td></tr>";
         s += "</table>";
-        $(this).closest("tr").html(s);
+        $(this_tr).html(s);
+        
+        
+
+    })
+
+    //리뷰 댓글 수정후 전송
+    $(document).on("click","reply-mod-submit",function(){
+        var review_id = $(this).attr("review_id");
+        var reply = {};
+        reply.reviewId = review_id;
+        reply.userEmail = userEmail;
+        reply.replyContent = $(this).closest("table").find("textarea").val();
+
+
+        $.ajax({
+            type:"post",
+            data:JSON.stringify(reply),
+            url:"http://112.169.196.76:47788/reply",
+            dataType:"json",
+            success:function(d){
+                alert("댓글 작성 성공"+d);
+            }
+        })
     })
 
 

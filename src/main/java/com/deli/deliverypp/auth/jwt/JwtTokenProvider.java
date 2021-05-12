@@ -20,6 +20,7 @@ public class JwtTokenProvider {
     private static final long tokenValidateTime = 1000L * 60 * 60; // 1 hour
     private static final long refreshTokenValidateTime = 1000L * 60 * 60 * 24 * 7; // 7days
     private final Logger log = LogManager.getLogger(JwtTokenProvider.class);
+    private final String issuer = "https://deli.alconn.co";
 
     static {
         try {
@@ -31,11 +32,11 @@ public class JwtTokenProvider {
 
 
 
-    public Jws<Claims> getClaims(String jws){
+    public Jws<Claims> getAccessTokenClaims(String jws){
         try {
             return Jwts
                     .parserBuilder()
-                    .requireIssuer("https://deli.alconn.co")
+                    .requireIssuer(issuer)
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(jws);
@@ -48,7 +49,7 @@ public class JwtTokenProvider {
     }
 
     public Map<String ,Object> getTokenBody(String jws) {
-        Jws<Claims> claimsJws = getClaims(jws);
+        Jws<Claims> claimsJws = getAccessTokenClaims(jws);
         return claimsJws.getBody();
     }
 
@@ -78,7 +79,7 @@ public class JwtTokenProvider {
                 .setId(userEmail)
                 .setExpiration(exp)
                 .setIssuedAt(date)
-                .setIssuer("https://deli.alconn.co")
+                .setIssuer(issuer)
                 .claim("userEmail", userEmail)
                 .claim("userType", userType)
                 .claim("userRole", userRole)
@@ -96,7 +97,10 @@ public class JwtTokenProvider {
                 .builder()
                 .setSubject("refresh")
                 .setId(user.getUserEmail())
-                .setIssuer("https://deli.alconn.co")
+                .setIssuer(issuer)
+                .claim("userEmail", user.getUserEmail())
+                .claim("userType", user.getUserType())
+                .claim("userRole", user.getUserRole())
                 .setIssuedAt(date)
                 .setExpiration(exp)
                 .setAudience(user.getUserEmail())
@@ -111,7 +115,7 @@ public class JwtTokenProvider {
             return Jwts
                     .parserBuilder()
                     .requireSubject("refresh")
-                    .requireIssuer("https://deli.alconn.co")
+                    .requireIssuer(issuer)
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(jws);
@@ -122,9 +126,15 @@ public class JwtTokenProvider {
         return null;
     }
 
+    /**
+     *
+     * @param jws token
+     * @return true if valid token
+     */
+
     public boolean validateToken (String jws) {
         try{
-            validateToken(jws);
+            getAccessTokenClaims(jws);
             return true;
         }catch (Exception e) {
             e.printStackTrace();
@@ -132,6 +142,11 @@ public class JwtTokenProvider {
         return false;
     }
 
+    /**
+     *
+     * @param jws token
+     * @return true if valid token
+     */
     public boolean validateRefreshToken (String jws) {
         try {
             getClaimsFromRefresh(jws);
