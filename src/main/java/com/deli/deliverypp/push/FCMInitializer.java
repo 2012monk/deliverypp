@@ -15,7 +15,7 @@ import java.net.URL;
 
 public class FCMInitializer {
 
-    private static final String keyPath ="test-c5caf-firebase-adminsdk-wi8s2-87418faf77.json";
+    private static final String keyPath ="delideli-c7932-firebase-adminsdk-ksy1s-0ea33cf21d.json";
     private static final Logger log = LogManager.getLogger(FCMInitializer.class);
 
     static {

@@ -112,55 +112,70 @@ window.simpleDeli = {
  }
 
 
-
+$.ajaxSetup({
+    beforeSend:function(xhr) {
+        if (simpleDeli.user.token){
+            xhr.setRequestHeader("authorization", "Bearer "+simpleDeli.user.token)
+        }
+    }
+})
 
 simpleDeli.unit = {
     init() {
         this.silentRefresh();
         setInterval(this.autoCheck, 1000 * 60 * 10);
 
+       
+        
         /**
          * @use
          * over ride XMLHttpRequest to set credentials , header
          * over ride global fetch
          */
         (function() {
-            const fetch = window.fetch;
-            window.fetch = function(){
-                console.log(arguments)
-                const headers = simpleDeli.unit.generateAuthHeader();
-                const args = [].slice.call(arguments);
-                if (headers !== null) {
+            // const fetch = window.fetch;
+            // window.fetch = function(){
+            //     console.log(arguments)
+            //     const headers = simpleDeli.unit.generateAuthHeader();
+            //     const args = [].slice.call(arguments);
+            //     if (headers !== null) {
          
-                    const originHeaders = args.headers;
-                    if (originHeaders !== null) {
+            //         const originHeaders = args.headers;
+            //         if (originHeaders !== null) {
          
-                    }
-                }
-                return Promise.resolve(fetch.apply(window, arguments))
-            }
+            //         }
+            //     }
+            //     return Promise.resolve(fetch.apply(window, arguments))
+            // }
          
-            const send = window.XMLHttpRequest.prototype.send;
-            window.XMLHttpRequest.prototype.send = function() {
-                const pointer = this;
-                // console.log(arguments)
-                // console.log(this);
-                const header = generateAuthHeader();
-                const args = [].slice.call(arguments)
-                // console.log(args)
+            // const send = window.XMLHttpRequest.prototype.send;
+            // window.XMLHttpRequest.prototype.send = function() {
+            //     return send.apply(this, [].slice.call(args));
+            //     const pointer = this;
+            //     console.log(arguments)
+            //     console.log(this);
+            //     const header = generateAuthHeader();
+            //     const args = [].slice.call(arguments)
+            //     // console.log(args)
          
-                if (!args.includes("authorization")){
-                    for (let k of header) {
-                        args.push(k[0], k[1]);
-                        console.log(k)
-                    }
-                    this.withCredentials = true;
-                }
+            //     // if (!args.includes("authorization")){
+            //     // }
+            //     try{
+            //         for (let k of header) {
+            //             console.log(k)
+            //             this.setRequestHeader(k[0], k[1]);
+            //             console.log(k)
+            //         }
+            //         this.withCredentials = true;
+    
+            //         console.log(this);
+
+            //     }catch(err) {
+            //         console.error(err);
+            //     }
          
-         
-                // console.log(args)
-                return send.apply(this, [].slice.call(args));
-            }
+            //     // console.log(args)
+            // }
          })();
     },
     checkExp(){
@@ -248,7 +263,6 @@ simpleDeli.unit = {
     
     }
 }
-
 
 
 

@@ -32,9 +32,11 @@ public class ReplyController extends HttpServlet {
                 List<Reply> list = access.getRepliesBiReview(ControlUtil.getRequestUri(request, 2));
                 ControlUtil.sendResponseData(response, MessageGenerator.makeResultMsg(list));
                 break;
-            default:
+            case "reply-id":
                 Reply reply = access.getReplyById(ControlUtil.getRequestUri(request, 2));
                 ControlUtil.sendResponseData(response, MessageGenerator.makeResultMsg(reply));
+                break;
+            default:
                 break;
         }
     }

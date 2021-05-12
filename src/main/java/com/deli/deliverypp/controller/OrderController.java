@@ -41,7 +41,7 @@ public class OrderController extends HttpServlet {
     public void initiateOrder(HttpServletRequest request, HttpServletResponse response) {
         response.setCharacterEncoding("utf-8");
         String json = ControlUtil.getJson(request);
-        ResponseMessage msg = null;
+        ResponseMessage<?> msg = null;
         try {
             msg = service.startKaKaoPayment(json);
             if (msg.getMessage() != null){
@@ -52,7 +52,7 @@ public class OrderController extends HttpServlet {
                 msg.setMessage("payment proceed");
             }
         } catch (IllegalArgumentException | IllegalStateException | JsonProcessingException e) {
-            msg = new ResponseMessage();
+            msg = new ResponseMessage<>();
             msg.setMessage("failed");
             msg.setData(e.getMessage());
         }

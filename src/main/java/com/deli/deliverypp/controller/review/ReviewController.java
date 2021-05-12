@@ -59,7 +59,7 @@ public class ReviewController extends HttpServlet {
                 msg = service.getReviewsByStore(value);
                 break;
             default:
-                msg = service.getReviewById(value);
+                msg = service.getReviewById(target);
                 break;
 
         }
