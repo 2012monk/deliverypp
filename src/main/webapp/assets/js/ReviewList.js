@@ -42,28 +42,27 @@ function reviewPage(){
 */
 
     function reviewLoad(){
-
+      
         //출력할 리뷰목록 DB에서 store id 로 받아오기
         $.ajax({
             type:"get",
             url:"http://112.169.196.76:47788/review/store/stid22",
             dataType:"json",
             success:function(ajax_data){
-                //alert("리뷰 출력 성공:"+JSON.stringify(ajax_data));
-
+               
                 var s="";
-                s+= "<h2>리뷰 게시판</h2><button id='review-write'>리뷰 쓰기</button>";
-                s+= "<hr><div id='write-form'></div>";
+                s+= "<h2>리뷰 게시판("+storeId+")</h2><button id='review-write'>리뷰 쓰기</button>";
+                s+= "<div id='write-form'></div>";
                 var idx=0;
                 ajax_data.data.forEach(function(w){
-                    s+="<button review_id='"+w.reviewId+"' type='button' id='testbtn'>리뷰테스트</button>";
-                    s+="<div review_id='"+w.reviewId+"'>";
+                    //테스트용 s+="<button review_id='"+w.reviewId+"' type='button' id='testbtn'>리뷰테스트</button>";
+                    s+="<hr><div review_id='"+w.reviewId+"'>";
                     //리뷰수정,삭제버튼
                     s+="<button id='review-mod' idx='"+idx+"'>수정</button><button id='review-del' idx='"+idx+"'>삭제</button>";
                     //리뷰 테이블
                     s+= "<table class='table table-bordered'><tr><td>번호</td><td>작성자</td><td>내용</td><td>별점</td><td>작성일</td></tr>";
                     s+="<tr><td>"+w.reviewId+"</td><td>"+w.userEmail+"</td><td class='content'>"+w.reviewContent+"("+w.replyList.length+")</td><td>"+w.reviewRating+"</td><td>"+w.reviewDate+"</td></tr>";
-                    s+="<tr class='photo'><td><img src='"+w.reviewImage+"'>"+w.reviewImage+"</td></tr></table>";
+                    s+="<tr class='photo'><td><img src=''>"+w.reviewImage+"</td></tr></table>";
                     //댓글 등록버튼
                     s+="<div><button idx='"+idx+"' id='reply-write'>Reply</button></div>";
                     //댓글 테이블
@@ -76,7 +75,8 @@ function reviewPage(){
                             s+="<tr review_id='"+w.reviewId+"' reply_id='"+r.replyId+"'><td><span class='glyphicon glyphicon-arrow-right'></span></td>";
                             s+="<td>"+r.userEmail+"</td><td>"+r.replyContent+"</td><td>"+r.replyDate+"</td>";
                             //댓글 수정,삭제 버튼
-                            s+="<td><button id='replytest' reply_id='"+r.replyId+"'>리플테스트</button><button id='reply-mod'>수정</button><button idx='"+idx+"' idx_reply='"+idx_reply+"' id='reply-del'>삭제</button></tr>";
+                            //테스트용 s+="<button id='replytest' reply_id='"+r.replyId+"'>리플테스트</button>";
+                            s+="<td><button id='reply-mod'>수정</button><button idx='"+idx+"' idx_reply='"+idx_reply+"' id='reply-del'>삭제</button></tr>";
 
                             idx_reply++;
                         }
@@ -86,10 +86,13 @@ function reviewPage(){
                     idx++;
                 })
                 s+="";
+                
                 $("#test").html(s);
+                
 
             }
         })
+
 
     }
 
@@ -142,7 +145,7 @@ function reviewPage(){
         s += "<tr><td>별점</td><td><select id='review-rate'><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></td></tr>";
         s += "<tr><td>사진 첨부</td><td><input id='photo' type='file'></td></tr>";
         s += "<tr><td>리뷰</td><td><textarea id='content' style='width:500px;height:150px;'></textarea></td></tr>";
-        s += "<tr><td><button id='review-submit'>등록</button><button id='review-cancel'>취소</button></td></tr>";
+        s += "<tr><td><button type='button' id='review-submit'>등록</button><button type='button' id='review-cancel'>취소</button></td></tr>";
         s += "</table></form>";
         $("#write-form").html(s);
     })
@@ -160,14 +163,10 @@ function reviewPage(){
         var review_json = {};
         review_json.userEmail = table.find("#userEmail").text();
         review_json.reviewRating = table.find("#review-rate").val();
-        //review_json.reviewImage = table.find("#photo").val();
         review_json.reviewContent = table.find("#content").val();
         review_json.userEmail = userEmail;
         review_json.storeId = storeId;
         review_json.replyLIst = [];
-        
-        var formData = new FormData();
-        formData.append('photo',document.getElementById('photo').files[0]);
         
 
         $.ajax({
@@ -176,9 +175,24 @@ function reviewPage(){
             url:"http://112.169.196.76:47788/review",
             dataType:"json",
             success:function(d){
-                alert("작성 성공:"+d);
+                alert("작성 성공:"+JSON.stringify(d));
                 $("#write-form").html("");
                 reviewLoad();
+            }
+        })
+        
+        var formData = new FormData();
+        formData.append('photo',table.find("input#photo").val());
+        
+
+        $.ajax({
+            type:"post",
+            data:formData,
+            url:"http://112.169.196.76:47788/upload",
+            processData: false,
+            contentType: false,
+            success:function(d){
+                alert("이미지 전송 성공:"+d);
             }
         })
         
@@ -201,18 +215,19 @@ function reviewPage(){
                 s += "<tr><td>별점</td><td><select id='review-rate'><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></td></tr>";
                 s += "<tr><td>사진 첨부</td><td><input id='photo' type='file'></td></tr>";
                 s += "<tr><td>리뷰</td><td><textarea id='content' style='width:500px;height:150px;'>"+r.data.reviewContent+"</textarea></td></tr>";
-                s += "<tr><td><button id='review-submit'>등록</button><button id='review-cancel'>취소</button></td></tr>";
+                s += "<tr><td><button type='button' review_id='"+review_id+"' id='review-mod-submit'>등록</button><button type='button' id='review-mod-cancel'>취소</button></td></tr>";
                 s += "</table></form>";
                 review_div.html(s);
                 review_div.find("#review-rate").val(r.data.reviewRating);
                 
-
-
-
-
             }
         }) 
         
+    })
+
+    //리뷰 수정폼 닫기
+    $(document).on("click","#review-mod-cancel",function(){
+        reviewLoad();
     })
 
     //리뷰 수정후 전송
@@ -220,9 +235,9 @@ function reviewPage(){
     $(document).on("click","#review-mod-submit",function(){
         var table = $(this).closest("table");
         var review_json = {};
+        review_json.reviewId = $(this).attr("review_id");
         review_json.userEmail = table.find("#userEmail").text();
         review_json.reviewRating = table.find("#review-rate").val();
-        review_json.reviewImage = table.find("#photo").val();
         review_json.reviewContent = table.find("#content").val();
         review_json.userEmail = userEmail;
         review_json.storeId = storeId;
@@ -233,13 +248,27 @@ function reviewPage(){
             type:"put",
             data:JSON.stringify(review_json),
             url:"http://112.169.196.76:47788/review",
-            dataType:"json",
+            //dataType:"json",
             success:function(d){
-                alert("리뷰 수정 성공:"+d);
+                alert("리뷰 수정 성공:"+JSON.stringify(d));
                 reviewLoad();
             }
         })
 
+        var formData = new FormData();
+        formData.append('photo',table.find("input#photo").val());
+
+        $.ajax({
+            type:"post",
+            data:formData,
+            url:"http://112.169.196.76:47788/upload",
+            processData: false,
+            contentType: false,
+            success:function(d){
+                alert("이미지 전송 성공:"+d);
+            }
+        })
+    
     })
 
     //리뷰 삭제 처리
@@ -250,12 +279,13 @@ function reviewPage(){
             type:"delete",
             url:"http://112.169.196.76:47788/review/"+review_id,
             //url:"http://112.169.196.76:47788/review/null",
-            dataType:"json",
+            //dataType:"json",
             success:function(d){
                 alert("리뷰삭제 성공:"+d);
                 reviewLoad();
             }
         })
+
     })
 
 
@@ -291,7 +321,7 @@ function reviewPage(){
             url:"http://112.169.196.76:47788/reply",
             dataType:"json",
             success:function(d){
-                alert("댓글 작성 성공"+d);
+                alert("댓글 작성 성공"+JSON.stringify(d));
                 reviewLoad();
             }
         })
@@ -376,7 +406,7 @@ function reviewPage(){
             url:"http://112.169.196.76:47788/reply",
             dataType:"json",
             success:function(d){
-                alert("댓글 수정 성공"+d);
+                alert("댓글 수정 성공"+JSON.stringify(d));
                 reviewLoad();
             }
         })
