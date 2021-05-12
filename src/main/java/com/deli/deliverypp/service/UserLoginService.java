@@ -158,6 +158,10 @@ public class UserLoginService {
 
     }
 
+    private boolean validateUser (DeliUser user) {
+        return user.getUserEmail() != null ;
+    }
+
     /**
      *
      * @param user user information
@@ -207,6 +211,7 @@ public class UserLoginService {
     }
 
     public boolean updateUser(String json) {
+        log.info(json);
         try {
             return access.updateUser(mapper.readValue(json, DeliUser.class));
         } catch (Exception e) {
