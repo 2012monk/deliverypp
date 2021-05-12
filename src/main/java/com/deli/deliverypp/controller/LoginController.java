@@ -63,11 +63,14 @@ public class LoginController extends HttpServlet {
         AuthInfo authInfo = null;
         try {
             authInfo = service.generateAuthInfo(ControlUtil.getJson(request));
-            String token = service.getRefreshToken(authInfo.getUser());
-            setRefreshToken(response, token);
+            if (authInfo != null){
+                String token = service.getRefreshToken(authInfo.getUser());
+                setRefreshToken(response, token);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         ControlUtil.sendResponseData(response, authInfoMsg(authInfo));
     }
 
@@ -75,7 +78,7 @@ public class LoginController extends HttpServlet {
 
     private void checkId (HttpServletRequest request, HttpServletResponse response) throws IOException {
         String id = ControlUtil.getRequestUri(request, 2);
-        ResponseMessage msg = new ResponseMessage();
+        ResponseMessage<?> msg = new ResponseMessage<>();
         msg.setMessage(service.checkUserIdOverlap(id) ? "overlap" : "free");
         msg.setData(id);
         ControlUtil.sendResponseData(response, msg);
@@ -91,7 +94,7 @@ public class LoginController extends HttpServlet {
         authCookie.setHttpOnly(true);
         authCookie.setSecure(true);
         authCookie.setMaxAge(60 * 60 * 24 * 7); // 7days
-        response.setHeader("Set-Cookie", "SID="+token+";SameSite=None; HttpOnly; Secure; max-age="+(60 * 60 * 24 * 7));
+        response.setHeader("Set-Cookie", "SID="+token+";SameSite=None; HttpOnly; Secure; path=/;max-age="+(60 * 60 * 24 * 7));
 //        response.addCookie(authCookie);
     }
 

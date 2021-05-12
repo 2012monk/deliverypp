@@ -49,7 +49,11 @@ public class ReviewAccess {
         conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
-            prst.setString(1, review.getReviewId());
+            prst.setString(4, review.getReviewId());
+
+            prst.setString(1, review.getReviewContent());
+            prst.setString(2, review.getReviewImage());
+            prst.setInt(3, review.getReviewRating());
 
             if (prst.executeUpdate() > 0) {
                 conn.commit();
@@ -98,6 +102,7 @@ public class ReviewAccess {
 
         List<Review> list = new ArrayList<>();
         String dbKey = convertToDbNameConvention(key);
+        System.out.println(value);
         String sql = "SELECT * FROM REVIEW WHERE " + dbKey+"=?";
         conn = getConn();
         try {

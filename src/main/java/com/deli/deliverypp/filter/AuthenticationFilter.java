@@ -28,6 +28,7 @@ public class AuthenticationFilter implements Filter {
 //    private static final AuthProvider provider = new AuthProvider();
     private static final UserLoginService service = new UserLoginService();
     private static final Map<String, DeliUser.UserRole> resources = MappingLoader.protectedUriProperties;
+//    private static final Map<String , Requ>
     private static final AuthProvider provider = new AuthProvider();
     private final Logger log = LogManager.getLogger(AuthenticationFilter.class);
 

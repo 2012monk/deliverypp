@@ -17,4 +17,7 @@ import java.lang.annotation.*;
 public @interface ProtectedResource {
     String redirect() default "/";
     DeliUser.UserRole role() default DeliUser.UserRole.CLIENT;
+    String method() default "get";
+    boolean id() default false;
+    String uri();
 }
