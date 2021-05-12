@@ -6,13 +6,19 @@
 /**
  * 
  * @function checkUserRole() 
- * @returns user role 
+ * @returns {userRole || null} user role if logged in
  * 
  * 
  * @function isLoggedIn()
- * @returns true if logged in
+ * @returns {boolean} true if logged in
  * 
+ * @function getUserInfo()
+ * @returns {userInfo || null}
+ * user info if logged in null
  * 
+ * @function getUserEmail()
+ * @returns {userEmail || null}
+ * user Email if logged in or null
  */
 
 window.simpleDeli = {
@@ -69,6 +75,10 @@ window.simpleDeli = {
      */
      getUserInfo() {
         return simpleDeli.deliUser || null
+    },
+
+    getUserEmail() {
+        return simpleDeli.deliUser.userEmail || null;
     },
 
 

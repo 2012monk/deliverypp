@@ -23,7 +23,6 @@ public class ReviewService {
     }
 
     public ResponseMessage<Review> insertNewReview (String json, boolean objReturn) {
-        ResponseMessage<Review> msg = new ResponseMessage<>();
         Review review = null;
         try {
             review = mapper.readValue(json, Review.class);
