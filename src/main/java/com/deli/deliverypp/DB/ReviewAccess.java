@@ -20,16 +20,17 @@ public class ReviewAccess {
     private static Connection conn;
 
     public Review insertReview (Review review) {
-        String sql = "INSERT INTO REVIEW (STORE_ID, REVIEW_ID, REVIEW_RATING, REVIEW_IMAGE, USER_EMAIL, REVIEW_CONTENT) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO REVIEW (STORE_ID, REVIEW_ID, REVIEW_RATING, REVIEW_IMAGE, USER_EMAIL, REVIEW_CONTENT, REVIEW_DATE) VALUES (?,?,?,?,?,?,?)";
         conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, review.getStoreId());
             prst.setString(2, review.getReviewId());
             prst.setInt(3, review.getReviewRating());
-            prst.setString(4, review.getUserEmail());
-            prst.setString(5, review.getReviewContent());
-            prst.setString(6, review.getReviewDate());
+            prst.setString(4, review.getReviewImage());
+            prst.setString(5, review.getUserEmail());
+            prst.setString(6, review.getReviewContent());
+            prst.setString(7, review.getReviewDate());
             if (prst.executeUpdate() > 0) {
                 conn.commit();
                 return review;
@@ -85,7 +86,7 @@ public class ReviewAccess {
     // NOTE 수정가능성있음 테스트코드 작성 필요!
     public List<Review> getReviewsByKey (@FindColumn(target = Review.class) String key, String value) {
         try {
-            Field f = Review.class.getField(key);
+            Field f = Review.class.getDeclaredField(key);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
             return null;

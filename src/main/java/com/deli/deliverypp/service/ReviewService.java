@@ -10,10 +10,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Map;
 
+import static com.deli.deliverypp.util.JSONUtil.getMapper;
+
 public class ReviewService {
 
     private static final ReviewAccess access = new ReviewAccess();
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = getMapper();
     private static final ReplyAccess replyAccess = new ReplyAccess();
 
     public boolean insertNewReview (String json) {
@@ -24,7 +26,9 @@ public class ReviewService {
         ResponseMessage<Review> msg = new ResponseMessage<>();
         Review review = null;
         try {
-            review = access.insertReview(mapper.readValue(json, Review.class));
+            review = mapper.readValue(json, Review.class);
+            review.generateReviewId();
+            review = access.insertReview(review);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -6,6 +6,7 @@ import com.deli.deliverypp.model.AuthInfo;
 import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.service.UserLoginService;
 import com.deli.deliverypp.util.ControlUtil;
+import com.deli.deliverypp.util.MessageGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,10 +59,15 @@ public class LoginController extends HttpServlet {
 
     // send access token
     // set refresh token
-    private void handleLogin (HttpServletRequest request, HttpServletResponse response) throws IOException {
-        AuthInfo authInfo = service.generateAuthInfo(ControlUtil.getJson(request));
-        String token = service.getRefreshToken(authInfo.getUser());
-        setRefreshToken(response, token);
+    private void handleLogin (HttpServletRequest request, HttpServletResponse response){
+        AuthInfo authInfo = null;
+        try {
+            authInfo = service.generateAuthInfo(ControlUtil.getJson(request));
+            String token = service.getRefreshToken(authInfo.getUser());
+            setRefreshToken(response, token);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ControlUtil.sendResponseData(response, authInfoMsg(authInfo));
     }
 
@@ -83,8 +89,10 @@ public class LoginController extends HttpServlet {
         Cookie authCookie = new Cookie("SID", token);
         authCookie.setPath("/");
         authCookie.setHttpOnly(true);
+        authCookie.setSecure(true);
         authCookie.setMaxAge(60 * 60 * 24 * 7); // 7days
-        response.addCookie(authCookie);
+        response.setHeader("Set-Cookie", "SID="+token+";SameSite=None; HttpOnly; Secure; max-age="+(60 * 60 * 24 * 7));
+//        response.addCookie(authCookie);
     }
 
 
@@ -107,18 +115,33 @@ public class LoginController extends HttpServlet {
 
     }
 
-    public void exchangeToken (HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Cookie refreshCookie = Arrays
-                .stream(request.getCookies())
-                .filter(c -> c.getName().equals("SID"))
-                .collect(Collectors.toList()).get(0);
+    public void exchangeToken (HttpServletRequest request, HttpServletResponse response)  {
+        Cookie refreshCookie = null;
+        try {
+        refreshCookie = Arrays
+                    .stream(request.getCookies())
+                    .filter(c -> c.getName().equals("SID"))
+                    .collect(Collectors.toList()).get(0);
+
+        } catch (Exception e) {
+            ControlUtil.sendResponseData(response,
+                MessageGenerator.makeMsg("refresh failed", "refresh_token doesn't exist", "111"));
+            e.printStackTrace();
+        }
 
 
         if (refreshCookie != null && provider.checkRefreshToken(refreshCookie.getValue())) {
             String token = refreshCookie.getValue();
             DeliUser user = service.parseUserFromRefreshToken(token);
 
-            AuthInfo info = service.generateAuthInfo(user);
+            AuthInfo info = null;
+            try {
+                info = service.generateAuthInfo(user);
+            } catch (Exception e) {
+                ControlUtil.sendResponseData(response,
+                        MessageGenerator.makeErrorMsg("refresh failed", "invalid_token"));
+                e.printStackTrace();
+            }
 
             ResponseMessage<AuthInfo> msg = authInfoMsg(info);
             msg.setMessage("exchange success");
