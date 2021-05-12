@@ -3,6 +3,7 @@ package com.deli.deliverypp.model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class Review {
 
@@ -27,6 +28,10 @@ public class Review {
         this.userEmail = userEmail;
         this.reviewContent = reviewContent;
         this.reviewDate = reviewDate;
+    }
+
+    public void generateReviewId() {
+        this.reviewId = UUID.randomUUID().toString();
     }
 
     public String getStoreName() {

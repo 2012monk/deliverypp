@@ -158,6 +158,10 @@ public class UserLoginService {
 
     }
 
+    private boolean validateUser (DeliUser user) {
+        return user.getUserEmail() != null ;
+    }
+
     /**
      *
      * @param user user information

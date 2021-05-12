@@ -1,156 +1,51 @@
-
-// 가게 상세 출력 : $("#storecus-storelist-detail").html(s);
-// 상품리스트 출력 : $("#storecus-productlist").html(s);
-// 장바구니 모달창 띄움 $("#myModal").modal();
-// 장바구니 cartmain 출력 $("div#test").html(s);
-// 장바구니 cartmain2 출력 $("div#test2").html(s);
-
-function cartPage(){
-
-	var s = "";
-	s+="<div class='onsuccess-msg'>";
-
-	s+="</div><div id='kakao-modal' class='modal fade' tabindex='-1'  aria-hidden='true'>";
-    s+="<div class='modal-dialog' role='document'><div class='modal-content'>";
-    s+="<iframe src='' class='kakao-inner' style='width: 100%;height: 100%;' ></iframe>";
-	s+="</div></div></div>";
-
-
-	s+="<div class='container'><h2>장바구니 테스트55</h2>";
-  	s+="<button type='button' class='btn btn-default btn-lg' id='myBtn'>장바구니</button>";
-	s+="<div class='modal fade' id='myModal' role='dialog'><div class='modal-dialog'>";
-    s+="<div class='modal-content'><div class='modal-header' style='padding:35px 50px;'>";
-	s+="<button type='button' class='close' data-dismiss='modal'>&times;</button>";
-    s+="<h2 style='font-weight:bold;'><span class='glyphicon glyphicon-shopping-cart'></span> 장바구니</h2></div>";
-        
-	s+="<div class='modal-body' style='padding:40px 50px;'>";
-    s+="<div id='test'></div><div id='test2'></div></div>";
-    s+="<div class='modal-footer' style='padding:20px 20px;'>test2</div>";
-    s+="</div></div></div></div>";
-
-	s+="<div id='storecus-header'></div><div id='storecus-btn-crud'></div>";
-	s+="<div id='storecus-storelist-detail'></div><div id='storecus-productlist'></div>";
-	s+="<div id='storecus-btn-order'></div>";
-	$("body").html(s);
-
-	//상품리스트
-	$.ajax({
-		type:"get",
-		url:"http://112.169.196.76:47788/products/list/stid3",
-		dataType:"json",
-		success:function(data){
-			var s="";
-				s+="<table>";
-				s+="<caption>상품 리스트</caption>";
-				s+="<tr><th>상품명</th><th>상품가격</th><th>상품 정보</th><th>상품 이미지</th></tr>";
-				$.each(data.data, function(i,elt){
-				    s+="<tr><td>"+elt.productName+"</td><td>"+elt.productPrice+"</td><td>"+elt.productDesc+"</td><td>"+elt.productImage+"</td><td><button type='button' onClick='add("+JSON.stringify(elt)+")'>add</button></td><tr>";
-			});
-				s+="</table>"; 
-			
-			$("#storecus-productlist").html(s);
-		}
-	});
+$(function(){
+	/*basket 모달 띄우기*/
+	var s ="";
+	s+='<div class="modal fade" id="basket-myModal" role="dialog">';
+    s+='<div class="modal-dialog">';
+  	s+='<div class="modal-content">';
+ 	s+=' <div class="modal-header" style="padding:35px 50px;">';
+    s+=' <button type="button" class="close" data-dismiss="modal">&times;</button>';
+    s+=' <h2 style="font-weight:bold;"><span class="glyphicon glyphicon-shopping-cart"></span> 장바구니</h2>';
+  	s+='  </div>';    
+  	s+='  <div class="modal-body" style="padding:40px 50px;">';
+    s+=' <div id="test"></div>';
+    s+='  <div id="test2"></div>';
+    s+='</div>';  
+    s+=' <div class="modal-footer" style="padding:20px 20px;">';
+    s+='  test2';
+    s+=' </div>'; 
+    s+=' </div>';
+      
+    s+='</div>';
+  	s+='</div>';
+	$("#index-main-first").html(s);
 	
-	//가게리스트
-	$.ajax({
-		type:"get",
-		url:"http://112.169.196.76:47788/stores/stid3",
-		dataType:"json",
-		success:function(data){
-			var s="";
-				s+="<div>가게소개</div>"
-				s+="<div>가게이름 : "+data.data.storeName+"</div>";
-				s+="<div>가게주소 : "+data.data.storeAddr+"</div>";
-				s+="<div>가게소개 : "+data.data.storeDesc+"</div>";
-				s+="<div>가게사진 : "+data.data.storeImage+"</div>";			
-			
-			$("#storecus-storelist-detail").html(s);
-		}
-	});
-
-}
-
-
-$(document).on("click","button.cart-add",function(){
-	//console.log("추가버튼");
-	var cart_list = JSON.parse(localStorage.getItem("cartList"));
-	var product = $(this).val();
-
-	var cart = {};
-	cart.productName = product;
-	cart.productPrice = cart_list[product].productPrice;
-	CartAdd(cart);
-	CartMain();
-})
-
-$(document).on("click","button.cart-delete",function(){
-	//console.log("삭제버튼");
-	var cart_list = JSON.parse(localStorage.getItem("cartList"));
-	var product = $(this).val();
-
-	var cart = {};
-	cart.productName = product;
-	cart.productPrice = cart_list[product].productPrice;
-	CartRemoveOne(cart);
-	CartMain();
-})
-
-$(document).on("click","button.cart-delete-line",function(){
-	//console.log("한줄삭제버튼");
-	var cart_list = JSON.parse(localStorage.getItem("cartList"));
-	var product = $(this).val();
-
-	var cart = {};
-	cart.productName = product;
-	cart.productPrice = cart_list[product].productPrice;
-	CartRemoveLine(cart);
-	CartMain();
-})
-
-$(document).on("click","button.cart-clear",function(){
-	//console.log("장바구니비움버튼");
-	CartRemoveAll();
-	alert("장바구니를 비웠습니다");
-})
-
-$(document).on("click","button.cart-order",function(){
-	//console.log("장바구니 결제하기 버튼");
-	var cart_pay = {}
-	cart_pay.storeId = localStorage.getItem("cartStoreId");
-	cart_pay.storeName = localStorage.getItem("cartStore");
 	
-	var cart_local_list = JSON.parse(localStorage.getItem("cartList"));
-	var cart_pay_list = [];
-	var cart_count = 0;
-	for(var one in cart_local_list)
-	{
-		cart_pay_list.push(cart_local_list[one]);
-		cart_count += parseInt(cart_local_list[one].quantity);
-	}
-	cart_pay.quantity = cart_count.toString();
-	cart_pay.totalPrice = localStorage.getItem("cartPrice");
-	cart_pay.orderList = cart_pay_list;
-	cart_pay.address = $(this).parent().find("#address").val();
-	cart_pay.telephone = $(this).parent().find("#telephone").val();
-	cart_pay.orderRequirement = $(this).parent().find("#orderRequirement").val();
-	cart_pay.paymentType = $(this).parent().find("#paymentType").val();
+	$(document).on("click","#basket-movepage",function(){
+		CartMain();
+		CartMain2();
 	
-	alert(JSON.stringify(cart_pay));
 	
-	$.ajax({
-		type:"post",
-		url:"http://112.169.196.76:47788/order",
-		data:JSON.stringify(cart_pay),
-		dataType:"json",
-		success:function(data){
-			var url = data.data.redirect_url;
-			kakaoPopUp(url);
-		}
 	})
 	
-})
+	
+	
+	
+});
 
+
+
+
+
+
+
+
+
+
+
+
+/*장바구니에 필요한 function*/
 function CartMain(){
 	console.log("CartMain()실행");
 	var cart_list = JSON.parse(localStorage.getItem("cartList"));
@@ -172,9 +67,13 @@ function CartMain(){
 	s+= "<tr><td>총 주문액 : </td><td>";
 	s+= localStorage.getItem("cartPrice");
 	s+= "</td><td><button type='button' class='cart-clear btn-info' data-dismiss='modal'>비우기</button></td></tr></table>";
+	
+	
+	
+	$("#index-main-first").html(s);
+	
+	$("#basket-myModal").modal();
 
-	$("div#test").html(s);
-	$("#myModal").modal();
 }
 
 function CartMain2(){
@@ -186,7 +85,7 @@ function CartMain2(){
 	s+= "<br><button type='button' class='btn-info cart-order'>결제하기</button>";
 	s+= "<button type='button' class='btn-info cart-order-cancel' data-dismiss='modal'>취소하기</button>";
 	
-	$("div#test2").html(s);
+	$("#index-main-second").html(s);
 }
 
 //메뉴창에서 메뉴(들)을 담기 누르면 호출
@@ -202,14 +101,14 @@ function CartLoad(cart_list, cart_store){
 		productDesc:xx
 	}
 	*/
-	//console.log("CartLoad()실행");
+	console.log("CartLoad()실행");
 	var cartAdd = JSON.parse(localStorage.getItem("cartList"));
 	var cartStore = localStorage.getItem("cartStore");
 	
 	//장바구니에 다른 가게 품목이 이미 담겨있으면
 	if(cartAdd != null && cartStore != cart_store)
 	{
-		//console.log("장바구니에 다른 가게 품목이 이미 담겨있으면 사용자체크");
+		console.log("장바구니에 다른 가게 품목이 이미 담겨있으면 사용자체크");
 		//사용자에게 기존 장바구니 비우고 새로 담을지 물어봄
 		var check = confirm("한 업체의 품목만 담을 수 있습니다. 기존 목록을 비우고 다시 담으시겠습니까?");
 		if(check = true) // Yes 라고 답하면
@@ -221,9 +120,13 @@ function CartLoad(cart_list, cart_store){
 			return; // 돌아감
 		}
 	}
+	console.log("cartAdd()실행전");
 	CartAdd(cart_list);  // 전부 담기
+	console.log("cartAdd()실행후");
 	localStorage.setItem("cartStore",cart_store); // 담긴 업체명 수정
 	localStorage.setItem("cartStoreId",cart_list.storeId); // 담긴 업체명 ID 수정
+	//alert("장바구니에 메뉴를 추가했습니다.");
+	
 }
 
 function CartAdd(cart){
@@ -231,6 +134,8 @@ function CartAdd(cart){
 	
 	if(JSON.parse(localStorage.getItem("cartList")) == null) //카트가 없는경우
 	{
+		console.log("CartAdd()실행:카트가없는경우");	
+		console.log("카트가 없는경우 새로 추가");
 		// 카트리스트에 상품1개 새로 추가
 		var cartAdd = {}; 
 		//저장 포맷 변경은 여기서(1)!!
@@ -245,12 +150,15 @@ function CartAdd(cart){
 				"quantity":1
 			};
 		
+		//console.log(JSON.stringify(cartAdd)); 여기까진 ok
+		
 		localStorage.setItem("cartList",JSON.stringify(cartAdd));
 		//주문 총액에 상품가격 추가
 		localStorage.setItem("cartPrice",cart.productPrice);
 	}
 	else //카트가 이미 하나이상 있는경우, (기존에 있는상품 count++ or 새상품 추가)
 	{
+		console.log("CartAdd()실행:카트가 이미 하나이상 있는경우");
 		//일단 기존에 있는 카트의 리스트 JSON객체로 꺼내오기
 		var cartAdd = JSON.parse(localStorage.getItem("cartList"));
 		
@@ -288,7 +196,7 @@ function CartAdd(cart){
 } 
 
 function CartAddAll(cart_all){
-	//console.log("CartAddAll()실행");
+	console.log("CartAddAll()실행");
 	for(var product in cart_all)
 	{
 		CartAdd(cart_all[product]);
@@ -298,6 +206,8 @@ function CartAddAll(cart_all){
 
 
 function CartRemoveOne(cart){
+	console.log("CartRemoveOne()실행");
+	// 삭제처리. 
 	//일단 기존에 있는 카트의 리스트 JSON객체로 꺼내오기
 	var cartAdd = JSON.parse(localStorage.getItem("cartList"));
 	

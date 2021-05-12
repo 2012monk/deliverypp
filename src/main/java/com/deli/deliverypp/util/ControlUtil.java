@@ -39,6 +39,7 @@ public class ControlUtil {
         }else{
 
             try{
+//                return java.net.URLDecoder.decode(rq.getRequestURI().substring(1).split("/")[num], "UTF-8");
                 return rq.getRequestURI().substring(1).split("/")[num];
             }catch (Exception e){
 //                e.printStackTrace();

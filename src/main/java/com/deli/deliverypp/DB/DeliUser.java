@@ -1,6 +1,8 @@
 package com.deli.deliverypp.DB;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DeliUser {
@@ -37,6 +39,7 @@ public class DeliUser {
         DELI
     }
     private String userEmail;
+    @JsonIgnore
     private String userPw;
     private UserRole userRole = UserRole.CLIENT;
     private UserType userType = UserType.DELI;
@@ -67,6 +70,7 @@ public class DeliUser {
         this.userEmail = userEmail;
     }
 
+    @JsonProperty
     public String getUserPw() {
         return userPw;
     }

@@ -59,9 +59,6 @@ body {
 	height:50px;
 }
 
-<!--        수정 한 부분 입니다 이성묵             -->
-
-<!-- iframe css style 안잡히는 이유? 해결해야됨 -->
 .kakao-inner{
     width: 100%;
     height: 100%;
@@ -72,92 +69,14 @@ body {
     overflow: auto;
 }
 
-<!-- 스타일 수정 끝  -->
-
-
-<!-- iframe css style 안잡히는 이유? 해결해야됨 -->
-.kakao-inner{
-    width: 100%;
-    height: 100%;
-}
-
-#kakao-modal .modal-content{
-    height: 800px;
-    overflow: auto;
-}
-
-<!-- 스타일 수정 끝  -->
 </style>
 <script type="text/javascript" src="./assets/js/StorePageList.js"></script>
 </head>
 <body>
-<!-- html 수정 부분입니다 이성묵 -->
-
-<div class="onsuccess-msg">
-
-</div>
-<div id="kakao-modal" class="modal fade" tabindex="-1"  aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <iframe src="" class="kakao-inner" style="width: 100%;height: 100%;" ></iframe>
-        </div>
-    </div>
-</div>
-
-<!--                            수정 끝                                   -->
-
-<!-- 카카오 수정부분 -->
-<div class="onsuccess-msg">
-
-</div>
-<div id="kakao-modal" class="modal fade" tabindex="-1"  aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <iframe src="" class="kakao-inner" style="width: 100%;height: 100%;" ></iframe>
-        </div>
-    </div>
-</div>
-
-<!-- 결제 두번째 할때는 결제안됨 -->
-
-<div class="container">
-  <h2>장바구니 테스트55</h2>
-  <!-- Trigger the modal with a button -->
-  <button type="button" class="btn btn-default btn-lg" id="myBtn">장바구니</button>
-
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
     
-      <!-- Modal content-->
-      <div class="modal-content">
-      
-        <div class="modal-header" style="padding:35px 50px;">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h2 style="font-weight:bold;"><span class="glyphicon glyphicon-shopping-cart"></span> 장바구니</h2>
-        </div>
-        
-        <div class="modal-body" style="padding:40px 50px;">
-        <div id="test"></div>
-        <div id="test2"></div>
-        </div>
-        
-        <div class="modal-footer" style="padding:20px 20px;">
-         test2
-        </div>
- 
-        
-      </div>
-      
-    </div>
-  </div> 
-</div>
-
-	<div id="storecus-header"></div>
-	<div id="storecus-btn-crud"></div>
-	<div id="storecus-storelist-detail"></div>
-	<div id="storecus-productlist"></div>
-	<div id="storecus-btn-order"></div>
+<script>
+cartPage();
+</script>
 </body>
 
 
