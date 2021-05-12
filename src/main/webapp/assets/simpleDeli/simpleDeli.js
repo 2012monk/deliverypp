@@ -13,12 +13,13 @@
  * @returns {boolean} true if logged in
  * 
  * @function getUserInfo()
- * @returns {userInfo || null}
+ * @returns {user || null}
  * user info if logged in null
  * 
  * @function getUserEmail()
  * @returns {userEmail || null}
  * user Email if logged in or null
+ * 
  */
 
 window.simpleDeli = {
