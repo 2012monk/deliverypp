@@ -1,11 +1,13 @@
 package com.deli.deliverypp.model;
 
 import com.deli.deliverypp.util.ParseUtil;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
+@JsonIgnoreProperties
 public class Store implements Serializable {
 
     private String storeId;

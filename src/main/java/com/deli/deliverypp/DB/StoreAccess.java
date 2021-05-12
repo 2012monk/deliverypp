@@ -11,6 +11,7 @@ import java.util.List;
 
 import static com.deli.deliverypp.DB.ConnHandler.close;
 import static com.deli.deliverypp.DB.ConnHandler.getConn;
+import static com.deli.deliverypp.util.DBUtil.setPOJO;
 
 public class StoreAccess {
 
@@ -81,7 +82,7 @@ public class StoreAccess {
             ResultSet rs = prst.executeQuery();
 
             if (rs.next()) {
-                store = rollUpStore(rs, store);
+                store = setPOJO(Store.class, rs);
             }
             return store;
         } catch (Exception e) {
