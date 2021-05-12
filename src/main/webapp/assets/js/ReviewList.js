@@ -42,7 +42,6 @@ function reviewPage(){
 */
 
     function reviewLoad(){
-      
         //출력할 리뷰목록 DB에서 store id 로 받아오기
         $.ajax({
             type:"get",
@@ -87,7 +86,7 @@ function reviewPage(){
                 })
                 s+="";
                 
-                $("#test").html(s);
+                $("#index-main-third").html(s);
                 
 
             }

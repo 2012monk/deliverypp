@@ -35,6 +35,7 @@
 				/*장바구니 이동하는 버튼 여기밖에 ??*/
 				c +="<div id='index-main-third'><button id='basket-movepage' style='btn btn-lg'>장바구니 이동 하는 버튼 </button></div>";
 			  	$("#index-main").html(c);
+                  reviewPage();
 				
 				$("#index-main-second").html(z);
             }
