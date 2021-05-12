@@ -4,6 +4,8 @@ import com.deli.deliverypp.DB.OrderAccess;
 import com.deli.deliverypp.model.KaKaoPayment;
 import com.deli.deliverypp.model.OrderInfo;
 import com.deli.deliverypp.model.ResponseMessage;
+import com.deli.deliverypp.push.FCMMessageService;
+import com.deli.deliverypp.util.MessageGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +25,9 @@ public class OrderService {
     private static final OrderAccess access = new OrderAccess();
     private final Logger log = LogManager.getLogger(OrderService.class);
 
-    public ResponseMessage startKaKaoPayment(String json) throws JsonProcessingException {
+    private static final FCMMessageService alertService = new FCMMessageService();
+
+    public ResponseMessage<OrderInfo> startKaKaoPayment(String json) throws JsonProcessingException {
 
         OrderInfo orderInfo;
 
@@ -58,7 +62,7 @@ public class OrderService {
                 throw new IllegalStateException("결제 요청 실패!");
             }
 
-            ResponseMessage msg = new ResponseMessage();
+            ResponseMessage<OrderInfo> msg = new ResponseMessage<>();
             if (paymentInfo != null) {
                 // add order list
                 orderInfo.setTid(paymentInfo.getTid());
@@ -86,7 +90,7 @@ public class OrderService {
 
 
 
-    public ResponseMessage sendKaKaoDone(String token, String tid) throws IOException {
+    public ResponseMessage<OrderInfo> sendKaKaoDone(String token, String tid) throws IOException {
 
         KaKaoPayment payment = new KaKaoPayment();
         payment.setPg_token(token);
@@ -94,7 +98,7 @@ public class OrderService {
 
         KaKaoPayment doneState = paymentHandler.kakaoPaymentDoneStage(payment);
 
-        ResponseMessage msg = new ResponseMessage();
+        ResponseMessage<OrderInfo> msg = new ResponseMessage<>();
         // validate if failed
         if (doneState.getCode() != null) {
 
@@ -105,12 +109,9 @@ public class OrderService {
         }else {
             access.makeOrderSuccessByTid(tid);
             OrderInfo info = access.getOrderInfoByTid(tid);
-            msg.setMessage("success");
-            msg.setData(
-                    new HashMap<String,Object>(){{
-                        put("orderInfo", info);
-                        put("paymentInfo", doneState);
-                    }});
+            msg = MessageGenerator.makeMsg("order success", info);
+
+            alertService.sendOrderMsgToSeller(info);
         }
 
         return msg;

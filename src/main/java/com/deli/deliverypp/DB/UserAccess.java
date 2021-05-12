@@ -13,7 +13,7 @@ public class UserAccess {
     private static Connection conn;
 
     public boolean registerUser(DeliUser user) {
-        String sql = "INSERT INTO USER (USER_EMAIL, USER_PW, USER_ROLE, USER_TYPE) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO USER (USER_EMAIL, USER_PW, USER_ROLE, USER_TYPE, USER_ADDR,USER_TELEPHONE) VALUES (?,?,?,?,?,?)";
         conn = getConn();
 
         try {
@@ -22,6 +22,8 @@ public class UserAccess {
             prst.setString(2, user.getUserPw());
             prst.setString(3, user.getUserRole().name());
             prst.setString(4, user.getUserType().name());
+            prst.setString(5, user.getUserAddr());
+            prst.setString(6, user.getUserTelephone());
 
             if (prst.executeUpdate() > 0) {
                 conn.commit();
@@ -45,18 +47,17 @@ public class UserAccess {
     }
 
 
-    public boolean loginUser (DeliUser user) {
+    public DeliUser loginUser (DeliUser user) {
         DeliUser savedUser = getUserInfo(user.getUserEmail());
 
         if (user.getUserType() == DeliUser.UserType.DELI) {
 
             if (user.getUserEmail().equals(savedUser.getUserEmail()) &&
                     user.getUserPw().equals(savedUser.getUserPw())) {
-                return true;
+                return savedUser;
             }
         }
-
-        return user.getUserEmail().equals(savedUser.getUserEmail());
+        return savedUser;
     }
 
     public boolean isUserEmailOverlap(String email) {
@@ -103,12 +104,12 @@ public class UserAccess {
         return null;
     }
 
-    public DeliUser signInUser (DeliUser user) {
-        if (loginUser(user)) {
-            return user;
-        }
-        return null;
-    }
+//    public DeliUser signInUser (DeliUser user) {
+//        if (loginUser(user) != null) {
+//            return user;
+//        }
+//        return null;
+//    }
 
     public boolean updateUser (DeliUser user) {
         String sql = "UPDATE USER SET USER_ADDR=?,USER_ROLE=?,USER_TELEPHONE=?, USER_PW=? WHERE USER_EMAIL=?";

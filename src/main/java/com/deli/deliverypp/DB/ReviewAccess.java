@@ -98,6 +98,7 @@ public class ReviewAccess {
 
         List<Review> list = new ArrayList<>();
         String dbKey = convertToDbNameConvention(key);
+        System.out.println(value);
         String sql = "SELECT * FROM REVIEW WHERE " + dbKey+"=?";
         conn = getConn();
         try {

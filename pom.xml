@@ -143,7 +143,7 @@
                 <include>**/jwt.key.pem</include>
                 <include>**/jwt.public.pem</include>
                 <include>**/jwtone.key.pem</include>
-                <include>**/test-c5caf-firebase-adminsdk-wi8s2-87418faf77.json</include>
+                <include>**/delideli-c7932-firebase-adminsdk-ksy1s-0ea33cf21d.json</include>
             </includes>
         </resource>
         <resource>
