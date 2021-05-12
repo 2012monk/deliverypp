@@ -39,6 +39,7 @@ public class DeliUser {
         DELI
     }
     private String userEmail;
+    @JsonIgnore
     private String userPw;
     private UserRole userRole = UserRole.CLIENT;
     private UserType userType = UserType.DELI;
@@ -69,7 +70,7 @@ public class DeliUser {
         this.userEmail = userEmail;
     }
 
-    @JsonIgnore
+    @JsonProperty
     public String getUserPw() {
         return userPw;
     }

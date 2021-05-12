@@ -211,7 +211,6 @@ public class UserLoginService {
     }
 
     public boolean updateUser(String json) {
-        log.info(json);
         try {
             return access.updateUser(mapper.readValue(json, DeliUser.class));
         } catch (Exception e) {

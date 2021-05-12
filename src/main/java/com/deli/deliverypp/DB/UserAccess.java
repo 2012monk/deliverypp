@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 
 import static com.deli.deliverypp.DB.ConnHandler.close;
 import static com.deli.deliverypp.DB.ConnHandler.getConn;
+import static com.deli.deliverypp.util.DBUtil.setPOJO;
 
 public class UserAccess {
 
@@ -85,10 +86,11 @@ public class UserAccess {
             ResultSet rs = prst.executeQuery();
 
             if (rs.next()) {
-                user.setUserEmail(rs.getString("USER_EMAIL"));
-                user.setUserPw(rs.getString("USER_PW"));
-                user.setUserType(DeliUser.UserType.valueOf(rs.getString("USER_TYPE")));
-                user.setUserRole(DeliUser.UserRole.valueOf(rs.getString("USER_ROLE")));
+//                user.setUserEmail(rs.getString("USER_EMAIL"));
+//                user.setUserPw(rs.getString("USER_PW"));
+//                user.setUserType(DeliUser.UserType.valueOf(rs.getString("USER_TYPE")));
+//                user.setUserRole(DeliUser.UserRole.valueOf(rs.getString("USER_ROLE")));
+                user = setPOJO(DeliUser.class, rs);
                 return user;
             }
         } catch (Exception e) {
@@ -110,6 +112,7 @@ public class UserAccess {
 
     public boolean updateUser (DeliUser user) {
         String sql = "UPDATE USER SET USER_ADDR=?,USER_ROLE=?,USER_TELEPHONE=?, USER_PW=? WHERE USER_EMAIL=?";
+        System.out.println(user);
         conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
