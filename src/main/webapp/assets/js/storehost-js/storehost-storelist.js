@@ -13,7 +13,7 @@ $(function(){
 				$.each(data.data, function(i,elt){
 				    s +="<tr><td>"+elt.storeId+"</td><td>"+elt.storeName+"</td><td>"+elt.storeDesc+"</td><td>"+elt.storeImage+"</td><td>"+elt.productList+"</td><td>"+elt.storeAddr+"</td>";
 				    s +="<td><button type='button' class='storelist-btn-delete' value='"+elt.storeId+"'>delete</button></td>";
-				    s +="<td><button type='button' id='storelist-btn-update"+i+"' value='"+elt.storeId+"'>update</button></td><tr>";
+				    s +="<td><button type='button' class='storelist-btn-update' value='"+elt.storeId+"'>update</button></td><tr>";
 			});
 				s+="</table>"; 
 			

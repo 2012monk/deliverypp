@@ -75,3 +75,13 @@ li {
 	height: 300px;
 	margin: 0 auto;
 }
+
+#index-main {
+	border: 5px solid black;
+	padding: 10px;
+	margin: 20px;
+	top: 600px;
+	width: 700px;
+	height: 300px;
+	margin: 0 auto;
+}
