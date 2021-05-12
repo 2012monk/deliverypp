@@ -23,13 +23,14 @@
  */
 
 window.simpleDeli = {
-    host : "http://112.169.196.76:47788/",
+    // host : "http://112.169.196.76:47788/",
+    host : "https://deli.alconn.co/",
     auth : {
         token : null
     },
 
     // TODO user 변수는 인식을 못함
-    user : "heelo",
+    // user : "heelo",
     // user : {
     //     userRole : null
     // },
@@ -37,6 +38,39 @@ window.simpleDeli = {
     deliUser: {
 
     },
+
+
+    // sub : {
+    //     getUserEmail() {
+            
+    //     },
+    //     getUserRole() {
+
+    //     },
+
+    //     getUserInfo() {
+    //         const data = localStorage.getItem("sub");
+    //         return user;
+    //     },
+
+    //     onSuccess(data){
+    //         const sub = {};
+    //         const res = data.data;
+    //         sub.deliUser = data.data.user;
+    //         sub.auth = {
+    //             "type" : res["auth_type"],
+    //             "token" : res["access_token"],
+    //             "exp" : parseInt(res["exp"])
+    //         };
+            
+    //         localStorage.setItem("sub", JSON.stringify(sub))
+    //     },
+
+    //     isLoggedIn(){
+    //         return this.getUserInfo !== null;
+    //     }
+    // },
+
     async handleLogOut() {
         await fetch(simpleDeli.host + "logout")
         simpleDeli.auth.token = null;
@@ -114,6 +148,7 @@ window.simpleDeli = {
 
 $.ajaxSetup({
     beforeSend:function(xhr) {
+        xhr.withCredentials = true;
         if (simpleDeli.user.token){
             xhr.setRequestHeader("authorization", "Bearer "+simpleDeli.user.token)
         }
@@ -132,7 +167,7 @@ simpleDeli.unit = {
          * over ride XMLHttpRequest to set credentials , header
          * over ride global fetch
          */
-        (function() {
+        // (function() {
             // const fetch = window.fetch;
             // window.fetch = function(){
             //     console.log(arguments)
@@ -176,7 +211,7 @@ simpleDeli.unit = {
          
             //     // console.log(args)
             // }
-         })();
+        //  })();
     },
     checkExp(){
         const now = new Date().getTime();
@@ -269,27 +304,39 @@ simpleDeli.unit = {
 
 
 
-setTimeout(function() {
-    $.ajax({
-        type: "get",
-        url: "http://localhost:47788/user/test@test.com",
-        dataType: "json",
-        beforeSend:function(xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer "+simpleDeli.auth.token);
-        },
-        success: function (data) {
-            console.log(JSON.stringify(data));
-            document.querySelector('body').innerText = JSON.stringify(data);
-        }
-    });
-}, 200)
+// setTimeout(function() {
+//     $.ajax({
+//         type: "get",
+//         url: "http://localhost:47788/user/test@test.com",
+//         dataType: "json",
+//         // beforeSend:function(xhr) {
+//         //     xhr.setRequestHeader("Authorization", "Bearer "+simpleDeli.auth.token);
+//         // },
+//         success: function (data) {
+//             console.log(JSON.stringify(data));
+//             document.querySelector('body').innerText = JSON.stringify(data);
+//         }
+//     });
+// }, 2000)
+// $.ajax({
+//     type: "post",
+//     data:JSON.stringify({
+//         "userEmail" : "test@test.com",
+//         "userPw" : "1234",
+//         "userType" : "DELI"
+//     }),
+//     url: simpleDeli.host+"login",
+//     success: function (response) {
+//         console.log(response)
+//     }
+// });
 
+// simpleDeli.loginAttempt({
+//     "userEmail" : "test@test.com",
+//     "userPw" : "1234",
+//     "userType" : "DELI"
+// })
 window.onload = () => {
-    simpleDeli.loginAttempt({
-        "userEmail" : "test@test.com",
-        "userPw" : "abcd1234",
-        "userType" : "DELI"
-    })
 }
 
 setTimeout(() => {
