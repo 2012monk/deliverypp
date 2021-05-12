@@ -13,22 +13,24 @@
  * @returns {boolean} true if logged in
  * 
  * @function getUserInfo()
- * @returns {userInfo || null}
+ * @returns {user || null}
  * user info if logged in null
  * 
  * @function getUserEmail()
  * @returns {userEmail || null}
  * user Email if logged in or null
+ * 
  */
 
 window.simpleDeli = {
-    host : "http://112.169.196.76:47788/",
+    // host : "http://112.169.196.76:47788/",
+    host : "https://deli.alconn.co/",
     auth : {
         token : null
     },
 
     // TODO user 변수는 인식을 못함
-    user : "heelo",
+    // user : "heelo",
     // user : {
     //     userRole : null
     // },
@@ -36,6 +38,10 @@ window.simpleDeli = {
     deliUser: {
 
     },
+
+
+    
+
     async handleLogOut() {
         await fetch(simpleDeli.host + "logout")
         simpleDeli.auth.token = null;
@@ -47,7 +53,6 @@ window.simpleDeli = {
      * @returns {null|string|*} if logged in return role or return null
      */
     checkUserRole() {
-        console.log(this.user)
         console.log(simpleDeli.deliUser)
         if (this.deliUser.userRole !== null && this.deliUser.userRole !== undefined) {
             return simpleDeli.deliUser.userRole;
@@ -111,56 +116,72 @@ window.simpleDeli = {
  }
 
 
-
+$.ajaxSetup({
+    beforeSend:function(xhr) {
+        xhr.withCredentials = true;
+        if (simpleDeli.deliUser.token){
+            xhr.setRequestHeader("authorization", "Bearer "+simpleDeli.deliUSer.token)
+        }
+    }
+})
 
 simpleDeli.unit = {
     init() {
         this.silentRefresh();
         setInterval(this.autoCheck, 1000 * 60 * 10);
 
+       
+        
         /**
          * @use
          * over ride XMLHttpRequest to set credentials , header
          * over ride global fetch
          */
-        (function() {
-            const fetch = window.fetch;
-            window.fetch = function(){
-                console.log(arguments)
-                const headers = simpleDeli.unit.generateAuthHeader();
-                const args = [].slice.call(arguments);
-                if (headers !== null) {
+        // (function() {
+            // const fetch = window.fetch;
+            // window.fetch = function(){
+            //     console.log(arguments)
+            //     const headers = simpleDeli.unit.generateAuthHeader();
+            //     const args = [].slice.call(arguments);
+            //     if (headers !== null) {
          
-                    const originHeaders = args.headers;
-                    if (originHeaders !== null) {
+            //         const originHeaders = args.headers;
+            //         if (originHeaders !== null) {
          
-                    }
-                }
-                return Promise.resolve(fetch.apply(window, arguments))
-            }
+            //         }
+            //     }
+            //     return Promise.resolve(fetch.apply(window, arguments))
+            // }
          
-            const send = window.XMLHttpRequest.prototype.send;
-            window.XMLHttpRequest.prototype.send = function() {
-                const pointer = this;
-                // console.log(arguments)
-                // console.log(this);
-                const header = generateAuthHeader();
-                const args = [].slice.call(arguments)
-                // console.log(args)
+            // const send = window.XMLHttpRequest.prototype.send;
+            // window.XMLHttpRequest.prototype.send = function() {
+            //     return send.apply(this, [].slice.call(args));
+            //     const pointer = this;
+            //     console.log(arguments)
+            //     console.log(this);
+            //     const header = generateAuthHeader();
+            //     const args = [].slice.call(arguments)
+            //     // console.log(args)
          
-                if (!args.includes("authorization")){
-                    for (let k of header) {
-                        args.push(k[0], k[1]);
-                        console.log(k)
-                    }
-                    this.withCredentials = true;
-                }
+            //     // if (!args.includes("authorization")){
+            //     // }
+            //     try{
+            //         for (let k of header) {
+            //             console.log(k)
+            //             this.setRequestHeader(k[0], k[1]);
+            //             console.log(k)
+            //         }
+            //         this.withCredentials = true;
+    
+            //         console.log(this);
+
+            //     }catch(err) {
+            //         console.error(err);
+            //     }
          
-         
-                // console.log(args)
-                return send.apply(this, [].slice.call(args));
-            }
-         })();
+            //     // console.log(args)
+            // }
+        //  })();
     },
     checkExp(){
         const now = new Date().getTime();
@@ -246,6 +267,36 @@ simpleDeli.unit = {
     deliAuth(header) {
     
     }
+    // sub : {
+    //     getUserEmail() {
+            
+    //     },
+    //     getUserRole() {
+
+    //     },
+
+    //     getUserInfo() {
+    //         const data = localStorage.getItem("sub");
+    //         return user;
+    //     },
+
+    //     onSuccess(data){
+    //         const sub = {};
+    //         const res = data.data;
+    //         sub.deliUser = data.data.user;
+    //         sub.auth = {
+    //             "type" : res["auth_type"],
+    //             "token" : res["access_token"],
+    //             "exp" : parseInt(res["exp"])
+    //         };
+            
+    //         localStorage.setItem("sub", JSON.stringify(sub))
+    //     },
+
+    //     isLoggedIn(){
+    //         return this.getUserInfo !== null;
+    //     }
+    // },
 }
 
 
@@ -253,35 +304,37 @@ simpleDeli.unit = {
 
 
 
+// setTimeout(function() {
+//     $.ajax({
+//         type: "get",
+//         url: "http://localhost:47788/user/test@test.com",
+//         dataType: "json",
+//         // beforeSend:function(xhr) {
+//         //     xhr.setRequestHeader("Authorization", "Bearer "+simpleDeli.auth.token);
+//         // },
+//         success: function (data) {
+//             console.log(JSON.stringify(data));
+//             document.querySelector('body').innerText = JSON.stringify(data);
+//         }
+//     });
+// }, 2000)
+// $.ajax({
+//     type: "post",
+//     data:JSON.stringify({
+//         "userEmail" : "test@test.com",
+//         "userPw" : "1234",
+//         "userType" : "DELI"
+//     }),
+//     url: simpleDeli.host+"login",
+//     success: function (response) {
+//         console.log(response)
+//     }
+// });
 
-setTimeout(function() {
-    $.ajax({
-        type: "get",
-        url: "http://localhost:47788/user/test@test.com",
-        dataType: "json",
-        beforeSend:function(xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer "+simpleDeli.auth.token);
-        },
-        success: function (data) {
-            console.log(JSON.stringify(data));
-            document.querySelector('body').innerText = JSON.stringify(data);
-        }
-    });
-}, 200)
-
-window.onload = () => {
-    simpleDeli.loginAttempt({
-        "userEmail" : "test@test.com",
-        "userPw" : "abcd1234",
-        "userType" : "DELI"
-    })
-}
-
-setTimeout(() => {
-    console.log(simpleDeli.checkUserRole());
-    console.log(simpleDeli.checkUserType())
-    console.log(simpleDeli.isLoggedIn());
-
-},1000)
+simpleDeli.loginAttempt({
+    "userEmail" : "test@test.com",
+    "userPw" : "1234",
+    "userType" : "DELI"
+})
 
 simpleDeli.unit.init();

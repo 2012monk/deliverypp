@@ -11,11 +11,13 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
+import static com.deli.deliverypp.util.JSONUtil.getMapper;
+
 
 public class StoreService {
 
     private static final Logger log = LogManager.getLogger(StoreService.class);
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = getMapper();
     private static final StoreAccess storeAccess = new StoreAccess();
     private static final ProductAccess productAccess = new ProductAccess();
 

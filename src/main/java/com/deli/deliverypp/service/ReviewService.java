@@ -51,15 +51,23 @@ public class ReviewService {
 
     public ResponseMessage<Review> getReviewById (String reviewId) {
         Review review = access.getReviewByKey("reviewId", reviewId);
-        review.setReplyList(replyAccess.getRepliesBiReview(reviewId));
+        try {
+            review.setReplyList(replyAccess.getRepliesBiReview(reviewId));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return makeMsg(review);
     }
 
     public ResponseMessage<List<Review>> getReviewsByStore (String storeId) {
         List<Review> list = access.getReviewsByKey("storeId", storeId);
         for (Review r: list) {
-            List<Reply> replies = replyAccess.getRepliesBiReview(r.getReviewId());
-            r.setReplyList(replies);
+            try {
+                List<Reply> replies = replyAccess.getRepliesBiReview(r.getReviewId());
+                r.setReplyList(replies);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return makeMsg(list);
     }
@@ -67,8 +75,13 @@ public class ReviewService {
     public ResponseMessage<List<Review>> getReviewsByWriter (String writer) {
         List<Review> list = access.getReviewsByKey("userEmail", writer);
         for (Review r: list) {
-            List<Reply> replies = replyAccess.getRepliesBiReview(r.getReviewId());
-            r.setReplyList(replies);
+            try {
+                List<Reply> replies = replyAccess.getRepliesBiReview(r.getReviewId());
+                r.setReplyList(replies);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return makeMsg(list);
     }

@@ -31,6 +31,7 @@ public class UserLoginService {
 
     public boolean signUpUser (String json) throws JsonProcessingException {
         DeliUser user = parseUser(json);
+        log.info(json);
         user.setUserRole(DeliUser.UserRole.CLIENT);
         return access.registerUser(user);
     }
@@ -51,9 +52,9 @@ public class UserLoginService {
         return false;
     }
 
-    public boolean userLogin(String json) throws JsonProcessingException {
-        return access.loginUser(parseUser(json));
-    }
+//    public boolean userLogin(String json) throws JsonProcessingException {
+//        return access.loginUser(parseUser(json));
+//    }
 
     public boolean checkUserIdOverlap (String userEmail) {
         return access.isUserEmailOverlap(userEmail);
@@ -68,6 +69,24 @@ public class UserLoginService {
         return mapper.readValue(json, DeliUser.class);
     }
 
+    public DeliUser loginUser (DeliUser user) {
+        DeliUser savedUser = getUserInfo(user.getUserEmail());
+
+        if (user.getUserType() == DeliUser.UserType.DELI) {
+
+            if (user.getUserEmail().equals(savedUser.getUserEmail()) &&
+                    user.getUserPw().equals(savedUser.getUserPw())) {
+                return savedUser;
+            }
+        }
+
+        if (user.getUserType() == DeliUser.UserType.GOOGLE){
+            if (user.getUserEmail().equals(savedUser.getUserEmail())){
+                return savedUser;
+            }
+        }
+        return null;
+    }
 
     /**
      *
@@ -82,7 +101,7 @@ public class UserLoginService {
      * @throws JsonProcessingException json parse exception
      */
     public AuthInfo generateAuthInfo (String json) throws JsonProcessingException {
-        DeliUser user = access.signInUser(parseUser(json));
+        DeliUser user = loginUser(parseUser(json));
         return generateAuthInfo(user);
     }
 
@@ -154,9 +173,6 @@ public class UserLoginService {
         return true;
     }
 
-    public void getAuthorized (String jws) {
-
-    }
 
     private boolean validateUser (DeliUser user) {
         return user.getUserEmail() != null ;
@@ -167,7 +183,7 @@ public class UserLoginService {
      * @param user user information
      * @return json auth information
      */
-    private AuthInfo setAccess (DeliUser user) throws JsonProcessingException {
+    private AuthInfo setAccess (DeliUser user){
         String token = provider.generateToken(user.getUserEmail(),
                 user.getUserRole().name(), user.getUserType().name());
 
@@ -222,4 +238,6 @@ public class UserLoginService {
     public boolean deleteUser(String userEmail) {
         return access.deleteUser(userEmail);
     }
+
+
 }
