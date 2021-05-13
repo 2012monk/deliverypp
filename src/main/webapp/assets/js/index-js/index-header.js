@@ -36,8 +36,7 @@
 		s += '</div>';
 		$("#index-header").html(s); 
 		
-		console.log(simpleDeli.checkUserRole());
-		if(simpleDeli.checkUserRole()=="SELLER"){
+		if(login_id=="SELLER"){
 			$(function(){
 				//가게 리스트 출력 
 				var storeId = $(this).attr("value");
