@@ -51,6 +51,7 @@ function reviewPage(){
                
                 var s="";
                 s+= "<h2>리뷰 게시판("+storeId+")</h2><button id='review-write'>리뷰 쓰기</button>";
+                s+= "<button id='review-mylist'>내가 쓴 리뷰</button>";
                 s+= "<div id='write-form'></div>";
                 var idx=0;
                 ajax_data.data.forEach(function(w){
@@ -95,45 +96,7 @@ function reviewPage(){
 
     }
 
-    // 서버 리뷰 테스트용 버튼
-    $(document).on("click","#testbtn",function(){
-        //유저아이디로 불러오기
-        $.ajax({
-            type:"get",
-            url:"http://112.169.196.76:47788/review/user/"+userEmail,
-            dataType:"json",
-            success:function(d){
-                alert("유저아이디로 불러오기:"+JSON.stringify(d));
-            }
-        })
-    })
-
-    // 서버 리플 테스트용 버튼
-    $(document).on("click","#replytest",function(){
-        var reply_id = $(this).attr("reply_id");
-        var review_id = $(this).closest("tr").attr("review_id");
-        console.log("reply_id:"+reply_id);
-        console.log("review_id:"+review_id);
-        $.ajax({
-            type:"get",
-            url:"http://112.169.196.76:47788/reply/reply-id/"+reply_id,
-            dataType:"json",
-            success:function(d){
-                alert("리플아이디로 불러오기:"+JSON.stringify(d));
-            }
-        })
-
-        $.ajax({
-            type:"get",
-            url:"http://112.169.196.76:47788/reply/review-id/"+review_id,
-            dataType:"json",
-            success:function(d){
-                alert("리뷰아이디로 불러오기:"+JSON.stringify(d));
-            }
-        })
-
-    })
-
+    
 
     // 리뷰 작성폼 출력
     $(document).on("click","#review-write",function(){
@@ -156,7 +119,6 @@ function reviewPage(){
     })
     
     // 리뷰 작성후 전송
-    // 사진 전송 기능 수정할 것
     $(document).on("click","#review-submit",function(){
         var table = $(this).closest("table");
         var review_json = {};
@@ -166,13 +128,13 @@ function reviewPage(){
         review_json.userEmail = userEmail;
         review_json.storeId = storeId;
         review_json.replyLIst = [];
-        
 
+        // 텍스트 데이터 전송
         $.ajax({
             type:"post",
             data:JSON.stringify(review_json),
             url:"http://112.169.196.76:47788/review",
-            dataType:"json",
+            //dataType:"json",
             success:function(d){
                 alert("작성 성공:"+JSON.stringify(d));
                 $("#write-form").html("");
@@ -180,20 +142,26 @@ function reviewPage(){
             }
         })
         
-        var formData = new FormData();
-        formData.append('photo',table.find("input#photo").val());
         
-
-        $.ajax({
-            type:"post",
-            data:formData,
-            url:"http://112.169.196.76:47788/upload",
-            processData: false,
-            contentType: false,
-            success:function(d){
-                alert("이미지 전송 성공:"+d);
-            }
-        })
+        // 첨부이미지 경로가 비어있지 않다면 사진이미지 전송
+        if(table.find("input#photo").val()!="")
+        {
+            var formData = new FormData();
+            formData.append('photo',table.find("input#photo").val());
+            
+            $.ajax({
+                type:"post",
+                data:formData,
+                url:"http://112.169.196.76:47788/upload",
+                processData: false,
+                contentType: false,
+                success:function(d){
+                    console.log("이미지 전송 성공:"+JSON.stringify(d));
+                }
+            })
+        }
+        else
+            console.log("이미지 첨부 없음");
         
     })
 
@@ -412,6 +380,54 @@ function reviewPage(){
         
     })
 
+
+
     reviewLoad();
     
 }
+
+
+
+
+
+
+
+
+// 서버 리뷰 테스트용 버튼
+$(document).on("click","#testbtn",function(){
+    //유저아이디로 불러오기
+    $.ajax({
+        type:"get",
+        url:"http://112.169.196.76:47788/review/user/"+userEmail,
+        dataType:"json",
+        success:function(d){
+            alert("유저아이디로 불러오기:"+JSON.stringify(d));
+        }
+    })
+})
+
+// 서버 리플 테스트용 버튼
+$(document).on("click","#replytest",function(){
+    var reply_id = $(this).attr("reply_id");
+    var review_id = $(this).closest("tr").attr("review_id");
+    console.log("reply_id:"+reply_id);
+    console.log("review_id:"+review_id);
+    $.ajax({
+        type:"get",
+        url:"http://112.169.196.76:47788/reply/reply-id/"+reply_id,
+        dataType:"json",
+        success:function(d){
+            alert("리플아이디로 불러오기:"+JSON.stringify(d));
+        }
+    })
+
+    $.ajax({
+        type:"get",
+        url:"http://112.169.196.76:47788/reply/review-id/"+review_id,
+        dataType:"json",
+        success:function(d){
+            alert("리뷰아이디로 불러오기:"+JSON.stringify(d));
+        }
+    })
+
+})
