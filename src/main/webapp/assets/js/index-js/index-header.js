@@ -1,4 +1,4 @@
-	function mainPage(){
+	/*function mainPage(){
 		s = "<div class='navbar-logo'>";
 		s += "<a href=''>배달의 민족</a>";
 		s +="<i class='fas fa-space-shuttle'></i>"
@@ -12,10 +12,10 @@
 				
 		s +="<ul class='navbar-login'>";
 		s +="<li><i class='fas fa-user-plus'></i></li>";
-		s +="<li><i class='far fa-id-card'></i></li></ul>";
+		s +="<li><i class='far fa-id-card'></i></li></ul>";*/
 		
 		/*모달 코드 렌더링 처음에 해놔야 나중에 */
-		s += '<div id="myModal" class="modal" tabindex="-1" role="dialog">';
+		/*s += '<div id="myModal" class="modal" tabindex="-1" role="dialog">';
   		s += '<div class="modal-dialog" role="document">';
         s += '<div class="modal-content">';
     	s += '<div class="modal-header">';
@@ -26,12 +26,12 @@
       	s += '</div>';
       	s += '<div class="modal-body">';
        	s += ' <p class="modal-body-p">Modal body text goes here.</p>';
-      	s += '</div>';
+      	s += '</div>';*/
       	/*s += '<div class="modal-footer">';
        	s += ' <button type="button" class="btn btn-primary">Save changes</button>';
        	s += ' <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>';
       	s += '</div>';*/
-    	s += '</div>';
+    	/*s += '</div>';
   		s += '</div>';
 		s += '</div>';
 		$("#index-header").html(s); 
@@ -59,24 +59,24 @@
 						$("#index-main").html(s);
 						
 					}
-				});
+				});*/
 				/*storeHost();*/
-			});
-		} else {
+			/*});
+		} else {*/
 			/*비화원 손님 회원도 여기가 렌더링*/
-			var a = "";
+			/*var a = "";
 			$.ajax({
 				type:"get",
 				url:"http://112.169.196.76:47788/stores/list",
 				dataType:"json",
 				success:function(d){
 					$.each(d.data, function(i, elt) {
-						console.log(elt.storeId,elt.storeName);
+						console.log(elt.storeId,elt.storeName);*/
 						//console.log(i);
 						//a += "<div storename='"+elt.storeId+"'>";
-						a += "<div class='main-storelist' data-value='"+elt.storeId+"'>";
+						/*a += "<div class='main-storelist' data-value='"+elt.storeId+"'>";*/
 						/*a += "<img src='"+elt.storeImage+"'>";*/
-						a += "<div>"+elt.storeName+"</div>";
+						/*a += "<div>"+elt.storeName+"</div>";
 						a +="<div><span>리뷰</span></div>";
 						a +="</div>";
 						
@@ -86,8 +86,7 @@
 			});
 			storeCustomerProductList()
 		}
-}
-
+}*/
 
 function mainHeaderPage() {
 	s = "<div class='navbar-logo'>";

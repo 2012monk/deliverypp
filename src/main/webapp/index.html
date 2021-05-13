@@ -25,17 +25,20 @@ var login_id = "logout";
 $(document).on("click","#test_seller_login",function(){
 	login_id = "SELLER";
 	$("#test_login_info").html("SELLER 로그인");
-	mainPage();
+	mainHeaderPage();
+	mainBodyPage();
 })
 $(document).on("click","#test_client_login",function(){
 	login_id = "CLIENT";
 	$("#test_login_info").html("CLIENT 로그인");
-	mainPage();
+	mainHeaderPage();
+	mainBodyPage();
 })
 $(document).on("click","#test_logout",function(){
 	login_id = "logout";
 	$("#test_login_info").html("로그아웃됨");
-	mainPage();
+	mainHeaderPage();
+	mainBodyPage();
 })
 
 
