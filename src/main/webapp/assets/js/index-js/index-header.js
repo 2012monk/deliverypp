@@ -6,11 +6,11 @@
 	
 		s +="<ul class='navbar-menu'>";
 		s +="<li><a href='#main' id='mainpage'>main</div><li>";
-		s +="<li><a href='#storecus' id='storecustomer'>storecus</a><li>";	
+		s +="<li><a href='#storecus' id='storecustomer'>storecus</a><li>";
 		s +="<li><a href='#basket'>basket</a><li>";
 		s +="</ul>";
 				
-		s +="<ul class='navbar-login'>"	
+		s +="<ul class='navbar-login'>";
 		s +="<li><i class='fas fa-user-plus'></i></li>";
 		s +="<li><i class='far fa-id-card'></i></li></ul>";
 		

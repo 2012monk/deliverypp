@@ -9,17 +9,21 @@
 <script src="assets/simpleDeli/simpleDeli.js"></script>
 <script>
     $(function(){
-        $("#userinformation").hide();
-        $("#userupdateform").hide();
-        $("#test").show();
+        setTimeout(a,2000);
+    });
 
-        if(simpleDeli.isLoggedIn()==true)
+    function a(){
+        if(simpleDeli.isLoggedIn()===true)
         {
             $("#userinformation").show();
             $("#userupdateform").show();
             $("#test").hide();
+        }else{
+            $("#userinformation").hide();
+            $("#userupdateform").hide();
+            $("#test").show();
         }
-    });
+    }
 </script>
 </head>
 <body>
