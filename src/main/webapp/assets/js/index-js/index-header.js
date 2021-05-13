@@ -128,7 +128,7 @@ function mainHeaderPage() {
 }
 
 function mainBodyPage() {
-	if(login_id=="SELLER"){
+	if(simpleDeli.checkUserRole()=="SELLER"){
 			$(function(){
 				//가게 리스트 출력 
 				var storeId = $(this).attr("value");

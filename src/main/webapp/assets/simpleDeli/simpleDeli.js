@@ -357,7 +357,7 @@ simpleDeli.unit = {
 // });
 
 simpleDeli.loginAttempt({
-    "userEmail" : "test123@test.com",
+    "userEmail" : "test@test.com",
     "userPw" : "1234",
     "userType" : "DELI"
 })
