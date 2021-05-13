@@ -1,6 +1,6 @@
 $(function(){
 	var s="";
-	var userroll="";
+	var userRole="";
 	$(document).on("click","#memberbtn",function(){
 		userType="deli";
 		s="<form id='deliform'>";
