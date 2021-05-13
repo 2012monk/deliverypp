@@ -44,6 +44,7 @@ public class OrderTest {
 
         OrderInfo info = m.readValue("{\"storeId\":\"bba6248f-3a98-475e-a385-ffb76b32c518\",\"storeName\":\"teststore\",\"quantity\":\"13\",\"totalPrice\":\"715000\",\"orderList\":[{\"productId\":\"pid2\",\"productName\":\"아이템3421\",\"productImage\":null,\"storeId\":\"stid2\",\"productPrice\":\"15000\",\"productDesc\":null,\"quantity\":5},{\"productId\":\"pid4\",\"productName\":\"섬띵\",\"productImage\":null,\"storeId\":\"stid2\",\"productPrice\":\"80000\",\"productDesc\":null,\"quantity\":8}],\"address\":\"555\",\"telephone\":\"666\",\"orderRequirement\":\"777\",\"paymentType\":\"kakao\"}", OrderInfo.class);
 //        OrderInfo o = m.readValue(json, OrderInfo.class);
+        System.out.println(m.writeValueAsString(info));
 
         OrderService s = new OrderService();
         FCMMessageService m2 = new FCMMessageService();
