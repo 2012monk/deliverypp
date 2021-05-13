@@ -370,6 +370,7 @@ function CartClearCheck(){
 		
 		// 모달창 dismiss 닫기 처리해야한다 코드 알아보기
 		
+		$("button.btn-order-cancel").click();
 	}
 }
 
