@@ -85,6 +85,7 @@ public class CORSFilter implements Filter {
 
         else if (rq.getHeader("origin") != null) {
             String origin = rq.getHeader("origin");
+            log.info(origin);
 
             rs.setHeader("Access-Control-Allow-Credentials", "true");
 //            rs.setHeader("Access-Control-Allow-Origin", local);
