@@ -34,11 +34,11 @@ public class CORSFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
-//        try {
-//            Class.forName("com.deli.deliverypp.util.ConfigLoader");
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Class.forName("com.deli.deliverypp.util.ConfigLoader");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 
