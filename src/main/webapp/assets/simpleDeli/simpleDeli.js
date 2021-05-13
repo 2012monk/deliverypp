@@ -331,10 +331,10 @@ simpleDeli.unit = {
 //     }
 // });
 
-simpleDeli.loginAttempt({
-    "userEmail" : "test@test.com",
-    "userPw" : "1234",
-    "userType" : "DELI"
-})
+// simpleDeli.loginAttempt({
+//     "userEmail" : "test@test.com",
+//     "userPw" : "1234",
+//     "userType" : "DELI"
+// })
 
 simpleDeli.unit.init();
