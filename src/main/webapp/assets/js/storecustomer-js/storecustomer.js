@@ -1,18 +1,5 @@
-$(function(){
-	/*기본적으로 가게 상세,상품리스트 출력해줘야함*/
-	
-	/*장바구니 이동하는 거 렌더링 */
-	/*s = "<button id='basket-move'>장바구니 이동 하는 버튼 </button>"
-	
-	$("#index-main-thrid").html(s);
-	*/
-	
-	
-	/*console.log(simpleDeli.isLoggedIn());
-	if(simpleDeli.isLoggedIn()) {
-		if(simpleDeli.checkUserRole==)
-	}*/
-	
+/* customer 상품 리스트  */
+function storeCustomerProductList() {
 	$(document).on("click",".main-storelist",function(){
 		/*console.log($(this).attr("data-value"));*/
 		var storeId = $(this).attr("data-value");
@@ -53,4 +40,4 @@ $(function(){
 			
 		});
 	});
-});
+}

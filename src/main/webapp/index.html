@@ -15,22 +15,30 @@
 <script src="https://kit.fontawesome.com/c06c7c1f00.js" crossorigin="anonymous"></script>
 <script src="./assets/js/index-js/index-header.js"></script>
 
-<!-- <script src="./assets/js/storecustomer-js/storecustomer.js"></script> -->
+<script src="./assets/js/storecustomer-js/storecustomer.js"></script>
 <script src="./assets/js/basket-js/basket.js"></script>
 <script src="./assets/js/storehost-js/storehost.js"></script>
 <script src="./assets/js/ReviewList.js"></script>
 <script>
 
-var login_id = "";
+var login_id = "logout";
 $(document).on("click","#test_seller_login",function(){
 	login_id = "SELLER";
 	$("#test_login_info").html("SELLER 로그인");
-	mainPage();
+	mainHeaderPage();
+	mainBodyPage();
 })
 $(document).on("click","#test_client_login",function(){
 	login_id = "CLIENT";
 	$("#test_login_info").html("CLIENT 로그인");
-	mainPage();
+	mainHeaderPage();
+	mainBodyPage();
+})
+$(document).on("click","#test_logout",function(){
+	login_id = "logout";
+	$("#test_login_info").html("로그아웃됨");
+	mainHeaderPage();
+	mainBodyPage();
 })
 
 
@@ -39,6 +47,7 @@ $(document).on("click","#test_client_login",function(){
 <body>
 <button type="button" id='test_seller_login'>Seller 로그인 </button>
 <button type="button" id='test_client_login'>Client 로그인</button>
+<button type="button" id='test_logout'>로그아웃</button>
 <span id="test_login_info">로그인 정보</span>
 	<!-- <ul>
 		<li class="history" route="/main"></li>
@@ -49,7 +58,7 @@ $(document).on("click","#test_client_login",function(){
 	<div id="index-main"></div>
 	<div id="hidden-basket"></div>
 
-	<<!-- div>
+	<!-- <div>
 		<a href="main.html">main</a> 
 		<a href="storecus.html">storecus</a> 
 		<a href="basket.html">basket</a>
