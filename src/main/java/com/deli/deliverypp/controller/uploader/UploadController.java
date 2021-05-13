@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @WebServlet(name = "UploadController", value = "/upload")
-@LoadConfig()
+//@LoadConfig()
 public class UploadController extends HttpServlet {
 
     private static final String  CHAR_SET = "UTF-8";

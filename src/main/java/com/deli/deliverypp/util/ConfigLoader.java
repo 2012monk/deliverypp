@@ -13,6 +13,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -46,6 +47,7 @@ public class ConfigLoader {
                 e.printStackTrace();
             }
             catch (IllegalArgumentException e){
+                e.printStackTrace();
                 throw new IllegalArgumentException("target filed is not a static filed");
             } catch (URISyntaxException | IOException fe) {
                 fe.printStackTrace();
@@ -121,20 +123,39 @@ public class ConfigLoader {
             FileReader fr = new FileReader(file);
             p.load(fr);
 
+            // TODO error fix required
+        // FIXME 원인에 대해서 정확하게 조사!
             for (Field f: aClass.getDeclaredFields()){
                 f.setAccessible(true);
-                // Load Db driver
-                if (f.getName().equals("DRIVER")){
-                    try {
-                        Class.forName(p.getProperty(f.getName()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                System.out.println(f.getName());
+                if (f.getType().equals(String.class)) {
+                    f.set(aClass, p.getProperty(f.getName()));
+                    if (f.getName().equals("DRIVER")){
+                        try {
+                            Class.forName(p.getProperty(f.getName()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-
-                if (f.get(f.getType()) == null){
+                if (f.get(f.getType()) == null
+                        && f.getType().equals(String.class)
+                        && f.getModifiers() != Modifier.FINAL && f.getModifiers() == Modifier.STATIC){
+                    System.out.println(f.getName());
                     f.set(aClass, p.getProperty(f.getName()));
+
+                    if (f.getName().equals("DRIVER")){
+                        try {
+                            Class.forName(p.getProperty(f.getName()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
+                if (f.getModifiers() == Modifier.STATIC){
+                    log.info(f.getName());
+                }
+                // Load Db driver
             }
 
             log.info( "load Complete "  +"\n"+"[" + Thread.currentThread().getName() + Thread.currentThread().getId()+ "]"+ aClass.getName() );
