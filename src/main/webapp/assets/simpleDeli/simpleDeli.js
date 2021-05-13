@@ -78,7 +78,7 @@ window.simpleDeli = {
      *
      * @returns {user || null}
      */
-     getUserInfo() {
+    getUserInfo() {
         return simpleDeli.deliUser || null
     },
 
