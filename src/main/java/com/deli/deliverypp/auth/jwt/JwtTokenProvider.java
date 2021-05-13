@@ -22,13 +22,13 @@ public class JwtTokenProvider {
     private final Logger log = LogManager.getLogger(JwtTokenProvider.class);
     private final String issuer = "https://deli.alconn.co";
 
-    static {
-        try {
-            Class.forName("com.deli.deliverypp.util.ConfigLoader");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+//    static {
+//        try {
+////            Class.forName("com.deli.deliverypp.util.ConfigLoader");
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 

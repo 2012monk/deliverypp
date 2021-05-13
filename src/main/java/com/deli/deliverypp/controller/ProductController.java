@@ -1,7 +1,11 @@
 package com.deli.deliverypp.controller;
 
+import com.deli.deliverypp.DB.DeliUser;
+import com.deli.deliverypp.model.Product;
 import com.deli.deliverypp.service.StoreService;
 import com.deli.deliverypp.util.ControlUtil;
+import com.deli.deliverypp.util.annotaions.ProtectedResource;
+import com.deli.deliverypp.util.annotaions.RequiredModel;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -14,11 +18,6 @@ public class ProductController extends HttpServlet {
 
 
     private static final StoreService service = new StoreService();
-
-
-
-
-
 
 
     @Override
@@ -38,6 +37,7 @@ public class ProductController extends HttpServlet {
 
 
 
+    @ProtectedResource(uri = "/products", role = DeliUser.UserRole.SELLER)
     // CREATE product
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -57,21 +57,20 @@ public class ProductController extends HttpServlet {
     }
 
 
+    @RequiredModel(target = Product.class)
+    @ProtectedResource(uri = "/products", id = true)
     // UPDATE product
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp){
         ControlUtil.responseMsg(resp, service.updateProduct(ControlUtil.getJson(req)));
     }
 
-
+    @RequiredModel(target = Product.class)
+    @ProtectedResource(uri = "/products", id = true)
     // DELETE Product
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        System.out.println("slakdfjalkdsjf");
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp){
         System.out.println(ControlUtil.getRequestUri(req, 1));
-//        System.out.println(ControlUtil.getRequestUri(req, 2));
         ControlUtil.responseMsg(resp, service.deleteProduct(ControlUtil.getRequestUri(req, 1)));
     }
 
