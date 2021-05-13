@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script src="./assets/simpleDeli/simpleDeli.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="./assets/css/style.css" type="text/css">
@@ -17,13 +18,50 @@
 <script src="./assets/js/basket-js/basket.js"></script>
 <script src="./assets/js/storehost-js/storehost.js"></script>
 <script src="./assets/js/ReviewList.js"></script>
-
 <script>
-	var store_login = false;
-	var client_login = false;
+//임시 로그인 처리
+// simpleDeli.loginAttempt({
+//     "userEmail" : "test@test.com",
+//     "userPw" : "1234",
+//     "userType" : "DELI"
+// })
+// 	  @function checkUserRole() 
+//  * @returns {userRole || null} user role if logged in
+//  * 
+//  * 
+//  * @function isLoggedIn()
+//  * @returns {boolean} true if logged in
+//  * 
+//  * @function getUserInfo()
+//  * @returns {user || null}
+//  * user info if logged in null
+//  * 
+//  * @function getUserEmail()
+//  * @returns {userEmail || null}
+//  * user Email if logged in or null
+$(document).on("click","#test_seller_login",function(){
+	simpleDeli.loginAttempt({
+		"userEmail" : "seller@seller.com",
+		"userPw" : "1234"
+	})
+})
+$(document).on("click","#test_client_login",function(){
+	simpleDeli.loginAttempt({
+		"userEmail" : "test@test.com",
+		"userPw" : "1234"
+	})
+})
+$(document).on("click","#test_login_info_btn",function(){
+
+	$("#test_login_info").html(simpleDeli.checkUserRole());
+})
 </script>
 </head>
 <body>
+<button type="button" id='test_seller_login'>Seller 로그인</button>
+<button type="button" id='test_client_login'>Client 로그인</button>
+<button type="button" id='test_login_info_btn'>로그인정보</button>
+<span id="test_login_info">로그인 정보</span>
 	<!-- <ul>
 		<li class="history" route="/main"></li>
 		<li class="history" route="/storecus"></li>
