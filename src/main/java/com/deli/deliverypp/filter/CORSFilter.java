@@ -34,11 +34,11 @@ public class CORSFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
-        try {
-            Class.forName("com.deli.deliverypp.util.ConfigLoader");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Class.forName("com.deli.deliverypp.util.ConfigLoader");
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
@@ -85,6 +85,7 @@ public class CORSFilter implements Filter {
 
         else if (rq.getHeader("origin") != null) {
             String origin = rq.getHeader("origin");
+            log.info(origin);
 
             rs.setHeader("Access-Control-Allow-Credentials", "true");
 //            rs.setHeader("Access-Control-Allow-Origin", local);

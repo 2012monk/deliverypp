@@ -1,9 +1,12 @@
 package com.deli.deliverypp.controller;
 
+import com.deli.deliverypp.DB.DeliUser;
+import com.deli.deliverypp.model.Store;
 import com.deli.deliverypp.service.StoreService;
 import com.deli.deliverypp.util.ControlUtil;
 import com.deli.deliverypp.util.HttpConnectionHandler;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
+import com.deli.deliverypp.util.annotaions.RequiredModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -107,6 +110,7 @@ public class StoreController extends HttpServlet {
 
 
 
+    @ProtectedResource(role = DeliUser.UserRole.SELLER, uri = "/stores")
     // CREATE
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -120,6 +124,8 @@ public class StoreController extends HttpServlet {
 
 
     // UPDATE Store
+    @RequiredModel(target = Store.class)
+    @ProtectedResource(uri = "/stores", id = true, method = "put")
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -132,9 +138,10 @@ public class StoreController extends HttpServlet {
 
 
     // DELETE Store
+    @RequiredModel(target = Store.class)
+    @ProtectedResource(uri = "/stores", id = true, method = "delete")
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp){
         try {
             ControlUtil.responseMsg(resp, service.deleteStore(ControlUtil.getRequestUri(req, 1)));
         } catch (Exception e) {
