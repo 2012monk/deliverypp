@@ -11,8 +11,8 @@
 		s +="</ul>";
 				
 		s +="<ul class='navbar-login'>";
-		s +="<li><i class='fas fa-user-plus'></i></li>";
-		s +="<li><i class='far fa-id-card'></i></li></ul>";
+		s +="<li><i class='fas fa-user-plus' id='signbtn'></i></li>";
+		s +="<li><i class='far fa-id-card' id='loginbtn'></i></li></ul>";
 		
 		/*모달 코드 렌더링 처음에 해놔야 나중에 */
 		s += '<div id="myModal" class="modal" tabindex="-1" role="dialog">';
@@ -35,7 +35,19 @@
   		s += '</div>';
 		s += '</div>';
 		$("#index-header").html(s); 
-		
+		//로그인 이벤트
+		var s="";
+		$(document).on("click","#loginbtn",function(){
+		s+="<form>";
+		s+="<table>";
+		s+="<caption><b>로그인</b></caption>"
+		s+="<tr><td><input type='email' name='userEmail'pattern='[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}' required placeholder='E-MAIL'></td><td rowspan='2'><button type='submit'>로그인</button><td></tr>";
+		s+="<tr><td><input type='password' name='userPw' required placeholder='PASSWORD'></td></tr>";
+		s+="</table>";
+		s+="</form>";
+		$("#show").html(s);
+	});
+
 		console.log(simpleDeli.checkUserRole());
 		if(simpleDeli.checkUserRole()=="CLIENT"){
 			$(function(){
