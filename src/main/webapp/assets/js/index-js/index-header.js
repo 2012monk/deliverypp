@@ -139,10 +139,10 @@ function mainBodyPage() {
 					success:function(data){
 						var s="";
 							s+="<table>";
-							s+="<caption><b>가게 상세보기</b></caption>";
+							s+="<caption><b>가게 상세보기</b><button id='storehost-btn-add'>추가</button></caption>";
 							s+="<tr><th>가게ID</th><th>가게명</th><th>가게 정보</th><th>가게 이미지</th><th>상품리스트</th><th>가게 주소</th></tr>";
 							$.each(data.data, function(i,elt){
-							    s +="<tr><td name='storeId' value='"+elt.storeId+"'>"+elt.storeId+"</td><td name='storeName' value='"+elt.storeName+"'>"+elt.storeName+"</td><td name='storeDesc'>"+elt.storeDesc+"</td><td name='storeImage'>"+elt.storeImage+"</td><td name=''>"+elt.productList+"</td><td name='storeAddr'>"+elt.storeAddr+"</td>";
+							    s +="<tr value='"+elt.storeId+"'><td class='storehostdetail-page' name='storeId' value='"+elt.storeId+"'>"+elt.storeId+"</td><td class='storehostdetail-page' name='storeName' value='"+elt.storeName+"'>"+elt.storeName+"</td><td class='storehostdetail-page' name='storeDesc'>"+elt.storeDesc+"</td><td class='storehostdetail-page' name='storeImage'>"+elt.storeImage+"</td><td name=''>"+elt.productList+"</td><td name='storeAddr'>"+elt.storeAddr+"</td>";
 							    s +="<td><button type='button' class='storelist-btn-delete' value='"+elt.storeId+"'>delete</button></td>";
 							    s +="<td><button type='button' class='storelist-btn-update' value='"+elt.storeId+"'>update</button></td><tr>";
 						});
@@ -176,6 +176,7 @@ function mainBodyPage() {
 					$("#index-main").html(a);
 				}
 			});
-			storeCustomerProductList()
+			
+			storeCustomerProductList();
 		}
 } 

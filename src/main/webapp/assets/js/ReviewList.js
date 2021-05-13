@@ -1,8 +1,9 @@
 function reviewPage(){
 
-    var storeId = "stid22";
-    var userEmail = "abc@abc.net";
-
+    /*var storeId = "stid22";
+    var userEmail = "abc@abc.net";*/
+	var storeId = $("#ssss").attr("data-store");
+	console.log("제발 "+storeId);
 /* 리뷰리스트 데이터 형식
     var ajax_data = 
         {
