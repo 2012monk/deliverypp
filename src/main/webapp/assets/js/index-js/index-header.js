@@ -1,4 +1,4 @@
-	$(function(){
+	function mainPage(){
 		s = "<div class='navbar-logo'>";
 		s += "<a href=''>배달의 민족</a>";
 		s +="<i class='fas fa-space-shuttle'></i>"
@@ -36,108 +36,53 @@
 		s += '</div>';
 		$("#index-header").html(s); 
 		
-		
-		var a = "";
-		$.ajax({
-			type:"get",
-			url:"http://112.169.196.76:47788/stores/list",
-			dataType:"json",
-			success:function(d){
-				$.each(d.data, function(i, elt) {
-					console.log(elt.storeId,elt.storeName);
-					//console.log(i);
-					//a += "<div storename='"+elt.storeId+"'>";
-					a += "<div class='main-storelist' data-value='"+elt.storeId+"'>";
-					/*a += "<img src='"+elt.storeImage+"'>";*/
-					a += "<div>"+elt.storeName+"</div>";
-					a +="<div><span>리뷰</span></div>";
-					a +="</div>"
-					
+		console.log(simpleDeli.checkUserRole());
+		if(simpleDeli.checkUserRole()=="SELLER"){
+			$(function(){
+				//가게 리스트 출력 
+				var storeId = $(this).attr("value");
+				$.ajax({
+					type:"get",
+					url:"http://112.169.196.76:47788/stores/list",
+					dataType:"json",
+					success:function(data){
+						var s="";
+							s+="<table>";
+							s+="<caption><b>가게 상세보기</b></caption>";
+							s+="<tr><th>가게ID</th><th>가게명</th><th>가게 정보</th><th>가게 이미지</th><th>상품리스트</th><th>가게 주소</th></tr>";
+							$.each(data.data, function(i,elt){
+							    s +="<tr><td name='storeId' value='"+elt.storeId+"'>"+elt.storeId+"</td><td name='storeName' value='"+elt.storeName+"'>"+elt.storeName+"</td><td name='storeDesc'>"+elt.storeDesc+"</td><td name='storeImage'>"+elt.storeImage+"</td><td name=''>"+elt.productList+"</td><td name='storeAddr'>"+elt.storeAddr+"</td>";
+							    s +="<td><button type='button' class='storelist-btn-delete' value='"+elt.storeId+"'>delete</button></td>";
+							    s +="<td><button type='button' class='storelist-btn-update' value='"+elt.storeId+"'>update</button></td><tr>";
+						});
+							s+="</table>"; 
+						
+						$("#index-main").html(s);
+						
+					}
 				});
-				$("#index-main").html(a);
-			}
-		});
-		
-		
-	});
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/* 상품 리스트 출력하는 id 출력*/
-	function productAndStoreDescriptionList() {
-		/*var storeId = $(this).attr("data-value");*/
-		var storeId = document.querySelector(".main-storelist").getAttribute("data-value");
-		console.log(storeId);
-		/*가게 상세 상품 목록 등장 */
-		$.ajax({
-            type:"get",
-            url:"http://112.169.196.76:47788/products/list/"+storeId, 
-            dataType:"json",
-            success:function(data){
-				//console.log(data);
-                localStorage.setItem("product-list",JSON.stringify(data));
-                var z="";
-                    z+="<form>";
-                    z+="<input type='hidden' value='"+data.data.productId+"'>";
-                    z+="<table>";
-                    z+="<caption>상품 리스트</caption>";
-                    z+="<tr><th>가게ID</th><th>상품ID</th><th>상품명</th><th>상품가격</th><th>상품 정보</th><th>상품 이미지</th></tr>";
-                    $.each(data.data, function(i,elt){
-                        z+="<tr><td>"+elt.storeId+"</td>";
-						z+="<td>"+elt.productId+"</td>";
-						z+="<td>"+elt.productName+"</td>";
-						z+="<td>"+elt.productPrice+"</td>";
-						z+="<td>"+elt.productDesc+"</td>";
-						z+="<td>"+elt.productImage+"</td>";
-						z+="<td><button id='product-btn-updateform' value='"+i+"'>update</button>&nbsp;";
-						z+="<button type='button' id='deletebtn' value='"+elt.productId+"'>delete</button></td></tr>";
-                });
-                z+="</table>"; 
-                z+="</form><br><br><br><br><br><br>";
-            	
-				c = "<div id='index-main-first'></div>";
-				c +="<div id='index-main-second'></div>";
-				c +="<div id='index-main-thrid'></div>";
-			  	$("#index-main").html(c);
-				
-				$("#index-main-second").html(z);
-            }
-		});
-		/*매장 소개*/
-		$.ajax({
-            type:"get",
-            url:"http://112.169.196.76:47788/stores/"+storeId, 
-            dataType:"json",
-            success:function(data){
-                var s="";
-                s+="<b>매장소개</b>";
-                s+="<div>매장명 : "+data.data.storeName+"</div>";
-                s+="<div>매장소개 : "+data.data.storeDesc+"</div>";
-                s+="<div>매장사진 : "+data.data.storeImage+"</div>";
-                s+="<div>매장주소 : "+data.data.storeAddr+"</div>";
-            
-	           	$("#index-main-first").html(s);
-            }
-        });
-	}
+			});
+		} else {
+			/*비화원 손님 회원도 여기가 렌더링*/
+			var a = "";
+			$.ajax({
+				type:"get",
+				url:"http://112.169.196.76:47788/stores/list",
+				dataType:"json",
+				success:function(d){
+					$.each(d.data, function(i, elt) {
+						console.log(elt.storeId,elt.storeName);
+						//console.log(i);
+						//a += "<div storename='"+elt.storeId+"'>";
+						a += "<div class='main-storelist' data-value='"+elt.storeId+"'>";
+						/*a += "<img src='"+elt.storeImage+"'>";*/
+						a += "<div>"+elt.storeName+"</div>";
+						a +="<div><span>리뷰</span></div>";
+						a +="</div>"
+						
+					});
+					$("#index-main").html(a);
+				}
+			});
+		}
+}
