@@ -1,12 +1,15 @@
 package com.deli.deliverypp.controller;
 
 import com.deli.deliverypp.DB.DeliUser;
+import com.deli.deliverypp.auth.AuthProvider;
 import com.deli.deliverypp.model.Store;
 import com.deli.deliverypp.service.StoreService;
+import com.deli.deliverypp.service.UserLoginService;
 import com.deli.deliverypp.util.ControlUtil;
 import com.deli.deliverypp.util.HttpConnectionHandler;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
 import com.deli.deliverypp.util.annotaions.RequiredModel;
+import com.deli.deliverypp.util.exp.AuthorityChecker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,6 +27,7 @@ public class StoreController extends HttpServlet {
     private static final Logger log = LogManager.getLogger(StoreController.class);
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final StoreService service = new StoreService();
+
 
 
 //    private static HashMap<String , Store> list = new HashMap<>();
@@ -109,15 +113,18 @@ public class StoreController extends HttpServlet {
      */
 
 
+    private AuthProvider provider = new AuthProvider();
+    private UserLoginService userLoginService = new UserLoginService();
 
     @ProtectedResource(role = DeliUser.UserRole.SELLER, uri = "/stores")
     // CREATE
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        DeliUser user = provider.getUserFromHeader(request);
+        log.info(user);
         String json = ControlUtil.getJson(request);
-        ControlUtil.responseMsg(response, service.insertStoreService(json));
+        ControlUtil.responseMsg(response, service.insertStoreService(json, user.getUserEmail()));
     }
 
 
@@ -129,10 +136,15 @@ public class StoreController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        try{
-            ControlUtil.responseMsg(resp, service.updateStore(ControlUtil.getJson(req)));
-        }catch (Exception e){
-            e.printStackTrace();
+        String json = ControlUtil.getJson(req);
+        if (AuthorityChecker.checkUserEmailFromJson(req, Store.class, "storeId", json)){
+            try{
+                ControlUtil.responseMsg(resp, service.updateStore(json));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }else {
+            ControlUtil.sendUnAuthorizeMsg(resp);
         }
     }
 
@@ -142,10 +154,15 @@ public class StoreController extends HttpServlet {
     @ProtectedResource(uri = "/stores", id = true, method = "delete")
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp){
-        try {
-            ControlUtil.responseMsg(resp, service.deleteStore(ControlUtil.getRequestUri(req, 1)));
-        } catch (Exception e) {
-            e.printStackTrace();
+        String id = ControlUtil.getRequestUri(req);
+        if (AuthorityChecker.checkUserEmail(req, Store.class, "storeId", id)){
+            try {
+                ControlUtil.responseMsg(resp, service.deleteStore(ControlUtil.getRequestUri(req, 1)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            ControlUtil.sendUnAuthorizeMsg(resp);
         }
     }
 

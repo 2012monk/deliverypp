@@ -84,6 +84,7 @@ public class ConfigLoader {
             if (field.getType() == String.class) {
                 field.set(String.class, sb.toString());
             }
+            System.out.println(secretKey.getAlgorithm());
             field.set(SecretKey.class, secretKey);
             log.info("key load complete from  "+ "[" + field.getDeclaringClass().getName() + "]");
         } catch (Exception e) {

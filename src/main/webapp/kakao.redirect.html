@@ -28,21 +28,22 @@
               if (k === 'pg_token') {
                   const data = new URLSearchParams();
                   data.append(k, val);
-                  fetch("http://localhost:47788/payment/kakao/success",
-                  // fetch("https://deli.alconn.co/payment/kako/success",
+                //   fetch("http://localhost:47788/payment/kakao/success",
+                  fetch("https://deli.alconn.co/payment/kako/success",
                       {
                           method : "POST",
                           body: data
                       })
                       .then(r => r.json())
                       .then(d => {
-                          d.msg = "kakao";
-                          parent.postMessage(d,"*");
-                          try{
-                            parent.success(d);
-                            parent.kakaoHide();
-                          }catch (err) {
-                          }
+                          parent.kakaoHide();
+                          parent.success(d);
+                          parent.kakaoSuccess(d);
+                        //   d.msg = "kakao";
+                        //   parent.postMessage(d,"*");
+                        //   try{
+                        //   }catch (err) {
+                        //   }
                 })
               }
             })

@@ -30,8 +30,8 @@ public class UserLoginService {
     private static final UserAccess access = new UserAccess();
 
     public boolean signUpUser (String json) throws JsonProcessingException {
-        DeliUser user = parseUser(json);
         log.info(json);
+        DeliUser user = parseUser(json);
         user.setUserRole(DeliUser.UserRole.CLIENT);
         return access.registerUser(user);
     }
@@ -46,7 +46,7 @@ public class UserLoginService {
 
         if (user != null){
             user.setUserRole(DeliUser.UserRole.SELLER);
-            return access.registerUser(user);
+            return access.updateUser(user);
         }
 
         return false;
@@ -197,7 +197,24 @@ public class UserLoginService {
 
 
     public DeliUser parseUserFromToken(String jws) {
-        return parse(provider.getTokenBody(jws));
+
+        try {
+            log.debug(jws);
+            Map<String ,Object> map = provider.getTokenBody(jws);
+            String userEmail = (String) map.get("userEmail");
+            String userRole = (String) map.get("userRole");
+            String userType = (String) map.get("userType");
+
+            DeliUser user = new DeliUser();
+            user.setUserRole(DeliUser.UserRole.valueOf(userRole));
+            user.setUserType(DeliUser.UserType.valueOf(userType));
+            user.setUserEmail(userEmail);
+            log.debug(jws);
+            return user;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        return null;
     }
 
 
@@ -230,7 +247,8 @@ public class UserLoginService {
         try {
             return access.updateUser(mapper.readValue(json, DeliUser.class));
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            log.warn("user info null");
         }
         return false;
     }

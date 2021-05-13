@@ -19,18 +19,19 @@ public class StoreAccess {
         System.out.println(new StoreAccess().getStoreById("stid3"));
     }
 
-    private static  Connection conn;
+//    private static  Connection conn;
 
     public List<Store> getStoreList () {
         List<Store> list = new ArrayList<>();
         String sql = "SELECT * FROM STORE";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             ResultSet rs = conn.prepareStatement(sql).executeQuery();
 
             while (rs.next()) {
-                Store store = rollUpStore(rs, new Store());
-                list.add(store);
+//                Store store = rollUpStore(rs, new Store());
+//                list.add(store);
+                list.add(setPOJO(Store.class, rs));
             }
 
             return list;
@@ -42,40 +43,32 @@ public class StoreAccess {
         return list;
     }
 
-    public Store rollUpStore (ResultSet rs, Store store) throws SQLException {
-        store.setStoreId(rs.getString("STORE_ID"));
-        store.setStoreDesc(rs.getString("STORE_DESC"));
-        store.setStoreName(rs.getString("STORE_NAME"));
-        store.setStoreImage(rs.getString("STORE_IMAGE"));
-        store.setStoreAddr(rs.getString("STORE_ADDR"));
-        return store;
-    }
-
     public Store getStoreByName(String storeName) {
         Store store = new Store();
         String sql = "SELECT * FROM STORE WHERE STORE_NAME=?";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, storeName);
             ResultSet rs = prst.executeQuery();
 
             if (rs.next()) {
-                store = rollUpStore(rs, store);
+//                store = rollUpStore(rs, store);
+                return setPOJO(Store.class, rs);
             }
-            return store;
+//            return store;
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
             close(conn);
         }
-        return store;
+        return null;
     }
 
     public Store getStoreById(String storeId) {
         Store store = new Store();
         String sql = "SELECT * FROM STORE WHERE STORE_ID=?";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, storeId);
@@ -90,13 +83,13 @@ public class StoreAccess {
         }finally {
             close(conn);
         }
-        return store;
+        return null;
     }
 
 
     public boolean insertStore (Store store) {
-        String sql = "INSERT INTO STORE (STORE_ID, STORE_NAME, STORE_DESC, STORE_IMAGE, STORE_ADDR) VALUES (?,?,?,?,?)";
-        conn = getConn();
+        String sql = "INSERT INTO STORE (STORE_ID, STORE_NAME, STORE_DESC, STORE_IMAGE, STORE_ADDR, USER_EMAIL,STORE_TELEPHONE) VALUES (?,?,?,?,?,?,?)";
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, store.getStoreId());
@@ -104,6 +97,8 @@ public class StoreAccess {
             prst.setString(3, store.getStoreDesc());
             prst.setString(4, store.getStoreImage());
             prst.setString(5, store.getStoreAddr());
+            prst.setString(6, store.getUserEmail());
+            prst.setString(7, store.getStoreTelephone());
 
             if (prst.executeUpdate() > 0) {
                 conn.commit();
@@ -119,15 +114,16 @@ public class StoreAccess {
     }
 
     public boolean updateStore (Store store) {
-        String sql = "UPDATE STORE SET STORE_IMAGE=?,STORE_TELEPHONE=?,STORE_DESC=?,STORE_NAME=? WHERE STORE_ID=?";
-        conn = getConn();
+        String sql = "UPDATE STORE SET STORE_IMAGE=?,STORE_TELEPHONE=?,STORE_DESC=?,STORE_NAME=?,STORE_ADDR=? WHERE STORE_ID=?";
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, store.getStoreImage());
             prst.setString(2, store.getStoreTelephone());
             prst.setString(3, store.getStoreDesc());
             prst.setString(4, store.getStoreName());
-            prst.setString(5, store.getStoreId());
+            prst.setString(5, store.getStoreAddr());
+            prst.setString(6, store.getStoreId());
 
             if (prst.executeUpdate() > 0) {
                 conn.commit();
@@ -144,7 +140,7 @@ public class StoreAccess {
 
     public boolean deleteStore (String storeId) {
         String sql = "DELETE FROM STORE WHERE STORE_ID=?";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, storeId);
@@ -165,7 +161,7 @@ public class StoreAccess {
 
     public boolean isNameOverlap(String name) {
         String sql = "SELECT COUNT(*) FROM STORE WHERE STORE_NAME=?";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, name);

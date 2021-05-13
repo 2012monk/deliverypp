@@ -27,6 +27,7 @@ public class MappingLoader {
     public static Map<String , DeliUser.UserRole> protectedUriProperties;
     public static Map<String, ProtectedResource> resources;
     public static Map<String, Class<?>> requiredModel;
+    public static Map<String ,Method> methodList;
     private static final Logger log = Logger.getGlobal();
     static {
         try {
@@ -54,6 +55,7 @@ public class MappingLoader {
         HashMap<String, ProtectedResource> rem = new HashMap<>();
         HashMap<String, DeliUser.UserRole> pm = new HashMap<>();
         HashMap<String, Class<?>> rc = new HashMap<>();
+        HashMap<String ,Method> me = new HashMap<>();
         for (Method m: protectedResources) {
 //            String uri = m.getAnnotation(RequestUri.class).uri();
 //            pm.put(uri, m.getAnnotation(ProtectedResource.class).role());
@@ -69,7 +71,7 @@ public class MappingLoader {
             log.info(p.uri());
             String key = i+" "+p.method().toLowerCase(Locale.ROOT);
             rem.put(key, p);
-
+            me.put(key, m);
             try {
                 RequiredModel r = m.getAnnotation(RequiredModel.class);
                 if (r != null) {
@@ -79,6 +81,7 @@ public class MappingLoader {
                 e.printStackTrace();
             }
         }
+        methodList =me;
         resources = rem;
         protectedUriProperties = pm;
         HashMap<String, UriSources> rm = new HashMap<>();

@@ -10,11 +10,11 @@ import static com.deli.deliverypp.util.DBUtil.setPOJO;
 
 public class UserAccess {
 
-    private static Connection conn;
+//    private static Connection conn;
 
     public boolean registerUser(DeliUser user) {
         String sql = "INSERT INTO USER (USER_EMAIL, USER_PW, USER_ROLE, USER_TYPE, USER_ADDR,USER_TELEPHONE) VALUES (?,?,?,?,?,?)";
-        conn = getConn();
+        Connection conn = getConn();
 
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
@@ -62,7 +62,7 @@ public class UserAccess {
 
     public boolean isUserEmailOverlap(String email) {
         String sql = "SELECT COUNT(*) FROM USER WHERE USER_EMAIL=?";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, email);
@@ -79,7 +79,7 @@ public class UserAccess {
     public DeliUser getUserInfo (String userEmail) {
         String sql = "SELECT * FROM USER WHERE USER_EMAIL=?";
         DeliUser user = new DeliUser();
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, userEmail);
@@ -114,7 +114,7 @@ public class UserAccess {
     public boolean updateUser (DeliUser user) {
         String sql = "UPDATE USER SET USER_ADDR=?,USER_ROLE=?,USER_TELEPHONE=?, USER_PW=? WHERE USER_EMAIL=?";
         System.out.println(user);
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, user.getUserAddr());
@@ -138,7 +138,7 @@ public class UserAccess {
 
     public boolean deleteUser (String userEmail) {
         String sql = "DELETE FROM USER WHERE USER_EMAIL=?";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, userEmail);

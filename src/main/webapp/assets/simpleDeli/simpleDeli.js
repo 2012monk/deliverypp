@@ -112,6 +112,19 @@ window.simpleDeli = {
             "token" : res["access_token"],
             "exp" : parseInt(res["exp"])
         };
+        const fToken = localStorage.getItem("deviceId");
+        if (fToken!=null) {
+            const user = res.user;
+            user.fcmToken = fToken;
+            fetch('http://localhost:47788/push/register',{
+                method:'post',
+                body: JSON.stringify(user)
+            })
+            .then(res => res.text())
+            .then(console.log);
+        }
+        firebaseModule.init();
+        this.unit.moduleInit();
     },
 }
 
@@ -126,6 +139,13 @@ $.ajaxSetup({
 })
 
 simpleDeli.unit = {
+    moduleInit() {
+        try{
+            firebaseModule.init();
+        }catch(err) {
+            console.error(err)
+        }
+    },
     init() {
         this.silentRefresh();
         setInterval(this.autoCheck, 1000 * 60 * 10);
@@ -231,6 +251,11 @@ simpleDeli.unit = {
                     "exp" : res.data["exp"]
                 };
             }
+            try{
+                firebaseModule.init()
+            }catch(err) {
+                console.error(err)
+            }
         }catch(err) {
             console.error(err);
         }
@@ -331,10 +356,10 @@ simpleDeli.unit = {
 //     }
 // });
 
-// simpleDeli.loginAttempt({
-//     "userEmail" : "test@test.com",
-//     "userPw" : "1234",
-//     "userType" : "DELI"
-// })
+simpleDeli.loginAttempt({
+    "userEmail" : "test@test.com",
+    "userPw" : "1234",
+    "userType" : "DELI"
+})
 
 simpleDeli.unit.init();
