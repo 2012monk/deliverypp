@@ -3,6 +3,7 @@ package com.deli.deliverypp.auth;
 import com.deli.deliverypp.DB.DeliUser;
 import com.deli.deliverypp.auth.jwt.JwtTokenProvider;
 import com.deli.deliverypp.service.UserLoginService;
+import org.apache.http.HttpRequest;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,18 @@ public class AuthProvider {
         return provider.validateRefreshToken(token);
     }
 
+    public String parseHeader (HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+
+        if (header != null) {
+            String scheme = header.split(" ")[0];
+            String token = header.split(" ")[1];
+            if (scheme.equals("Bearer")) {
+                return token;
+            }
+        }
+        return null;
+    }
     public boolean checkUserStatusValid(HttpServletRequest request) {
         String token = getToken(request.getHeader("Authorization"));
         if (token == null) return false;
@@ -61,6 +74,31 @@ public class AuthProvider {
         }
         return null;
     }
+
+    public String getTokenFromHeader (HttpServletRequest request) {
+        String header = parseHeader(request);
+        return getToken(header);
+    }
+
+    /**
+     *
+     * @param userEmail email from request
+     * @param request request obj
+     * @return true if passed
+     */
+    public boolean checkId(String userEmail, HttpServletRequest request) {
+        String token = getTokenFromHeader(request);
+        String email = service.parseUserFromToken(token).getUserEmail();
+
+        try {
+            return userEmail.equals(email);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
 
 
 

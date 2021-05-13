@@ -1,11 +1,14 @@
 package com.deli.deliverypp.controller.review;
 
+import com.deli.deliverypp.DB.DeliUser;
 import com.deli.deliverypp.DB.ReplyAccess;
 import com.deli.deliverypp.model.Reply;
 import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.model.Review;
 import com.deli.deliverypp.util.ControlUtil;
 import com.deli.deliverypp.util.MessageGenerator;
+import com.deli.deliverypp.util.annotaions.ProtectedResource;
+import com.deli.deliverypp.util.annotaions.RequiredModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.naming.ldap.Control;
@@ -42,6 +45,7 @@ public class ReplyController extends HttpServlet {
     }
 
 
+    @ProtectedResource(uri = "/reply", role = DeliUser.UserRole.CLIENT)
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -53,6 +57,8 @@ public class ReplyController extends HttpServlet {
                 MessageGenerator.makeResultMsg(access.insertReply(reply)));
     }
 
+    @RequiredModel(target = Reply.class)
+    @ProtectedResource(uri = "/reply", id = true, method = "put")
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -62,6 +68,8 @@ public class ReplyController extends HttpServlet {
 
     }
 
+    @RequiredModel(target = Reply.class)
+    @ProtectedResource(uri = "/reply", id = true, method = "delete")
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
 
