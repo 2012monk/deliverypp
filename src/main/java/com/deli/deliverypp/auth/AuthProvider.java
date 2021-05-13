@@ -63,6 +63,7 @@ public class AuthProvider {
     public String getToken (String header) {
         if (header == null) return null;
         try {
+            System.out.println(header);
             String type = header.split(" ")[0];
             String token = header.split(" ")[1];
             if (!type.equals("Bearer")) {
@@ -76,8 +77,9 @@ public class AuthProvider {
     }
 
     public String getTokenFromHeader (HttpServletRequest request) {
-        String header = parseHeader(request);
-        return getToken(header);
+        return parseHeader(request);
+//        String header = parseHeader(request);
+//        return getToken(header);
     }
 
     /**
@@ -96,6 +98,17 @@ public class AuthProvider {
             e.printStackTrace();
         }
         return false;
+    }
+
+
+    public DeliUser getUserFromHeader (HttpServletRequest request) {
+        try {
+            String token = getTokenFromHeader(request);
+            return service.parseUserFromToken(token);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

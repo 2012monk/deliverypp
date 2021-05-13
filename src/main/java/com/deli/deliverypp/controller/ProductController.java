@@ -6,6 +6,7 @@ import com.deli.deliverypp.service.StoreService;
 import com.deli.deliverypp.util.ControlUtil;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
 import com.deli.deliverypp.util.annotaions.RequiredModel;
+import com.deli.deliverypp.util.exp.AuthorityChecker;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -62,7 +63,12 @@ public class ProductController extends HttpServlet {
     // UPDATE product
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp){
-        ControlUtil.responseMsg(resp, service.updateProduct(ControlUtil.getJson(req)));
+        String json = ControlUtil.getJson(req);
+        if (AuthorityChecker.checkUserEmailFromJson(req, Product.class, "productId", json)) {
+            ControlUtil.responseMsg(resp, service.updateProduct(json));
+        }else {
+            ControlUtil.sendUnAuthorizeMsg(resp);
+        }
     }
 
     @RequiredModel(target = Product.class)
@@ -70,8 +76,13 @@ public class ProductController extends HttpServlet {
     // DELETE Product
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp){
+        String id = ControlUtil.getRequestUri(req);
+        if (AuthorityChecker.checkUserEmail(req, Product.class, "productId", id)){
+            ControlUtil.responseMsg(resp, service.deleteProduct(ControlUtil.getRequestUri(req, 1)));
+        }else {
+            ControlUtil.sendUnAuthorizeMsg(resp);
+        }
         System.out.println(ControlUtil.getRequestUri(req, 1));
-        ControlUtil.responseMsg(resp, service.deleteProduct(ControlUtil.getRequestUri(req, 1)));
     }
 
 

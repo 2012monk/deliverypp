@@ -5,10 +5,12 @@ import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.model.Review;
 import com.deli.deliverypp.service.ReviewService;
 import com.deli.deliverypp.util.ControlUtil;
+import com.deli.deliverypp.util.MessageGenerator;
 import com.deli.deliverypp.util.annotaions.PathParam;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
 import com.deli.deliverypp.util.annotaions.RequiredModel;
 import com.deli.deliverypp.util.annotaions.RequiredParam;
+import com.deli.deliverypp.util.exp.AuthorityChecker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,20 +45,33 @@ public class ReviewController extends HttpServlet {
 
     @RequiredModel(target = Review.class)
     @ProtectedResource(uri = "/review", id = true, method = "put")
+    @RequiredParam(value = "json")
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
-        ControlUtil.sendResponseData(resp, service.updateReview(ControlUtil.getJson(req)));
+        String json = ControlUtil.getJson(req);
+        if (AuthorityChecker.checkUserEmailFromJson(req,Review.class,"reviewId", json)){
+            ControlUtil.sendResponseData(resp, service.updateReview(json));
+        }else {
+            ControlUtil.sendResponseData(resp, MessageGenerator.makeErrorMsg("you don't have authority to access this resources \r\n 본인인증실패", "authority_error"));
+            log.warn("failed to pass test");
+        }
     }
 
 
 
+    // TODO REFACTORING !!!!
     @ProtectedResource(uri = "/review", id = true, method = "delete")
     @RequiredParam(value = "/review/{reviewId}")
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp){
-        System.out.println(ControlUtil.getRequestUri(req, 2));
-        log.info(req.getRequestURI());
-        ControlUtil.responseMsg(resp, service.deleteReview(ControlUtil.getRequestUri(req)));
+        String reviewId = ControlUtil.getRequestUri(req);
+        if (AuthorityChecker.checkUserEmail(req,Review.class,"reviewId", reviewId)){
+            log.warn("passed annotaions test");
+            ControlUtil.responseMsg(resp, service.deleteReview(ControlUtil.getRequestUri(req)));
+        }else{
+            ControlUtil.sendResponseData(resp, MessageGenerator.makeErrorMsg("you don't have authority to access this resources \r\n 본인인증실패", "authority_error"));
+            log.warn("failed to pass test");
+        }
     }
 
 

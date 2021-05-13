@@ -7,6 +7,7 @@ import com.deli.deliverypp.util.ControlUtil;
 import com.deli.deliverypp.util.HttpConnectionHandler;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
 import com.deli.deliverypp.util.annotaions.RequiredModel;
+import com.deli.deliverypp.util.exp.AuthorityChecker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -129,10 +130,15 @@ public class StoreController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        try{
-            ControlUtil.responseMsg(resp, service.updateStore(ControlUtil.getJson(req)));
-        }catch (Exception e){
-            e.printStackTrace();
+        String json = ControlUtil.getJson(req);
+        if (AuthorityChecker.checkUserEmailFromJson(req, Store.class, "storeId", json)){
+            try{
+                ControlUtil.responseMsg(resp, service.updateStore(json));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }else {
+            ControlUtil.sendUnAuthorizeMsg(resp);
         }
     }
 
@@ -142,10 +148,15 @@ public class StoreController extends HttpServlet {
     @ProtectedResource(uri = "/stores", id = true, method = "delete")
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp){
-        try {
-            ControlUtil.responseMsg(resp, service.deleteStore(ControlUtil.getRequestUri(req, 1)));
-        } catch (Exception e) {
-            e.printStackTrace();
+        String id = ControlUtil.getRequestUri(req);
+        if (AuthorityChecker.checkUserEmail(req, Store.class, "storeId", id)){
+            try {
+                ControlUtil.responseMsg(resp, service.deleteStore(ControlUtil.getRequestUri(req, 1)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            ControlUtil.sendUnAuthorizeMsg(resp);
         }
     }
 

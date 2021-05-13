@@ -9,6 +9,7 @@ import com.deli.deliverypp.util.ControlUtil;
 import com.deli.deliverypp.util.MessageGenerator;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
 import com.deli.deliverypp.util.annotaions.RequiredModel;
+import com.deli.deliverypp.util.exp.AuthorityChecker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.naming.ldap.Control;
@@ -62,9 +63,18 @@ public class ReplyController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
 
-        Reply reply = getReply(ControlUtil.getJson(req));
-        ControlUtil.sendResponseData(resp,
-                MessageGenerator.makeResultMsg(access.updateReply(reply)));
+        String json = ControlUtil.getJson(req);
+        if (AuthorityChecker.checkUserEmailFromJson(req, Reply.class, "replyId", json)){
+            try {
+                Reply reply = mapper.readValue(json, Reply.class);
+                ControlUtil.sendResponseData(resp,
+                        MessageGenerator.makeResultMsg(access.updateReply(reply)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else{
+            ControlUtil.sendUnAuthorizeMsg(resp);
+        }
 
     }
 
@@ -72,8 +82,13 @@ public class ReplyController extends HttpServlet {
     @ProtectedResource(uri = "/reply", id = true, method = "delete")
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
+        String id = ControlUtil.getRequestUri(req);
+        if (AuthorityChecker.checkUserEmail(req, Reply.class, "replyId", id)){
+            ControlUtil.responseMsg(resp, access.deleteReply(id));
+        }else {
+            ControlUtil.sendUnAuthorizeMsg(resp);
+        }
 
-        ControlUtil.responseMsg(resp, access.deleteReply(ControlUtil.getRequestUri(req)));
     }
 
     private Reply getReply(String json) {

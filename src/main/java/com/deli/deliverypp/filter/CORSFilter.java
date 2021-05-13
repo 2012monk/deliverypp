@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
         initParams = {
         @WebInitParam(name ="encoding", value="UTF-8")
     })
-public class CORSFilter implements Filter {
+public class CORSFilter extends AuthenticationFilter {
     private final Logger log = LogManager.getLogger(CORSFilter.class);
 //    private static final String url = "http://localhost:47788";
 
@@ -50,11 +50,13 @@ public class CORSFilter implements Filter {
         HttpServletResponse rs = (HttpServletResponse) servletResponse;
         rq.setCharacterEncoding("UTF-8");
         rs.setCharacterEncoding("UTF-8");
+
+        log.info("cors ");
 //        rq.getServletContext().setResponseCharacterEncoding("UTF-8");
 //        rq.getServletContext().setResponseCharacterEncoding("UTF-8");
 
         log.info(rq.getRemoteAddr()+"   port :   " + rq.getRemotePort());
-//        yellHeader(rq);
+        yellHeader(rq);
 
         if (rq.getHeader("Authorization") != null) {
             log.info(rq.getHeader("Authorization"));
@@ -93,9 +95,11 @@ public class CORSFilter implements Filter {
             rs.setHeader("Access-Control-Allow-Methods", optionRes);
             rs.setHeader("Access-Control-Allow-Headers", headers);
             rs.setHeader("Access-Control-Max-Age", "3600");
-            filterChain.doFilter(servletRequest, servletResponse);
+//            filterChain.doFilter(servletRequest, servletResponse);
+            super.doFilter(servletRequest, servletResponse, filterChain);
         }else{
-            filterChain.doFilter(servletRequest, servletResponse);
+            super.doFilter(servletRequest, servletResponse, filterChain);
+//            filterChain.doFilter(servletRequest, servletResponse);
 
         }
     }
