@@ -24,6 +24,7 @@
 
 window.simpleDeli = window.simpleDeli || {};
 simpleDeli.uploader = {
+    domain : "http://112.169.196.76:47788",
     replace : true,
     config : {
     },
@@ -45,7 +46,7 @@ simpleDeli.uploader = {
             return;
         }
 
-        fetch("http://localhost:47788/upload",{
+        fetch(simpleDeli.uploader.domain+"/upload",{
             method:"POST",
             body:form
         })

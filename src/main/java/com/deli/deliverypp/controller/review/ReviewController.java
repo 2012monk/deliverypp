@@ -50,8 +50,8 @@ public class ReviewController extends HttpServlet {
 
 
 
-//    @ProtectedResource(uri = "/review", id = true, method = "delete")
-//    @RequiredParam(value = "/review/{reviewId}")
+    @ProtectedResource(uri = "/review", id = true, method = "delete")
+    @RequiredParam(value = "/review/{reviewId}")
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp){
         System.out.println(ControlUtil.getRequestUri(req, 2));
@@ -61,8 +61,8 @@ public class ReviewController extends HttpServlet {
 
 
 
-    @RequiredParam(value = "/review/{reviewId}")
-    @ProtectedResource(uri = "/review", id = true, method = "delete")
+//    @RequiredParam(value = "/review/{reviewId}")
+//    @ProtectedResource(uri = "/review", id = true, method = "delete")
     public void delete(@PathParam(param = "reviewId") String reviewId) {
         System.out.println(reviewId);
     }
