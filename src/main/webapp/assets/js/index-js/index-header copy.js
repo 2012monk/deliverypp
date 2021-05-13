@@ -92,7 +92,7 @@ function signup(){
 var s="";
 var userroll="";
 $(document).on("click","#signbtn",function(){
-	console.log(this);
+	console.log();
 	userType="deli";
 	s="<form id='deliform'>";
 	s+="<table>";
