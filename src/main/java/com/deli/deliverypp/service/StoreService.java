@@ -36,11 +36,12 @@ public class StoreService {
         return store;
     }
 
-    public boolean insertStoreService (String json) {
+    public boolean insertStoreService (String json, String userEmail) {
         Store store = jsonToStoreObject(json);
 
         if (store == null) return false;
         store.generateStoreId();
+        store.setUserEmail(userEmail);
 
         return storeAccess.insertStore(store);
     }
@@ -100,6 +101,15 @@ public class StoreService {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public Product getProductById (String productId) {
+        try {
+            return productAccess.getProductById(productId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

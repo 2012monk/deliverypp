@@ -1,6 +1,7 @@
 package com.deli.deliverypp.controller.review;
 
 import com.deli.deliverypp.DB.DeliUser;
+import com.deli.deliverypp.auth.AuthProvider;
 import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.model.Review;
 import com.deli.deliverypp.service.ReviewService;
@@ -26,6 +27,7 @@ public class ReviewController extends HttpServlet {
 
     private static final ReviewService service = new ReviewService();
     private static final Logger log = LogManager.getLogger(ReviewController.class);
+    private static final AuthProvider provider = new AuthProvider();
 
     // option query string
     @Override
@@ -38,7 +40,16 @@ public class ReviewController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ControlUtil.sendResponseData(response, service.insertNewReview(ControlUtil.getJson(request), true));
+        String json = ControlUtil.getJson(request);
+        DeliUser user = provider.getUserFromHeader(request);
+
+        log.info(json);
+        log.info(user);
+        if (user != null) {
+            ControlUtil.sendResponseData(response, service.insertNewReview(json, user.getUserEmail()));
+        }else {
+            ControlUtil.sendResponseData(response, service.insertNewReview(json, null));
+        }
     }
 
 
@@ -75,20 +86,12 @@ public class ReviewController extends HttpServlet {
     }
 
 
-
-//    @RequiredParam(value = "/review/{reviewId}")
-//    @ProtectedResource(uri = "/review", id = true, method = "delete")
-    public void delete(@PathParam(param = "reviewId") String reviewId) {
-        System.out.println(reviewId);
-    }
-
-
     public void getReview (HttpServletRequest request, HttpServletResponse response) {
         String options = request.getQueryString();
         String target = ControlUtil.getRequestUri(request);
         String value = ControlUtil.getRequestUri(request, 2);
         ResponseMessage<?> msg = null;
-        System.out.println(value);
+        log.debug(value);
         switch (target) {
             case "user":
                 msg = service.getReviewsByWriter(value);

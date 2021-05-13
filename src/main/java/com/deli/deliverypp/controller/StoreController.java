@@ -1,8 +1,10 @@
 package com.deli.deliverypp.controller;
 
 import com.deli.deliverypp.DB.DeliUser;
+import com.deli.deliverypp.auth.AuthProvider;
 import com.deli.deliverypp.model.Store;
 import com.deli.deliverypp.service.StoreService;
+import com.deli.deliverypp.service.UserLoginService;
 import com.deli.deliverypp.util.ControlUtil;
 import com.deli.deliverypp.util.HttpConnectionHandler;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
@@ -25,6 +27,7 @@ public class StoreController extends HttpServlet {
     private static final Logger log = LogManager.getLogger(StoreController.class);
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final StoreService service = new StoreService();
+
 
 
 //    private static HashMap<String , Store> list = new HashMap<>();
@@ -110,15 +113,18 @@ public class StoreController extends HttpServlet {
      */
 
 
+    private AuthProvider provider = new AuthProvider();
+    private UserLoginService userLoginService = new UserLoginService();
 
     @ProtectedResource(role = DeliUser.UserRole.SELLER, uri = "/stores")
     // CREATE
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        DeliUser user = provider.getUserFromHeader(request);
+        log.info(user);
         String json = ControlUtil.getJson(request);
-        ControlUtil.responseMsg(response, service.insertStoreService(json));
+        ControlUtil.responseMsg(response, service.insertStoreService(json, user.getUserEmail()));
     }
 
 

@@ -2,6 +2,7 @@ package com.deli.deliverypp.controller.review;
 
 import com.deli.deliverypp.DB.DeliUser;
 import com.deli.deliverypp.DB.ReplyAccess;
+import com.deli.deliverypp.auth.AuthProvider;
 import com.deli.deliverypp.model.Reply;
 import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.model.Review;
@@ -26,6 +27,7 @@ public class ReplyController extends HttpServlet {
 
     private static final ReplyAccess access = new ReplyAccess();
     private static final ObjectMapper mapper = getMapper();
+    private final AuthProvider provider = new AuthProvider();
 
 
     @Override
@@ -51,8 +53,12 @@ public class ReplyController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         Reply reply = getReply(ControlUtil.getJson(request));
+        DeliUser user = provider.getUserFromHeader(request);
         if (reply != null) {
             reply.generateReplyId();
+            if (reply.getUserEmail() == null) {
+                reply.setUserEmail(user.getUserEmail());
+            }
         }
         ControlUtil.sendResponseData(response,
                 MessageGenerator.makeResultMsg(access.insertReply(reply)));

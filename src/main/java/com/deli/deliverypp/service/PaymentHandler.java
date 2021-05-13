@@ -53,7 +53,8 @@ public class PaymentHandler {
 
         String json = HttpConnectionHandler.POSTHttpRequest(reqUri, params, header);
 
-        System.out.println(json);
+
+        log.debug(json);
 
         return new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false)

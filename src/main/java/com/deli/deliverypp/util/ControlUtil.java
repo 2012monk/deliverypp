@@ -23,13 +23,12 @@ public class ControlUtil {
         try {
             response.getWriter().write(success ? "SUCCESS" : "FAILED");
         } catch (Exception e) {
-            e.printStackTrace();
             try{
                 response.getWriter().write("failed server error");
-
             }catch (Exception e2) {
                 e2.printStackTrace();
             }
+            e.printStackTrace();
         }
     }
 
@@ -71,12 +70,12 @@ public class ControlUtil {
         try {
             response.getWriter().write(formatJson(message, data));
         } catch (Exception e) {
-            e.printStackTrace();
             try {
                 response.getWriter().write("failed server error");
             } catch (Exception e2) {
                 e2.printStackTrace();
             }
+            e.printStackTrace();
         }
     }
 
@@ -115,8 +114,8 @@ public class ControlUtil {
 
     public static void sendUnAuthorizeMsg(HttpServletResponse response){
         try {
-            sendResponseData(response, MessageGenerator.makeErrorMsg("접근권한 없음 ", "access_error"));
             response.sendError(401);
+            sendResponseData(response, MessageGenerator.makeErrorMsg("접근권한 없음 ", "access_error"));
             response.getWriter().close();
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,5 +1,8 @@
 package com.deli.deliverypp.model;
 
+import com.deli.deliverypp.util.PathSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +14,7 @@ public class Review {
     private String storeName;
     private String reviewId;
     private int reviewRating;
+    @JsonSerialize(using = PathSerializer.class, as = String.class)
     private String reviewImage;
     private String userEmail;
     private String reviewContent;
@@ -105,5 +109,20 @@ public class Review {
 
     public void setReplyList(List<Reply> replyList) {
         this.replyList = replyList;
+    }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "storeId='" + storeId + '\'' +
+                ", storeName='" + storeName + '\'' +
+                ", reviewId='" + reviewId + '\'' +
+                ", reviewRating=" + reviewRating +
+                ", reviewImage='" + reviewImage + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", reviewContent='" + reviewContent + '\'' +
+                ", reviewDate='" + reviewDate + '\'' +
+                ", replyList=" + replyList +
+                '}';
     }
 }

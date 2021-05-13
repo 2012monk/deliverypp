@@ -45,15 +45,16 @@ public class ReviewAccess {
     }
 
     public Review updateReview (Review review) {
-        String sql = "UPDATE REVIEW SET  REVIEW_CONTENT=?,REVIEW_IMAGE=?, REVIEW_RATING=? WHERE REVIEW_ID=?";
+        String sql = "UPDATE REVIEW SET  REVIEW_CONTENT=?,REVIEW_IMAGE=?, REVIEW_RATING=?  WHERE REVIEW_ID=?";
+        System.out.println(review);
         conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
-            prst.setString(4, review.getReviewId());
 
             prst.setString(1, review.getReviewContent());
             prst.setString(2, review.getReviewImage());
             prst.setInt(3, review.getReviewRating());
+            prst.setString(4, review.getReviewId());
 
             if (prst.executeUpdate() > 0) {
                 conn.commit();

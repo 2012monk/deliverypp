@@ -56,15 +56,10 @@ public class CORSFilter extends AuthenticationFilter {
 //        rq.getServletContext().setResponseCharacterEncoding("UTF-8");
 
         log.info(rq.getRemoteAddr()+"   port :   " + rq.getRemotePort());
-        yellHeader(rq);
+//        yellHeader(rq);
 
         if (rq.getHeader("Authorization") != null) {
             log.info(rq.getHeader("Authorization"));
-        }
-        try {
-            log.info(rq.getHeader("Authorization"));
-        } catch (Exception e) {
-
         }
 
         String local = "http://localhost:47788";
@@ -88,6 +83,7 @@ public class CORSFilter extends AuthenticationFilter {
         else if (rq.getHeader("origin") != null) {
             String origin = rq.getHeader("origin");
             log.info(origin);
+            log.info(allowedHosts(origin));
 
             rs.setHeader("Access-Control-Allow-Credentials", "true");
 //            rs.setHeader("Access-Control-Allow-Origin", local);

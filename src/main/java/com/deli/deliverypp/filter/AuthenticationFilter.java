@@ -96,7 +96,6 @@ public class AuthenticationFilter implements Filter {
 
 
             HttpServletResponse response = (HttpServletResponse) servletResponse;
-            boolean checkId = resource.id();
             String token = getToken(rq);
 
             if (token == null) {
@@ -108,12 +107,12 @@ public class AuthenticationFilter implements Filter {
                     if (reqRole.isHigher(user.getUserRole())) {
                         filterChain.doFilter(servletRequest,servletResponse);
                     }else {
-                        response.sendError(401);
                         ControlUtil.sendUnAuthorizeMsg((HttpServletResponse) servletResponse);
+                        response.sendError(401);
                     }
                 } catch (Exception e) {
-                    response.sendError(401);
                     ControlUtil.sendUnAuthorizeMsg(response);
+                    response.sendError(401);
                     e.printStackTrace();
                 }
 
@@ -166,7 +165,8 @@ public class AuthenticationFilter implements Filter {
                 return cookie.getValue();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            log.info(request.getRemoteAddr()+ "    refresh token doesn't exist");
         }
         return null;
     }

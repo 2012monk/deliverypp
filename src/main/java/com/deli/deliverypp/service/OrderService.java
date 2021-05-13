@@ -42,7 +42,8 @@ public class OrderService {
 
         // TODO order 검증 validate
 
-        System.out.println(orderInfo);
+//        System.out.println(orderInfo);
+        log.debug(orderInfo);
         assert  orderInfo != null;
 
         // 주문 번호 부여
