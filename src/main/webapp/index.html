@@ -21,7 +21,7 @@
 <script src="./assets/js/ReviewList.js"></script>
 <script>
 
-var login_id = "";
+var login_id = "logout";
 $(document).on("click","#test_seller_login",function(){
 	login_id = "SELLER";
 	$("#test_login_info").html("SELLER 로그인");
@@ -32,6 +32,11 @@ $(document).on("click","#test_client_login",function(){
 	$("#test_login_info").html("CLIENT 로그인");
 	mainPage();
 })
+$(document).on("click","#test_logout",function(){
+	login_id = "logout";
+	$("#test_login_info").html("로그아웃됨");
+	mainPage();
+})
 
 
 </script>
@@ -39,6 +44,7 @@ $(document).on("click","#test_client_login",function(){
 <body>
 <button type="button" id='test_seller_login'>Seller 로그인 </button>
 <button type="button" id='test_client_login'>Client 로그인</button>
+<button type="button" id='test_logout'>로그아웃</button>
 <span id="test_login_info">로그인 정보</span>
 	<!-- <ul>
 		<li class="history" route="/main"></li>
