@@ -15,7 +15,7 @@ function mainHeaderPage() {
             s +="<li><i class='far fa-id-card' id='loginbtn' data-target='#logmodal'></i></li></ul>";
         }else{
             s +="<ul class='navbar-login'>";
-            s +="<li><i id='mypagebtn' onclick='mypage();'>"+login_id+"님</i></li>";//변경요망
+            s +="<li><i id='mypagebtn' onclick='mypage();'>"+simpleDeli.getUserEmail()+"님</i></li>";//변경요망
             s +="<li><i></i></li></ul>";
         }
 		
@@ -162,7 +162,7 @@ function mypage(){
     $(document).on("click","#mypagebtn",function(){
         $.ajax({
             type:"get",
-            url:"http://112.169.196.76:47788/user/test0513@test.com",//E-Mail 변경요망 
+            url:"http://112.169.196.76:47788/user/"+simpleDeli.getUserEmail(),//E-Mail 변경요망 
             dataType:"json",
             success:function(data){
                 console.log(data);
