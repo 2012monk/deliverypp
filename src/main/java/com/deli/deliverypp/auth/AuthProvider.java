@@ -103,16 +103,22 @@ public class AuthProvider {
      * @return true if passed
      */
     public boolean checkId(String userEmail, HttpServletRequest request) {
-        String token = parseHeader(request);
-        String email = service.parseUserFromToken(token).getUserEmail();
 
         try {
+            String token = parseHeader(request);
+            log.info(token);
+            String email = service.parseUserFromToken(token).getUserEmail();
             return userEmail.equals(email);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
+//    public boolean checkId(String userEmail, HttpServletRequest request) {
+//       return true;
+//    }
+
+
 
 
     public DeliUser getUserFromHeader (HttpServletRequest request) {

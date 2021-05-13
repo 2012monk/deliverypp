@@ -1,8 +1,9 @@
 function reviewPage(){
 
-    var storeId = "stid22";
+    /*var storeId = "stid22";*/
     var userEmail = "abc@abc.net";
-    var list_range = "";
+	var storeId = $("#ssss").attr("data-store");
+	list_range = "";
 /* 리뷰리스트 데이터 형식
     var ajax_data = 
         {
@@ -65,7 +66,7 @@ function reviewPage(){
                     //리뷰 테이블
                     s+= "<table class='table table-bordered'><tr><td>번호</td><td>작성자</td><td>별점</td><td>작성일</td></tr>";
                     s+="<tr><td>"+idx+"</td><td>"+w.userEmail+"</td><td>"+w.reviewRating+"</td><td>"+w.reviewDate.substring(0,10)+"</td></tr>";
-                    var s_photo ="<tr class='photo'><td colspan='4'><img style='width:300px;height:300px;' src='"+photo_url+w.reviewImage+"'>"+w.reviewImage+"</td></tr>";
+                    var s_photo ="<tr class='photo'><td colspan='4'><img style='width:300px;height:300px;' src='"+w.reviewImage+"'>"+w.reviewImage+"</td></tr>";
                     if(w.reviewImage!=null)
                         s+=s_photo;
                     s+="<tr><td colspan='4' class='content'>"+w.reviewContent+"</td></tr></table>";

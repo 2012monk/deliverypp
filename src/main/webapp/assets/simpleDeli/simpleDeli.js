@@ -78,7 +78,7 @@ window.simpleDeli = {
      *
      * @returns {user || null}
      */
-     getUserInfo() {
+    getUserInfo() {
         return simpleDeli.deliUser || null
     },
 
@@ -123,17 +123,22 @@ window.simpleDeli = {
             .then(res => res.text())
             .then(console.log);
         }
-        firebaseModule.init();
-        this.unit.moduleInit();
+        try{
+            firebaseModule.init();
+        }catch(err) {
+            console.log(err)
+        }
+        // this.unit.moduleInit();
     },
 }
 
 
 $.ajaxSetup({
     beforeSend:function(xhr) {
-        xhr.withCredentials = true;
-        if (simpleDeli.deliUser.token){
-            xhr.setRequestHeader("authorization", "Bearer "+simpleDeli.deliUSer.token)
+        console.log(simpleDeli)
+        if (simpleDeli.auth.token){
+            xhr.withCredentials = true;
+            xhr.setRequestHeader("authorization", "Bearer "+simpleDeli.auth.token)
         }
     }
 })
@@ -356,10 +361,10 @@ simpleDeli.unit = {
 //     }
 // });
 
-simpleDeli.loginAttempt({
-    "userEmail" : "test@test.com",
-    "userPw" : "1234",
-    "userType" : "DELI"
-})
+// simpleDeli.loginAttempt({
+//     "userEmail" : "test@test.com",
+//     "userPw" : "1234",
+//     "userType" : "DELI"
+// })
 
 simpleDeli.unit.init();
