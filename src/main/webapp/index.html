@@ -45,26 +45,25 @@ $(document).on("click","#test_seller_login",function(){
 		"userEmail" : "seller@seller.com",
 		"userPw" : "1234"
 	})
+	$("#test_login_info").html(simpleDeli.checkUserRole());
+	alert("1초뒤에 눌러주세요");
+	mainPage();
 })
 $(document).on("click","#test_client_login",function(){
 	simpleDeli.loginAttempt({
 		"userEmail" : "test@test.com",
 		"userPw" : "1234"
 	})
-})
-$(document).on("click","#test_login_info_btn",function(){
-
 	$("#test_login_info").html(simpleDeli.checkUserRole());
-	alert("fsaojfieowajfewaojf");
+	alert("1초뒤에 눌러주세요");
 	mainPage();
-	
-}) 
+})
+
 </script>
 </head>
 <body>
 <button type="button" id='test_seller_login'>Seller 로그인 </button>
 <button type="button" id='test_client_login'>Client 로그인</button>
-<button type="button" id='test_login_info_btn'>로그인정보</button>
 <span id="test_login_info">로그인 정보</span>
 	<!-- <ul>
 		<li class="history" route="/main"></li>
