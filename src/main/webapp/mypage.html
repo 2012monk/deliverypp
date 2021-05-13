@@ -6,9 +6,29 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script src="./assets/js/mypage.js"></script>
+<script src="assets/simpleDeli/simpleDeli.js"></script>
+<script>
+    $(function(){
+        setTimeout(a,2000);
+    });
+
+    function a(){
+        if(simpleDeli.isLoggedIn()===true)
+        {
+            $("#userinformation").show();
+            $("#userupdateform").show();
+            $("#test").hide();
+        }else{
+            $("#userinformation").hide();
+            $("#userupdateform").hide();
+            $("#test").show();
+        }
+    }
+</script>
 </head>
 <body>
 <div id="userinformation">회원정보</div>
 <div id="userupdateform">회원정보 수정폼</div>
+<div id="test">test</div>
 </body>
 </html>

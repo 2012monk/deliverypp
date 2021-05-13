@@ -14,53 +14,31 @@
 <link rel="stylesheet" href="./assets/css/style.css" type="text/css">
 <script src="https://kit.fontawesome.com/c06c7c1f00.js" crossorigin="anonymous"></script>
 <script src="./assets/js/index-js/index-header.js"></script>
-<!-- <script src="./assets/js/storecustomer-js/storecustomer.js"></script> -->
+
+<script src="./assets/js/storecustomer-js/storecustomer.js"></script>
 <script src="./assets/js/basket-js/basket.js"></script>
 <script src="./assets/js/storehost-js/storehost.js"></script>
 <script src="./assets/js/ReviewList.js"></script>
 <script>
-//임시 로그인 처리
-// simpleDeli.loginAttempt({
-//     "userEmail" : "test@test.com",
-//     "userPw" : "1234",
-//     "userType" : "DELI"
-// })
-// 	  @function checkUserRole() 
-//  * @returns {userRole || null} user role if logged in
-//  * 
-//  * 
-//  * @function isLoggedIn()
-//  * @returns {boolean} true if logged in
-//  * 
-//  * @function getUserInfo()
-//  * @returns {user || null}
-//  * user info if logged in null
-//  * 
-//  * @function getUserEmail()
-//  * @returns {userEmail || null}
-//  * user Email if logged in or null
+
+var login_id = "";
 $(document).on("click","#test_seller_login",function(){
-	simpleDeli.loginAttempt({
-		"userEmail" : "seller@seller.com",
-		"userPw" : "1234"
-	})
+	login_id = "SELLER";
+	$("#test_login_info").html("SELLER 로그인");
+	mainPage();
 })
 $(document).on("click","#test_client_login",function(){
-	simpleDeli.loginAttempt({
-		"userEmail" : "test@test.com",
-		"userPw" : "1234"
-	})
+	login_id = "CLIENT";
+	$("#test_login_info").html("CLIENT 로그인");
+	mainPage();
 })
-$(document).on("click","#test_login_info_btn",function(){
 
-	$("#test_login_info").html(simpleDeli.checkUserRole());
-})
+
 </script>
 </head>
 <body>
 <button type="button" id='test_seller_login'>Seller 로그인 </button>
 <button type="button" id='test_client_login'>Client 로그인</button>
-<button type="button" id='test_login_info_btn'>로그인정보</button>
 <span id="test_login_info">로그인 정보</span>
 	<!-- <ul>
 		<li class="history" route="/main"></li>
@@ -71,7 +49,7 @@ $(document).on("click","#test_login_info_btn",function(){
 	<div id="index-main"></div>
 	<div id="hidden-basket"></div>
 
-	<<!-- div>
+	<!-- <div>
 		<a href="main.html">main</a> 
 		<a href="storecus.html">storecus</a> 
 		<a href="basket.html">basket</a>

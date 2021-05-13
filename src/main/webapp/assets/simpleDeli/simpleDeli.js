@@ -104,7 +104,7 @@ window.simpleDeli = {
         return this.unit.isValidUser();
     },
     handleLoginSuccess(data) {
-    
+
         const res = data.data;
         simpleDeli.deliUser = res.user;
         simpleDeli.auth = {
@@ -113,7 +113,7 @@ window.simpleDeli = {
             "exp" : parseInt(res["exp"])
         };
     },
- }
+}
 
 
 $.ajaxSetup({
