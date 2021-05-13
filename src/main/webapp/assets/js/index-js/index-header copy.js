@@ -11,8 +11,8 @@
 		s +="</ul>";
 				
 		s +="<ul class='navbar-login'>";
-		s +="<li><i class='fas fa-user-plus' id='signbtn'></i></li>";
-		s +="<li><i class='far fa-id-card' id='loginbtn'></i></li></ul>";
+		s +="<li><i class='fas fa-user-plus' id='signbtn' onclick='signup();'></i></li>";
+		s +="<li><i class='far fa-id-card' id='loginbtn' onclick='login();'></i></li></ul>";
 		
 		/*모달 코드 렌더링 처음에 해놔야 나중에 */
 		s += '<div id="myModal" class="modal" tabindex="-1" role="dialog">';
@@ -35,19 +35,7 @@
   		s += '</div>';
 		s += '</div>';
 		$("#index-header").html(s); 
-		//로그인 이벤트
-		var s="";
-		$(document).on("click","#loginbtn",function(){
-		s+="<form>";
-		s+="<table>";
-		s+="<caption><b>로그인</b></caption>"
-		s+="<tr><td><input type='email' name='userEmail'pattern='[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}' required placeholder='E-MAIL'></td><td rowspan='2'><button type='submit'>로그인</button><td></tr>";
-		s+="<tr><td><input type='password' name='userPw' required placeholder='PASSWORD'></td></tr>";
-		s+="</table>";
-		s+="</form>";
-		$("#show").html(s);
-	});
-
+		
 		console.log(simpleDeli.checkUserRole());
 		if(simpleDeli.checkUserRole()=="CLIENT"){
 			$(function(){
@@ -97,4 +85,97 @@
 				}
 			});
 		}
+}
+
+function signup(){
+//회원가입이벤트
+var s="";
+var userroll="";
+$(document).on("click","#signbtn",function(){
+	console.log(this);
+	userType="deli";
+	s="<form id='deliform'>";
+	s+="<table>";
+	s+="<caption><b>회원가입</b></caption>";
+	s+="<tr><td><input type='email' name='userEmail' pattern='[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}' required placeholder='예) id@domain.com'></td></tr>";
+	s+="<tr><td><input type='password' id='pw' name='userPw' placeholder='비밀번호 입력' required></td></tr>";
+	s+="<tr><td><input type='password' id='pw_cf' onkeyup='check_pw()' name='userPwok' placeholder='비밀번호 확인' required></td></tr>";
+	s+="<tr><td><span id='pw_check_msg' style='color:red;'></span></td></tr>"
+	s+="<tr><td><input type='text' name='userTelephone' placeholder='전화번호' required></td><td><button type='submit'>인증번호받기</button></td></tr>";
+	s+="<tr><td><input type='text' name='userAddr' placeholder='주소' required></td></tr>";
+	s+="<tr><td><input type='checkbox' name='userRole' value='seller'>SELLER</td><td><input type='checkbox' name='userRole' value='client'>CLIENT</td></tr>";
+	s+="<tr><td colspan='2' align='center'><button type='submit'>회원가입</button></td></tr>";
+	s+="</table>";
+	s+="</form>";
+	$("#signlogindiv").html(s);
+});
+
+$(document).on("submit","form", function(e){
+	e.preventDefault();
+	console.log(this);
+	userType="deli";
+	var userEmail = $(this).find('input[name="userEmail"]').val();
+	var userPw = $(this).find('input[name="userPw"]').val();
+	var userTelephone = $(this).find('input[name="userTelephone"]').val();
+	var userAddr = $(this).find('input[name="userAddr"]').val();
+	var userRole= $(this).find('input:checkbox[name="userRole"]:checked').val();
+	
+	console.log(userType);
+	console.log(userEmail);
+	console.log(userPw);
+	console.log(userRole);
+	console.log(userAddr);
+	console.log(userTelephone);
+	
+	$.ajax({
+		type:"post",
+		url:"http://112.169.196.76:47788/user/signup",
+		data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole, "userType":userType,"userTelephone":userTelephone,"userAddr":userAddr}),
+		success:function(d){
+			console.log(d);
+		}
+	});
+});
+}
+
+function login(){
+	//로그인 이벤트
+	var s="";
+	$(document).on("click","#loginbtn",function(){
+	s="<form id='loginform'>";
+	s+="<table>";
+	s+="<caption><b>로그인</b></caption>"
+	s+="<tr><td><input type='email' name='userEmail'pattern='[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}' required placeholder='E-MAIL'></td><td rowspan='2'><button type='submit'>로그인</button><td></tr>";
+	s+="<tr><td><input type='password' name='userPw' required placeholder='PASSWORD'></td></tr>";
+	s+="</table>";
+	s+="</form>";
+	$("#signlogindiv").html(s);
+});
+
+$(document).on("submit","form",function(e){
+	e.preventDefault();
+	console.log(this);
+	var userEmail = $(this).find('input[name="userEmail"]').val();
+	var userPw = $(this).find('input[name="userPw"]').val();
+	console.log(userEmail);
+	console.log(userPw);
+	
+	$.ajax({
+		type:"post",
+		//url:"<http://deli.alconn.co/login>",
+		url:"http://112.169.196.76:47788/login",
+		data:JSON.stringify({"userEmail":userEmail,"userPw":userPw}),
+		dataType:"json",
+		success:function(login_result){
+			console.log(login_result);
+			if(simpleDeli.isLoggedIn()===true){
+				$("#loginform").hide();
+				alert("로그인 성공!!");
+			}else{
+				alert("로그인 실패!!");
+			}
+			//simpleDeli.handleLoginSuccess(login_result);
+		}
+	});
+});
 }
