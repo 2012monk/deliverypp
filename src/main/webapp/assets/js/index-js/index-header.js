@@ -60,6 +60,7 @@
 						
 					}
 				});
+				/*storeHost();*/
 			});
 		} else {
 			/*비화원 손님 회원도 여기가 렌더링*/
@@ -77,11 +78,12 @@
 						/*a += "<img src='"+elt.storeImage+"'>";*/
 						a += "<div>"+elt.storeName+"</div>";
 						a +="<div><span>리뷰</span></div>";
-						a +="</div>"
+						a +="</div>";
 						
 					});
 					$("#index-main").html(a);
 				}
 			});
+			storeCustomerProductList()
 		}
 }
