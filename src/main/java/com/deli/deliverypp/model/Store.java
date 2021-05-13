@@ -1,7 +1,9 @@
 package com.deli.deliverypp.model;
 
 import com.deli.deliverypp.util.ParseUtil;
+import com.deli.deliverypp.util.PathSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,12 +16,22 @@ public class Store implements Serializable {
     private String storeName;
     private String storeDesc;
     // img 경로 수정 Method
+    @JsonSerialize(using = PathSerializer.class, as = String.class)
     private String storeImage;
     private List<Product> productList;
     private String storeAddr;
     private String storeTelephone;
+    private String userEmail;
 
     public Store() {
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getStoreTelephone() {
@@ -78,10 +90,10 @@ public class Store implements Serializable {
         return storeImage;
     }
 
-    public void setStoreImage(String storeImage) {
-        this.storeImage = ParseUtil.parseImgPath(storeImage);
-    }
 
+    public void setStoreImage(String storeImage) {
+        this.storeImage = storeImage;
+    }
 
     @Override
     public String toString() {

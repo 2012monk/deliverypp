@@ -33,6 +33,7 @@ public class JwtTokenProvider {
 
 
     public Jws<Claims> getAccessTokenClaims(String jws){
+        if (jws == null) return null;
         try {
             return Jwts
                     .parserBuilder()
@@ -42,6 +43,7 @@ public class JwtTokenProvider {
                     .parseClaimsJws(jws);
         }catch (SignatureException signatureException){
             log.warn(signatureException.getMessage());
+            log.warn("token signature error");
         }catch (ExpiredJwtException expiredJwtException) {
             log.warn("token expired");
         }
@@ -50,7 +52,12 @@ public class JwtTokenProvider {
 
     public Map<String ,Object> getTokenBody(String jws) {
         Jws<Claims> claimsJws = getAccessTokenClaims(jws);
-        return claimsJws.getBody();
+        try {
+            return claimsJws.getBody();
+        } catch (Exception e) {
+            log.warn("claim null");
+        }
+        return null;
     }
 
     public Map<String, Object> getRefreshTokenBody(String jws) {
@@ -72,9 +79,9 @@ public class JwtTokenProvider {
     public String generateToken (String userEmail, String userRole, String userType) {
         Date date = new Date();
         Date exp = new Date(date.getTime() + tokenValidateTime);
-        log.info(date.getTime());
-        log.info(date.getTime() + tokenValidateTime);
-        log.info(exp.getTime());
+//        log.info(date.getTime());
+//        log.info(date.getTime() + tokenValidateTime);
+//        log.debug(exp.getTime());
         return Jwts.builder()
                 .setId(userEmail)
                 .setExpiration(exp)

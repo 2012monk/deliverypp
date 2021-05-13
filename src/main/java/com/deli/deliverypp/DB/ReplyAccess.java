@@ -15,11 +15,11 @@ import static com.deli.deliverypp.util.DBUtil.setPOJO;
 
 public class ReplyAccess {
 
-    private static Connection conn;
+//    private static Connection conn;
 
     public Reply getReplyById(String replyId) {
         String sql = "SELECT * FROM REPLY WHERE REPLY_ID=?";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, replyId);
@@ -44,7 +44,7 @@ public class ReplyAccess {
     public List<Reply> getRepliesBiReview(String reviewId) {
         String sql = "SELECT * FROM REPLY WHERE REVIEW_ID=?";
         List<Reply> replies = new ArrayList<>();
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, reviewId);
@@ -70,7 +70,7 @@ public class ReplyAccess {
 
     public Reply insertReply(Reply reply) {
         String sql = "INSERT INTO REPLY (REVIEW_ID, REPLY_ID, REPLY_CONTENT, USER_EMAIL) VALUES (?,?,?,?)";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, reply.getReviewId());
@@ -93,7 +93,7 @@ public class ReplyAccess {
 
     public Reply updateReply(Reply reply) {
         String sql = "UPDATE REPLY SET REPLY_CONTENT=? WHERE REPLY_ID=?";
-        conn = getConn();
+        Connection conn = getConn();
 
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
@@ -115,7 +115,7 @@ public class ReplyAccess {
 
     public boolean deleteReply(String replyId) {
         String sql = "DELETE FROM REPLY WHERE REPLY_ID=?";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
 

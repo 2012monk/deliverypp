@@ -154,6 +154,7 @@ public class OrderInfo {
     }
     // parse string
 
+    @JsonProperty(value = "quantity")
     public String getQuantityString() {
         return String.valueOf(totalAmount);
     }
@@ -162,6 +163,7 @@ public class OrderInfo {
         this.totalAmount = Integer.parseInt(quantity);
     }
 
+    @JsonProperty(value = "totlaPrice")
     public String  getTotalPriceString() {
         return String.valueOf(totalPrice);
     }

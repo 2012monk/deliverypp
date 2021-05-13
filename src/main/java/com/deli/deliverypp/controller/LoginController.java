@@ -40,7 +40,7 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        System.out.println(request.getRequestURL().toString());
+
 
         switch (ControlUtil.getRequestUri(request)) {
             case "google":
@@ -95,6 +95,7 @@ public class LoginController extends HttpServlet {
         authCookie.setSecure(true);
         authCookie.setMaxAge(60 * 60 * 24 * 7); // 7days
         response.setHeader("Set-Cookie", "SID="+token+";SameSite=None; HttpOnly; Secure; path=/;max-age="+(60 * 60 * 24 * 7));
+        log.info("cookie generated");
 //        response.addCookie(authCookie);
     }
 

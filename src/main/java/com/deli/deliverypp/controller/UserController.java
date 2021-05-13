@@ -6,12 +6,17 @@ import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.service.UserLoginService;
 import com.deli.deliverypp.util.ControlUtil;
 import com.deli.deliverypp.util.MessageGenerator;
+import com.deli.deliverypp.util.annotaions.ProtectedResource;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
+import static com.deli.deliverypp.util.JSONUtil.getMapper;
 import static com.deli.deliverypp.util.MessageGenerator.makeMsg;
 
 @WebServlet(name = "UserController", value = "/user/*")
@@ -20,6 +25,9 @@ public class UserController extends HttpServlet {
 
     private static final UserLoginService service = new UserLoginService();
     private static final AuthProvider provider = new AuthProvider();
+    private static final Logger log = LogManager.getLogger(UserLoginService.class);
+    private static final ObjectMapper mapper = getMapper();
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -46,32 +54,37 @@ public class UserController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        updateUserInfo(req,resp);
+        String json = ControlUtil.getJson(req);
+        DeliUser user = mapper.readValue(json, DeliUser.class);
+        if (provider.checkId(user.getUserEmail(), req)){
+            ControlUtil.responseMsg(resp, service.updateUser(json));
+        }else {
+            ControlUtil.sendUnAuthorizeMsg(resp);
+        }
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
-        unregisterUser(req,resp);
-    }
-
-
-    private void handleSignUp (HttpServletRequest request, HttpServletResponse response){
-
-        String json = ControlUtil.getJson(request);
-        System.out.println(json);
-        try {
-            ControlUtil.responseMsg(response, service.signUpUser(json));
-        } catch (Exception e) {
-            e.printStackTrace();
-            ControlUtil.responseMsg(response, false);
+        String email = ControlUtil.getRequestUri(req, 1);
+        if (provider.checkId(email, req)) {
+            ControlUtil.responseMsg(resp, service.deleteUser(email));
+        }else{
+            ControlUtil.sendUnAuthorizeMsg(resp);
         }
     }
 
-    // TODO implement me register seller
-//    private void registerAsSeller (HttpServletRequest request, HttpServletResponse response) {
-//        ControlUtil.responseMsg(response, service.signUpSeller(ControlUtil.getJson(request)));
+
+//    private void handleSignUp (HttpServletRequest request, HttpServletResponse response){
+//
+//        String json = ControlUtil.getJson(request);
+//        log.debug(json);
+//        try {
+//            ControlUtil.responseMsg(response, service.signUpUser(json));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            ControlUtil.responseMsg(response, false);
+//        }
 //    }
 
     // 유저 등록
@@ -91,8 +104,6 @@ public class UserController extends HttpServlet {
     private void register(HttpServletRequest request, HttpServletResponse response) {
         if (ControlUtil.getRequestUri(request).equals("signup")){
             if (ControlUtil.getRequestUri(request,2).equals("seller")) {
-                System.out.println(provider.checkUserStatusValid(request));
-                System.out.println("seller");
 
                 if (provider.checkUserStatusValid(request)) {
                     ControlUtil.responseMsg(response, service.signUpSeller(ControlUtil.getJson(request)));
@@ -121,17 +132,14 @@ public class UserController extends HttpServlet {
         }
     }
 
-    private void updateUserInfo (HttpServletRequest request, HttpServletResponse response) {
-        ControlUtil.responseMsg(response, service.updateUser(ControlUtil.getJson(request)));
-    }
-
-    private void unregisterUser (HttpServletRequest request, HttpServletResponse response) {
-        ControlUtil.responseMsg(response, service.deleteUser(ControlUtil.getRequestUri(request)));
-    }
-
     private void getUserInfo (HttpServletRequest request, HttpServletResponse response) {
-        ResponseMessage<DeliUser> msg = MessageGenerator.makeResultMsg(service.getUserInfo(ControlUtil.getRequestUri(request)));
-        ControlUtil.sendResponseData(response, msg);
+        String email = ControlUtil.getRequestUri(request);
+        if (provider.checkId(email, request)){
+            ResponseMessage<DeliUser> msg = MessageGenerator.makeResultMsg(service.getUserInfo(email));
+            ControlUtil.sendResponseData(response, msg);
+        }else {
+            ControlUtil.sendUnAuthorizeMsg(response);
+        }
     }
 
 

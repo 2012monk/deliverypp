@@ -8,21 +8,23 @@
 function cartPage(){
 
 	var s = "";
-	s+="<div class='onsuccess-msg'>";
+	s+="<div class='onsuccess-msg'></div>";
 
-	s+="</div><div id='kakao-modal' class='modal fade' tabindex='-1'  aria-hidden='true'>";
-    s+="<div class='modal-dialog' role='document'><div class='modal-content'>";
+	//카카오 모달창
+	s+="<div id='kakao-modal' class='modal fade' tabindex='-1'  aria-hidden='true'>";
+    s+="<div class='modal-dialog' role='document'>";
+	s+="<div class='modal-content'>";
     s+="<iframe src='' class='kakao-inner' style='width: 100%;height: 100%;' ></iframe>";
 	s+="</div></div></div>";
 
-
-	s+="<div class='container'><h2>장바구니 테스트55</h2>";
-  	s+="<button type='button' class='btn btn-default btn-lg' id='myBtn'>장바구니</button>";
-	s+="<div class='modal fade' id='myModal' role='dialog'><div class='modal-dialog'>";
-    s+="<div class='modal-content'><div class='modal-header' style='padding:35px 50px;'>";
+	// 장바구니 모달창
+	s+="<div class='container'>";
+	s+="<div class='modal fade' id='myModal' role='dialog'><div class='modal-dialog'><div class='modal-content'>";
+	//모달 헤더
+	s+="<div class='modal-header' style='padding:35px 50px;'>";
 	s+="<button type='button' class='close' data-dismiss='modal'>&times;</button>";
     s+="<h2 style='font-weight:bold;'><span class='glyphicon glyphicon-shopping-cart'></span> 장바구니</h2></div>";
-        
+    //모달 바디
 	s+="<div class='modal-body' style='padding:40px 50px;'>";
     s+="<div id='test'></div><div id='test2'></div></div>";
     s+="<div class='modal-footer' style='padding:20px 20px;'>test2</div>";
@@ -32,6 +34,25 @@ function cartPage(){
 	s+="<div id='storecus-storelist-detail'></div><div id='storecus-productlist'></div>";
 	s+="<div id='storecus-btn-order'></div>";
 	$("body").html(s);
+
+
+	//가게리스트
+	$.ajax({
+		type:"get",
+		url:"http://112.169.196.76:47788/stores/stid3",
+		dataType:"json",
+		success:function(data){
+			var s="";
+				s+="<div>가게소개</div>"
+				s+="<div>가게이름 : "+data.data.storeName+"</div>";
+				s+="<div>가게주소 : "+data.data.storeAddr+"</div>";
+				s+="<div>가게소개 : "+data.data.storeDesc+"</div>";
+				s+="<div>가게사진 : "+data.data.storeImage+"</div>";			
+			
+			$("#storecus-storelist-detail").html(s);
+		}
+	});
+
 
 	//상품리스트
 	$.ajax({
@@ -49,23 +70,6 @@ function cartPage(){
 				s+="</table>"; 
 			
 			$("#storecus-productlist").html(s);
-		}
-	});
-	
-	//가게리스트
-	$.ajax({
-		type:"get",
-		url:"http://112.169.196.76:47788/stores/stid3",
-		dataType:"json",
-		success:function(data){
-			var s="";
-				s+="<div>가게소개</div>"
-				s+="<div>가게이름 : "+data.data.storeName+"</div>";
-				s+="<div>가게주소 : "+data.data.storeAddr+"</div>";
-				s+="<div>가게소개 : "+data.data.storeDesc+"</div>";
-				s+="<div>가게사진 : "+data.data.storeImage+"</div>";			
-			
-			$("#storecus-storelist-detail").html(s);
 		}
 	});
 
@@ -370,8 +374,7 @@ function CartClearCheck(){
 }
 
 function add(data) {
-	var ran = Math.random()*100;
-	CartLoad(data, ran>50?"A업체":"B업체");
+	CartLoad(data, "A업체");
 	CartMain();
 	CartMain2();
 }

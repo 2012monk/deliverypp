@@ -15,12 +15,12 @@ import static com.deli.deliverypp.DB.ConnHandler.getConn;
 
 public class ProductAccess {
 
-    private static Connection conn;
+//    private static Connection conn;
 
     public List<Product> getProductListByStoreId (String storeId) {
         List<Product> list =  new ArrayList<>();
         String sql = "SELECT * FROM PRODUCT WHERE STORE_ID=?";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, storeId);
@@ -60,7 +60,7 @@ public class ProductAccess {
     public Product getProductById (String productId) {
         Product product;
         String sql = "SELECT * FROM PRODUCT WHERE PRODUCT_ID=?";
-        conn = getConn();
+        Connection conn = getConn();
 
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
@@ -80,7 +80,7 @@ public class ProductAccess {
         String sql = "INSERT INTO PRODUCT " +
                 "(PRODUCT_ID, STORE_ID, PRODUCT_NAME, PRODUCT_IMAGE, PRODUCT_PRICE,PRODUCT_DESC) " +
                 "VALUES (?,?,?,?,?,?)";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, product.getProductId());
@@ -105,7 +105,7 @@ public class ProductAccess {
 
     public boolean updateProduct(Product product) {
         String sql = "UPDATE PRODUCT SET PRODUCT_DESC=?,PRODUCT_IMAGE=?,PRODUCT_NAME=?,PRODUCT_PRICE=? WHERE PRODUCT_ID=?";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, product.getProductDesc());
@@ -131,7 +131,7 @@ public class ProductAccess {
 
     public boolean deleteProduct(String productId) {
         String sql = "DELETE FROM PRODUCT WHERE PRODUCT_ID=?";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, productId);

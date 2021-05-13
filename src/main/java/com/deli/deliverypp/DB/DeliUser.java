@@ -45,6 +45,17 @@ public class DeliUser {
     private UserType userType = UserType.DELI;
     private String userAddr;
     private String userTelephone;
+    @JsonIgnore
+    private String fcmToken;
+
+    @JsonProperty
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
 
     public String getUserAddr() {
         return userAddr;

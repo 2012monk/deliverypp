@@ -40,8 +40,8 @@ public class PaymentHandler {
         params.put("quantity", String.valueOf((int) orderInfo.getTotalAmount()));
         params.put("total_amount", String.valueOf((int) orderInfo.getTotalPrice()));
         params.put("tax_free_amount", "0");
-//        String server = "https://deli.alconn.co/";
-        String server = "http://localhost:47788/";
+        String server = "https://deli.alconn.co/";
+//        String server = "http://localhost:47788/";
 //        params.put("approval_url", "http://localhost:47788/payment/kakao/success");
         params.put("approval_url", server+"kakao.redirect.html");
 //        params.put("approval_url", server);
@@ -53,7 +53,8 @@ public class PaymentHandler {
 
         String json = HttpConnectionHandler.POSTHttpRequest(reqUri, params, header);
 
-        System.out.println(json);
+
+        log.debug(json);
 
         return new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false)

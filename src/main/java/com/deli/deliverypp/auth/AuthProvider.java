@@ -4,6 +4,8 @@ import com.deli.deliverypp.DB.DeliUser;
 import com.deli.deliverypp.auth.jwt.JwtTokenProvider;
 import com.deli.deliverypp.service.UserLoginService;
 import org.apache.http.HttpRequest;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,7 @@ public class AuthProvider {
 
     private static final JwtTokenProvider provider = new JwtTokenProvider();
     private static final UserLoginService service = new UserLoginService();
+    private final Logger log = LogManager.getLogger(AuthProvider.class);
 
     public DeliUser.UserRole checkAuthority(String token) {
         return service.parseUserFromToken(token).getUserRole();
@@ -51,11 +54,22 @@ public class AuthProvider {
         if (!provider.validateToken(token)) return false;
 
         Cookie[] cookies = request.getCookies();
-        Cookie sid = Arrays.stream(cookies).filter(c -> c.getName().equals("SID")).collect(Collectors.toList()).get(0);
+        Cookie sid = null;
+        try {
+            sid = Arrays.stream(cookies).filter(c -> c.getName().equals("SID")).collect(Collectors.toList()).get(0);
+        } catch (Exception e) {
+            log.debug("refresh token xx");
+//            e.printStackTrace();
+        }
 
         if (sid == null) return false;
+        try {
+            return provider.validateRefreshToken(sid.getValue());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
 
-        return provider.validateRefreshToken(sid.getValue());
     }
 
 
@@ -63,6 +77,7 @@ public class AuthProvider {
     public String getToken (String header) {
         if (header == null) return null;
         try {
+            log.info(header);
             String type = header.split(" ")[0];
             String token = header.split(" ")[1];
             if (!type.equals("Bearer")) {
@@ -75,10 +90,11 @@ public class AuthProvider {
         return null;
     }
 
-    public String getTokenFromHeader (HttpServletRequest request) {
-        String header = parseHeader(request);
-        return getToken(header);
-    }
+//    public String getTokenFromHeader (HttpServletRequest request) {
+//        return parseHeader(request);
+//        String header = parseHeader(request);
+//        return getToken(header);
+//    }
 
     /**
      *
@@ -87,7 +103,7 @@ public class AuthProvider {
      * @return true if passed
      */
     public boolean checkId(String userEmail, HttpServletRequest request) {
-        String token = getTokenFromHeader(request);
+        String token = parseHeader(request);
         String email = service.parseUserFromToken(token).getUserEmail();
 
         try {
@@ -96,6 +112,19 @@ public class AuthProvider {
             e.printStackTrace();
         }
         return false;
+    }
+
+
+    public DeliUser getUserFromHeader (HttpServletRequest request) {
+        try {
+            String token = parseHeader(request);
+//            System.out.println(token);
+            log.debug(token);
+            return service.parseUserFromToken(token);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

@@ -16,7 +16,48 @@ import static com.deli.deliverypp.util.DBUtil.*;
 // NOTE 어떻게 반복적인 코드를 줄일까? Connection preparedStatement
 public class OrderAccess {
 
-    private static Connection conn;
+    public List<OrderInfo> getOrderListByUser (String userEmail) {
+        return getOrderList("userEmail", userEmail);
+    }
+
+    public List<OrderInfo> getOrderListByStore (String storeId) {
+        return getOrderList("storeId", storeId);
+    }
+
+
+    private List<OrderInfo> getOrderList (String key, String value) {
+        List<OrderInfo> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder();
+        Connection conn = getConn();
+        sql.append("SELECT * FROM").append(" ")
+                .append(convertClassNameToDbName(OrderInfo.class.getSimpleName()))
+                .append(" ")
+                .append("WHERE")
+                .append(" ")
+                .append(convertToDbNameConvention(key))
+                .append("=")
+                .append("'")
+                .append(value)
+                .append("'");
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(sql.toString());
+            while (rs.next()){
+                OrderInfo info = setPOJO(OrderInfo.class, rs);
+                System.out.println(info);
+                List<Product> orderList = getOrderList(info.getOrderId());
+                info.setOrderList(orderList);
+                list.add(info);
+            }
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            close(conn);
+        }
+        return null;
+    }
+
 
     public boolean makeNewOrder(OrderInfo info) {
         String sql = "INSERT INTO ORDER_INFO (ORDER_ID, TID, PAYMENT_TYPE, STORE_ID, STORE_NAME, TOTAL_AMOUNT, TOTAL_PRICE) " +
@@ -32,7 +73,7 @@ public class OrderAccess {
             add(info.getQuantityString());
             add(info.getTotalPriceString());
         }};
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             for (int i=1; i<=val.size();i++) {
@@ -58,7 +99,7 @@ public class OrderAccess {
     public boolean insertToOrderList (String orderId, String productId, int quantity) {
         String sql = "INSERT INTO ORDER_LIST (ORDER_ID, PRODUCT_ID, QUANTITY) VALUES (?,?,?)";
         OrderList orderList = new OrderList(orderId,productId,quantity);
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst =(PreparedStatement) makeInsertStatement(orderList, conn);
             if (prst.executeUpdate() > 0){
@@ -76,7 +117,7 @@ public class OrderAccess {
     public List<Product> getOrderList (String orderId) {
         ArrayList<Product> list = new ArrayList<>();
         String sql = "SELECT PRODUCT.*, QUANTITY, ORDER_ID FROM PRODUCT JOIN ORDER_LIST OL ON PRODUCT.PRODUCT_ID=OL.PRODUCT_ID WHERE ORDER_ID=?";
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, orderId);
@@ -100,7 +141,7 @@ public class OrderAccess {
         String sql = "SELECT * FROM ORDER_INFO WHERE ";
         sql += subSql;
 
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, key);
@@ -109,7 +150,6 @@ public class OrderAccess {
             if (rs.next()){
                 OrderInfo orderInfo = setPOJO(OrderInfo.class, rs);
                 System.out.println(orderInfo);
-
                 try {
                     List<Product> list = getOrderList(orderInfo.getOrderId());
                     orderInfo.setOrderList(list);
@@ -120,6 +160,9 @@ public class OrderAccess {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        finally {
+            close(conn);
         }
         return null;
     }
@@ -141,7 +184,7 @@ public class OrderAccess {
         String sql = "UPDATE ORDER_INFO SET ORDER_STATE=? WHERE ";
         sql += subSql;
 
-        conn = getConn();
+        Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
             prst.setString(1, state);

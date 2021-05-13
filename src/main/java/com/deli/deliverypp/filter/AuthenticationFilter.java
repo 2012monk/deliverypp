@@ -7,6 +7,8 @@ import com.deli.deliverypp.service.UserLoginService;
 import com.deli.deliverypp.util.ControlUtil;
 import com.deli.deliverypp.util.MappingLoader;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
+import com.deli.deliverypp.util.annotaions.RequiredModel;
+import com.deli.deliverypp.util.annotaions.RequiredParam;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,11 +20,11 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -37,6 +39,8 @@ public class AuthenticationFilter implements Filter {
     private static final Map<String, DeliUser.UserRole> resources = MappingLoader.protectedUriProperties;
     private static final Map<String , ProtectedResource> check = MappingLoader.resources;
     private static final Map<String , Class<?>> requiredModel = MappingLoader.requiredModel;
+
+    private static final Map<String, Method> methods = MappingLoader.methodList;
 //    private static final Map<String , Requ>
     private static final AuthProvider provider = new AuthProvider();
     private final Logger log = LogManager.getLogger(AuthenticationFilter.class);
@@ -58,6 +62,8 @@ public class AuthenticationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
+        log.info(new Date());
+        log.info("auth");
 
         // html, js, css 파일 통과
 
@@ -81,22 +87,34 @@ public class AuthenticationFilter implements Filter {
         String refreshToken = getRefreshToken(rq);
         log.info(reqKey);
         log.info(resource);
-        if (resource != null) {
+        // NOTE only check user role
+
+        // TODO 필터에서 체크시 CORS issue 발생
+        if (false) {
             boolean isPassed = false;
-
-
             log.info("auth required");
 
 
-            boolean checkId = resource.id();
+            HttpServletResponse response = (HttpServletResponse) servletResponse;
             String token = getToken(rq);
 
-            try {
-                DeliUser user = service.parseUserFromToken(token);
-                if (checkId) {
-
+            if (token == null) {
+                ControlUtil.sendUnAuthorizeMsg(response);
+            }else {
+                try {
+                    DeliUser user = service.parseUserFromToken(token);
+                    DeliUser.UserRole reqRole = resource.role();
+                    if (reqRole.isHigher(user.getUserRole())) {
+                        filterChain.doFilter(servletRequest,servletResponse);
+                    }else {
+                        ControlUtil.sendUnAuthorizeMsg((HttpServletResponse) servletResponse);
+                        response.sendError(401);
+                    }
+                } catch (Exception e) {
+                    ControlUtil.sendUnAuthorizeMsg(response);
+                    response.sendError(401);
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
 
             }
             // check token is present
@@ -113,8 +131,9 @@ public class AuthenticationFilter implements Filter {
 //            }else {
 //                rq.getRequestDispatcher("/unauthorized.html").forward(servletRequest,servletResponse);
 //            }
+        }else {
+            filterChain.doFilter(servletRequest, servletResponse);
         }
-        filterChain.doFilter(servletRequest, servletResponse);
 
 
 
@@ -146,7 +165,8 @@ public class AuthenticationFilter implements Filter {
                 return cookie.getValue();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            log.info(request.getRemoteAddr()+ "    refresh token doesn't exist");
         }
         return null;
     }
@@ -176,6 +196,23 @@ public class AuthenticationFilter implements Filter {
         return false;
     }
 
+    private <T> boolean check(String key, Method method) {
+        try {
+            RequiredParam param = method.getAnnotation(RequiredParam.class);
+            RequiredModel model = method.getAnnotation(RequiredModel.class);
+
+            Class<?> aClass = model.target();
+            String val = param.value();
+            if (val.equals("json")) {
+
+            }
+        } catch (Exception e) {
+
+        }
+
+        return false;
+
+    }
 
 
 }

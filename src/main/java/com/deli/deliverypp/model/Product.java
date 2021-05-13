@@ -1,7 +1,9 @@
 package com.deli.deliverypp.model;
 
 import com.deli.deliverypp.util.ParseUtil;
+import com.deli.deliverypp.util.PathSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.UUID;
 
@@ -10,6 +12,7 @@ public class Product {
 
     private String productId;
     private String productName;
+    @JsonSerialize(using = PathSerializer.class, as = String.class)
     private String productImage;
     private String storeId;
     private int productPrice;
@@ -51,9 +54,8 @@ public class Product {
         return productImage;
     }
 
-    // parse needed
     public void setProductImage(String productImage) {
-        this.productImage = ParseUtil.parseImgPath(productImage);
+        this.productImage = productImage;
     }
 
     public String getStoreId() {
