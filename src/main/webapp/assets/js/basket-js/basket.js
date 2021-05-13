@@ -10,8 +10,8 @@ function cartPage(){
 	var s = "";
 	s+="<div class='onsuccess-msg'>";
 
-	s+="</div><div id='kakao-modal' class='modal fade' tabindex='-1'  aria-hidden='true'>";
-    s+="<div class='modal-dialog' role='document'><div class='modal-content'>";
+	s+="</div><div id='kakao-modal'  class='modal fade' tabindex='-1'  aria-hidden='true'>";
+    s+="<div class='modal-dialog' role='document'><div class='modal-content'  style='width: 600px;height: 750px'>";
     s+="<iframe src='' class='kakao-inner' style='width: 100%;height: 100%;' ></iframe>";
 	s+="</div></div></div>";
 
@@ -109,7 +109,10 @@ $(document).on("click","button.cart-order",function(){
 	
 	$.ajax({
 		type:"post",
-		url:"http://112.169.196.76:47788/order",
+		url:"https://deli.alconn.co/order",
+		// url:"http://112.169.196.76:47788/order",
+		// TODO 고쳐야함
+		// url : "http://localhost:47788/order",
 		data:JSON.stringify(cart_pay),
 		dataType:"json",
 		success:function(data){
@@ -354,7 +357,53 @@ function add(data) {
  * @author monk
  */
  function success(data) {
-	document.querySelector('.onsuccess-msg').innerHTML = data;
+	 const kakaoOrderSuccessTmpl = `
+	 <div class="order-message">
+	 <div class="order-header">
+		 {{message}}
+	 </div>
+	 <div class="order-body">
+		 <span>주문번호 : {{data.orderId}}</span>
+		 <span>결제번호 : {{data.tid}}</span>
+		 <span>주문 상태 : {{data.orderState}}</span>
+		 <span>{{data.storeName}}</span>
+		 <div class="order-orderList">
+			 {{#data.orderList}}
+			 <div>
+				 <span>{{data.orderList.productName}}</span>
+				 <span>{{data.orderList.productDesc}}</span>
+				 <span>{{data.orderList.productPrice}}</span>
+				 <span>{{data.orderList.quantity}}</span>
+			 </div>
+			 {{/data.orderList}}
+		 </div>
+		 <div>
+			 <span>총 금액 {{data.totalprice}}</span>
+			 <span>총 상품수 : {{data.queantity}}</span>
+			 <span>주문일시 : {{data.orderInitDate}}</span>
+		 </div>
+ 
+		 <div>
+			 <span>{{data,userEmail}}</span>
+			 <span>{{data.userAddr}}</span>
+			 <span>{{data.userTelephone}}</span>
+			 <span>{{data.orderRequirement}}</span>
+		 </div>
+	 </div>
+ </div>`
+	 const html = Mustache.render(kakaoOrderSuccessTmpl, data);
+	// document.querySelector('.onsuccess-msg').innerHTML = data;
+	document.querySelector('#index-main').innerHTML = html;
+	// kakaoOrderSuccessTmpl(data)
+
+}
+
+function kakaoFailed() {
+	document.getElementById('index-main').innerText = "실패 했습니다!";
+}
+
+function kakaoCancel() {
+	document.getElementById('index-main').innerText = "결제 취소 했습니다";
 }
 
 // 카카오 결제페이지 모달 팝업
@@ -372,6 +421,7 @@ function kakaoHide() {
 window.addEventListener("message", function (e){
 	console.log(e);
 	console.log(e.data)
+	onSuccess(e);
 	if (e.msg === "kakao"){
 		success(e.data);
 		kakaoHide();
