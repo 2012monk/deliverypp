@@ -1,13 +1,13 @@
+var userEmail = "abc@abc.net";
+var list_range = "";
+//var domain = "http://112.169.196.76:47788";
+var domain = "http://deli.alconn.co";
+
 function reviewPage(){
 
-    /*var storeId = "stid22";*/
-    //var domain = "http://112.169.196.76:47788";
-    var domain = "http://deli.alconn.co";
-    var userEmail = "abc@abc.net";
-	var storeId = $("#ssss").attr("data-store");
-    storeId = "stid22";
-	list_range = "";
-
+    
+    var storeId = $("#ssss").attr("data-store");
+    
 /* 리뷰리스트 데이터 형식
     var ajax_data = 
         {
@@ -46,7 +46,7 @@ function reviewPage(){
         }
 */
 
-    function reviewLoad(){
+  
         //출력할 리뷰목록 DB에서 store id 로 받아오기
         $.ajax({
             type:"get",
@@ -119,7 +119,11 @@ function reviewPage(){
         })
 
 
-    }
+}
+
+
+
+function reviewPageEvent(){
 
     // 내가 쓴 리뷰만 출력
     $(document).on("click","#review-mylist",function(){
@@ -148,11 +152,12 @@ function reviewPage(){
     // 리뷰 작성폼 닫기
     $(document).on("click","#review-cancel",function(){
         $("#write-form").html("");
-        reviewLoad();
+        reviewPage();
     })
     
     // 리뷰 작성후 전송
     $(document).on("click","#review-submit",function(){
+        var storeId = $("#ssss").attr("data-store");
         var table = $(this).closest("table");
         var review_json = {};
         review_json.userEmail = table.find("#userEmail").text();
@@ -193,7 +198,7 @@ function reviewPage(){
             success:function(d){
                 alert("작성 성공:"+JSON.stringify(d));
                 $("#write-form").html("");
-                reviewLoad();
+                reviewPage();
             }
         })
     })
@@ -227,11 +232,12 @@ function reviewPage(){
 
     //리뷰 수정폼 닫기
     $(document).on("click","#review-mod-cancel",function(){
-        reviewLoad();
+        reviewPage();
     })
 
     //리뷰 수정후 전송
     $(document).on("click","#review-mod-submit",function(){
+        var storeId = $("#ssss").attr("data-store");
         var table = $(this).closest("table");
         var review_json = {};
         review_json.reviewId = $(this).attr("review_id");
@@ -270,7 +276,7 @@ function reviewPage(){
             //dataType:"json",
             success:function(d){
                 alert("리뷰 수정 성공:"+JSON.stringify(d));
-                reviewLoad();
+                reviewPage();
             }
         })
 
@@ -287,7 +293,7 @@ function reviewPage(){
             //dataType:"json",
             success:function(d){
                 alert("리뷰삭제 성공:"+JSON.stringify(d));
-                reviewLoad();
+                reviewPage();
             }
         })
 
@@ -308,7 +314,7 @@ function reviewPage(){
 
     //리뷰 댓글 작성/수정폼 닫기
     $(document).on("click","#reply-cancel",function(){
-        reviewLoad();
+        reviewPage();
     })
 
     //리뷰 댓글 작성후 전송
@@ -328,7 +334,7 @@ function reviewPage(){
             dataType:"json",
             success:function(d){
                 alert("댓글 작성 성공"+JSON.stringify(d));
-                reviewLoad();
+                reviewPage();
             }
         })
 
@@ -344,7 +350,7 @@ function reviewPage(){
             url:domain+"/reply/"+reply_id,
             success:function(d){
                 alert("댓글 삭제 성공!:"+d);
-                reviewLoad();
+                reviewPage();
             }
         })
      
@@ -413,60 +419,9 @@ function reviewPage(){
             dataType:"json",
             success:function(d){
                 alert("댓글 수정 성공"+JSON.stringify(d));
-                reviewLoad();
+                reviewPage();
             }
         })
         
     })
-
-
-
-    reviewLoad();
-    
 }
-
-
-
-
-
-
-
-
-// 서버 리뷰 테스트용 버튼
-$(document).on("click","#testbtn",function(){
-    //유저아이디로 불러오기
-    $.ajax({
-        type:"get",
-        url:domain+"/review/user/"+userEmail,
-        dataType:"json",
-        success:function(d){
-            alert("유저아이디로 불러오기:"+JSON.stringify(d));
-        }
-    })
-})
-
-// 서버 리플 테스트용 버튼
-$(document).on("click","#replytest",function(){
-    var reply_id = $(this).attr("reply_id");
-    var review_id = $(this).closest("tr").attr("review_id");
-    console.log("reply_id:"+reply_id);
-    console.log("review_id:"+review_id);
-    $.ajax({
-        type:"get",
-        url:domain+"/reply/reply-id/"+reply_id,
-        dataType:"json",
-        success:function(d){
-            alert("리플아이디로 불러오기:"+JSON.stringify(d));
-        }
-    })
-
-    $.ajax({
-        type:"get",
-        url:domain+"/reply/review-id/"+review_id,
-        dataType:"json",
-        success:function(d){
-            alert("리뷰아이디로 불러오기:"+JSON.stringify(d));
-        }
-    })
-
-})

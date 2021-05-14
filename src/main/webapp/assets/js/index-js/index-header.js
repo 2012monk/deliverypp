@@ -320,7 +320,7 @@ function sellerPage(){
 					s +="<tr value='"+elt.storeId+"'><td class='storehostdetail-page' name='storeId' value='"+elt.storeId+"'>"+elt.storeId+"</td><td class='storehostdetail-page' name='storeName' value='"+elt.storeName+"'>"+elt.storeName+"</td><td class='storehostdetail-page' name='storeDesc'>"+elt.storeDesc+"</td><td class='storehostdetail-page' name='storeImage'>"+elt.storeImage+"</td><td name=''>"+elt.productList+"</td><td name='storeAddr'>"+elt.storeAddr+"</td>";
 					s +="<td><button type='button' class='storelist-btn-delete' value='"+elt.storeId+"'>delete</button></td>";
 					s +="<td><button type='button' class='storelist-btn-update' value='"+elt.storeId+"'>update</button></td><tr>";
-			});
+				});
 				s+="</table>"; 
 			
 			$("#index-main").html(s);
