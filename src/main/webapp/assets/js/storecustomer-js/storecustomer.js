@@ -39,5 +39,24 @@ function storeCustomerProductList() {
             }
 			
 		});
+		
+		/*매장 소개*/
+		$.ajax({
+	        type:"get",
+	        url:"http://112.169.196.76:47788/stores/"+storeId, 
+	        dataType:"json",
+	        success:function(data){
+	            var s="";
+	            s+="<b>매장소개</b>";
+	            s+="<div id='ssss' data-store='"+storeId+"'>매장명 : "+data.data.storeName+"</div>";
+	            s+="<div>매장소개 : "+data.data.storeDesc+"</div>";
+	            s+="<div>매장사진 : "+data.data.storeImage+"</div>";
+	            s+="<div>매장주소 : "+data.data.storeAddr+"</div>";
+	        
+	           	$("#index-main-first").html(s);
+				reviewPage();
+	        }
+	    });
+		
 	});
 }

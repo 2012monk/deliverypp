@@ -17,10 +17,15 @@
 <script src="./assets/js/index-js/index-header.js"></script>
 
 <script src="./assets/js/storecustomer-js/storecustomer.js"></script>
+<script src="./assets/js/storehost-js/storehostdetail.js"></script>
 <script src="./assets/js/basket-js/basket.js" ></script>
-<script src="./assets/js/storehost-js/storehost.js"></script>
+<!-- <script src="./assets/js/storehost-js/storehost.js"></script> -->
 <script src="./assets/js/ReviewList.js"></script>
 <script>
+$(function(){
+	mainHeaderPage();
+	mainBodyPage();
+})
 /*
 * @function checkUserRole()
  * @returns {userRole || null} user role if logged in
@@ -102,7 +107,9 @@ $(document).on("click","#test_logout",function(){
 	<div id="index-header"></div>
 	<div id="index-main"></div>
 	<div id="hidden-basket"></div>
-
+	<div id="hidden-store-add-modal"></div>
+	<div id="hidden-product-add-modal"></div>
+	<div id="hidden-product-update-modal"></div>
 
 	<!-- <div>
 		<a href="main.html">main</a> 
@@ -112,6 +119,7 @@ $(document).on("click","#test_logout",function(){
 	</div> -->
 
 <script>
+	
 	cartPage();
 </script>
 </body>

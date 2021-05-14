@@ -128,11 +128,8 @@ function mainHeaderPage() {
 }
 
 function mainBodyPage() {
-	if(simpleDeli.checkUserRole() == "SELLER")
-		sellerPage();
-	else
-		clientPage();	
-		
+	//simpleDeli.viewByRole (sellerPage, clientPage);
+	sellerPage();
 } 
 
 function sellerPage(){
