@@ -14,13 +14,15 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="./assets/css/style.css" type="text/css">
 <script src="https://kit.fontawesome.com/c06c7c1f00.js" crossorigin="anonymous"></script>
-<script src="./assets/js/index-js/index-header.js"></script>
+
 
 <script src="./assets/js/storecustomer-js/storecustomer.js"></script>
 <script src="./assets/js/storehost-js/storehostdetail.js"></script>
 <script src="./assets/js/basket-js/basket.js" ></script>
 <!-- <script src="./assets/js/storehost-js/storehost.js"></script> -->
 <script src="./assets/js/ReviewList.js"></script>
+<script src="./assets/js/loginmodal.js"></script>
+<script src="./assets/js/signmodal.js"></script>
 <script>
 $(function(){
 	mainHeaderPage();
@@ -65,7 +67,8 @@ $(document).on("click","#test_seller_login",function(){
 		if(islogin == true)
 			$("#test_login_info").html(role+" 로그인");
 		mainHeaderPage();
-		mainBodyPage();
+		clientPage();
+		sellerPage();
 	},1000);
 
 
@@ -82,14 +85,15 @@ $(document).on("click","#test_client_login",function(){
 		if(islogin == true)
 			$("#test_login_info").html(role+" 로그인");
 		mainHeaderPage();
-		mainBodyPage();
+		clientPage();
+		sellerPage();
 	},1000);
 })
 $(document).on("click","#test_logout",function(){
 
 	//$("#test_login_info").html("로그아웃됨");
 	mainHeaderPage();
-	mainBodyPage();
+	clientPage();
 })
 
 
@@ -111,6 +115,8 @@ $(document).on("click","#test_logout",function(){
 	<div id="hidden-store-add-modal"></div>
 	<div id="hidden-product-add-modal"></div>
 	<div id="hidden-product-update-modal"></div>
+	<div id="hiddenlogin"></div>
+	<div id="hiddensign"></div>
 
 	<!-- <div>
 		<a href="main.html">main</a> 
@@ -120,8 +126,15 @@ $(document).on("click","#test_logout",function(){
 	</div> -->
 
 <script>
-	
+	loginmodal();
+    signmodal();
 	cartPage();
 </script>
 </body>
+<script src="./assets/js/index-js/index-header.js"></script>
+<script>
+	mainHeaderPage();
+	clientPage();
+	sellerPage();
+</script>
 </html>

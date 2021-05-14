@@ -19,7 +19,6 @@ function mainHeaderPage() {
             if(deli.getUserRole()=="SELLER"){
                 s +="<ul class='navbar-login'>";
             s +="<li><i id='mypagebtn' onclick='mypage();'>"+deli.getUserEmail()+"(SELLER)님</i></li>";//변경요망
-            s +="<li><i><button type='submit' id='sellersignbtn'>seller등록</button></i></li>";
             s +="<li><i></i></li></ul>";
             }else{
             console.log("true진입");
@@ -83,6 +82,9 @@ function check_pw(){  //비밀번호 확인
                 type:"post",
                 //url:"<http://deli.alconn.co/login>",
                 url:"http://112.169.196.76:47788/user/signup/seller",
+                beforeSend:function(xhr){
+                    xhr.withCredentials = true;
+                },
                 success:function(d){
                     console.log(d)
                     alert("seller등록이 되었습니다.");
@@ -193,6 +195,9 @@ function mypage(){
             type:"get",
             url:"http://112.169.196.76:47788/user/",//E-Mail 변경요망 
             dataType:"json",
+            beforeSend:function(xhr){
+                xhr.withCredentials = true;
+            },
             success:function(data){
                 console.log(data);
                     var s="";
