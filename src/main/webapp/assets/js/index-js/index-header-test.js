@@ -9,14 +9,25 @@ function mainHeaderPage() {
 		s +="<li><a href='#storecus' id='storecustomer'>storecus</a><li>";
 		s +="<li><a href='#basket'>basket</a><li>";
 		s +="</ul>";
-		if(login_id == "logout"){
+            console.log(simpleDeli.isLoggedIn());
+		if(simpleDeli.isLoggedIn()===false){
+            console.log("false진입");
             s +="<ul class='navbar-login'>";
             s +="<li><i class='fas fa-user-plus' id='signbtn' data-target='#signmodal'></i></li>";
             s +="<li><i class='far fa-id-card' id='loginbtn' data-target='#logmodal'></i></li></ul>";
         }else{
-            s +="<ul class='navbar-login'>";
-            s +="<li><i id='mypagebtn' onclick='mypage();'>"+simpleDeli.getUserEmail()+"님</i></li>";//변경요망
+            if(simpleDeli.checkUserRole()=="SELLER"){
+                s +="<ul class='navbar-login'>";
+            s +="<li><i id='mypagebtn' onclick='mypage();'>"+simpleDeli.getUserEmail()+"(SELLER)님</i></li>";//변경요망
+            s +="<li><i><button type='submit' id='sellersignbtn'>seller등록</button></i></li>";
             s +="<li><i></i></li></ul>";
+            }else{
+            console.log("true진입");
+            s +="<ul class='navbar-login'>";
+            s +="<li><i id='mypagebtn' onclick='mypage();'>"+simpleDeli.getUserEmail()+"(CLIENT)님</i></li>";//변경요망
+            s +="<li><i><button type='submit' id='sellersignbtn'>seller등록</button></i></li>";
+            s +="<li><i></i></li></ul>";
+            }
         }
 		
 		/*모달 코드div 렌더링 처음에 해놔야 나중에 */
@@ -65,6 +76,21 @@ function check_pw(){  //비밀번호 확인
     } 
 } 
 
+        //sellersign이벤트
+        $(document).on("click","#sellersignbtn",function(){
+            alert("click")
+            $.ajax({
+                type:"post",
+                //url:"<http://deli.alconn.co/login>",
+                url:"http://112.169.196.76:47788/user/signup/seller",
+                success:function(d){
+                    console.log(d)
+                    alert("seller등록이 되었습니다.");
+                }
+            });
+        });
+
+
     function signup(){
         //회원가입이벤트
         var s="";
@@ -111,9 +137,10 @@ function check_pw(){  //비밀번호 확인
                 success:function(d){
                     console.log(d);
                     alert("회원가입을 축하드립니다!!");
-
+                    alert("로그인을 해주세요");
                 }
             });
+           
         });
         }
         function login(){
@@ -145,11 +172,13 @@ function check_pw(){  //비밀번호 확인
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw}),
                 dataType:"json",
                 success:function(login_result){
+                    simpleDeli.handleLoginSuccess(login_result)
                     console.log(login_result);
                     if(simpleDeli.isLoggedIn()===true){
                         $("#loginform").hide();
                         alert("로그인 성공!!");
                         mainHeaderPage();
+                        mainBodyPage();
                     }else{
                         alert("로그인 실패!!");
                     }
@@ -162,7 +191,7 @@ function mypage(){
     $(document).on("click","#mypagebtn",function(){
         $.ajax({
             type:"get",
-            url:"http://112.169.196.76:47788/user/"+simpleDeli.getUserEmail(),//E-Mail 변경요망 
+            url:"http://112.169.196.76:47788/user/",//E-Mail 변경요망 
             dataType:"json",
             success:function(data){
                 console.log(data);
@@ -246,7 +275,7 @@ function mypage(){
             dataType: "json",
             data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole,"userType":userType,"userAddr":userAddr,"userTelephone":userTelephone}),
             success:function(data){
-                alert("수정완료!!");
+                alert("정보가 수정되었습니다.");
                 console.log(data);
             }
         });
@@ -268,7 +297,9 @@ function mypage(){
 }
 
 function mainBodyPage() {
-	if(login_id=="SELLER"){
+    console.log("스타트")
+	if(simpleDeli.checkUserRole()=="SELLER"){
+        console.log("seller분기")
 			$(function(){
 				//가게 리스트 출력 
 				var storeId = $(this).attr("value");
@@ -277,6 +308,7 @@ function mainBodyPage() {
 					url:"http://112.169.196.76:47788/stores/list",
 					dataType:"json",
 					success:function(data){
+                        console.log(data)
 						var s="";
 							s+="<table>";
 							s+="<caption><b>가게 상세보기</b></caption>";
