@@ -1,8 +1,8 @@
 $.ajaxSetup(
     {
-        beforeSend:function(xhr){
-            xhr.witCredentials = true;
-        }
+         xhrFields:{
+                withCredentials:true
+            },
     }
 )
 
@@ -42,6 +42,7 @@ window.deli = {
             const data = JSON.parse(localStorage.getItem('deli'));
             return data.user;
         }catch(err) {
+            console.log(err)
             return null;
         }
     },
@@ -73,7 +74,9 @@ window.deli = {
 }
 
 window.onload = () => {
-    // deli.login();    
-    deli.checkRefresh();
+    // deli.checkRefresh();
+    const u = deli.getUser();
+    console.log(u)
+
 }
 
