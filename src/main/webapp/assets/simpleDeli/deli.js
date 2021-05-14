@@ -48,7 +48,7 @@ window.deli = {
     
     isLoggedIn() {
         try{
-            return this.getUser().user.userEmail !== null;
+            return this.getUser().userEmail !== null;
         }catch(err) {
             return null;
         }
@@ -56,7 +56,7 @@ window.deli = {
     
     getUserRole() {
         try{
-            return this.getUser().user.userRole;
+            return this.getUser().userRole;
         }catch(err){
             return null;
         }
@@ -64,7 +64,7 @@ window.deli = {
     
     getUserEmail() {
         try{
-            return this.getUser().user.userEmail;
+            return this.getUser().userEmail;
         }catch(err) {
             return null;
         }
