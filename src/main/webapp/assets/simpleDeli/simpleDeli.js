@@ -25,25 +25,25 @@
  */
 
 
- const send = window.XMLHttpRequest.prototype.send;
- window.XMLHttpRequest.prototype.send = function() {
-    const header = new Headers();
-    const pointer = this;
-    const args = [].slice.call(arguments)
-    this.withCredentials = true;
-    if (simpleDeli.auth.token === null) {
-        simpleDeli.unit.refresh().then(data => {
-            console.log(data)
-            this.setRequestHeader("Authorization", "Bearer "+ data.access_token);
-            send.call(this, args)
-        })
-    }
-    else {
-        this.setRequestHeader("Authorization", "Bearer "+ data.access_token);
-        send.call(this, args);
+//  const send = window.XMLHttpRequest.prototype.send;
+//  window.XMLHttpRequest.prototype.send = function() {
+//     const header = new Headers();
+//     const pointer = this;
+//     const args = [].slice.call(arguments)
+//     this.withCredentials = true;
+//     if (simpleDeli.auth.token === null) {
+//         simpleDeli.unit.refresh().then(data => {
+//             console.log(data)
+//             this.setRequestHeader("Authorization", "Bearer "+ data.access_token);
+//             send.call(this, args)
+//         })
+//     }
+//     else {
+//         this.setRequestHeader("Authorization", "Bearer "+ data.access_token);
+//         send.call(this, args);
         
-    }
-}
+//     }
+// }
 window.simpleDeli = {
     // host : "http://112.169.196.76:47788/",
     host : "https://deli.alconn.co/",
