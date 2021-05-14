@@ -39,8 +39,10 @@ function mainHeaderPage() {
 }
 
 function mainBodyPage() {
-	//simpleDeli.viewByRole (sellerPage, clientPage);
-	sellerPage();
+	if(login_id == "SELLER")
+		sellerPage();
+	else
+		clientPage();
 } 
 
 function sellerPage(){
