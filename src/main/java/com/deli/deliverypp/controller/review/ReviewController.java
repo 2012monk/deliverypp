@@ -7,11 +7,10 @@ import com.deli.deliverypp.model.Review;
 import com.deli.deliverypp.service.ReviewService;
 import com.deli.deliverypp.util.ControlUtil;
 import com.deli.deliverypp.util.MessageGenerator;
-import com.deli.deliverypp.util.annotaions.PathParam;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
 import com.deli.deliverypp.util.annotaions.RequiredModel;
 import com.deli.deliverypp.util.annotaions.RequiredParam;
-import com.deli.deliverypp.util.exp.AuthorityChecker;
+import com.deli.deliverypp.auth.AuthorityChecker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

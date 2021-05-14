@@ -8,7 +8,7 @@ import com.deli.deliverypp.util.ControlUtil;
 import com.deli.deliverypp.util.MessageGenerator;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
 import com.deli.deliverypp.util.annotaions.RequiredModel;
-import com.deli.deliverypp.util.exp.AuthorityChecker;
+import com.deli.deliverypp.auth.AuthorityChecker;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
