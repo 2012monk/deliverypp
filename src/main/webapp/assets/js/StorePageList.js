@@ -188,7 +188,7 @@ function CartMain2(){
 	s+= "<tr><td>결제수단</td><td><select id='paymentType'><option value='kakao'>카카오 페이</option></select></td></tr></table>";
 	
 	s+= "<br><button type='button' class='btn-info cart-order'>결제하기</button>";
-	s+= "<button type='button' class='btn-info cart-order-cancel' data-dismiss='modal'>취소하기</button>";
+	s+= "<button type='button' id='cart-order-cancel' class='btn-info cart-order-cancel' data-dismiss='modal'>취소하기</button>";
 	
 	$("div#test2").html(s);
 }
@@ -369,8 +369,7 @@ function CartClearCheck(){
 		CartRemoveAll();
 		
 		// 모달창 dismiss 닫기 처리해야한다 코드 알아보기
-		
-		$("button.btn-order-cancel").click();
+
 	}
 }
 
