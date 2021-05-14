@@ -106,7 +106,14 @@ public class UserController extends HttpServlet {
             if (ControlUtil.getRequestUri(request,2).equals("seller")) {
 
                 if (provider.checkUserStatusValid(request)) {
-                    ControlUtil.responseMsg(response, service.signUpSeller(ControlUtil.getJson(request)));
+                    try {
+                        DeliUser user = provider.getUserFromHeader(request);
+                        log.info(user);
+                        ControlUtil.responseMsg(response, service.signUpSeller(mapper.writeValueAsString(user)));
+
+                    } catch (Exception e) {
+
+                    }
                 }
                 else {
                     ResponseMessage<String> msg = new ResponseMessage<>();
@@ -133,13 +140,20 @@ public class UserController extends HttpServlet {
     }
 
     private void getUserInfo (HttpServletRequest request, HttpServletResponse response) {
-        String email = ControlUtil.getRequestUri(request);
-        if (provider.checkId(email, request)){
+//        String email = ControlUtil.getRequestUri(request);
+        DeliUser user = provider.getUserFromHeader(request);
+        try {
+            String email = user.getUserEmail();
             ResponseMessage<DeliUser> msg = MessageGenerator.makeResultMsg(service.getUserInfo(email));
             ControlUtil.sendResponseData(response, msg);
-        }else {
+        } catch (Exception e) {
             ControlUtil.sendUnAuthorizeMsg(response);
+            e.printStackTrace();
+
         }
+//        if (provider.checkId(email, request)){
+//        }else {
+//        }
     }
 
 

@@ -16,11 +16,6 @@ public class LogOutController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        invalidateAuth(request, response);
-    }
-
-
-    private void invalidateAuth (HttpServletRequest request,HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         for (Cookie c:cookies) {
             if (c.getName().equals("SID")) {
@@ -30,6 +25,5 @@ public class LogOutController extends HttpServlet {
             }
         }
 
-        
     }
 }
