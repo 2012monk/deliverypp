@@ -36,14 +36,24 @@ public class AuthProvider {
     }
 
     public String parseHeader (HttpServletRequest request) {
-        String header = request.getHeader("Authorization");
+//        String header = request.getHeader("Authorization");
+//
+//        if (header != null) {
+//            String scheme = header.split(" ")[0];
+//            String token = header.split(" ")[1];
+//            if (scheme.equals("Bearer")) {
+//                return token;
+//            }
+//        }
 
-        if (header != null) {
-            String scheme = header.split(" ")[0];
-            String token = header.split(" ")[1];
-            if (scheme.equals("Bearer")) {
-                return token;
-            }
+        Cookie[] cookies = request.getCookies();
+        Cookie sid = null;
+        try {
+            sid = Arrays.stream(cookies).filter(c -> c.getName().equals("SID")).collect(Collectors.toList()).get(0);
+            return sid.getValue();
+        } catch (Exception e) {
+            log.debug("refresh token xx");
+//            e.printStackTrace();
         }
         return null;
     }

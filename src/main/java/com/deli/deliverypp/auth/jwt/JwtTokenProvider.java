@@ -102,7 +102,7 @@ public class JwtTokenProvider {
 
         return Jwts
                 .builder()
-                .setSubject("refresh")
+//                .setSubject("refresh")
                 .setId(user.getUserEmail())
                 .setIssuer(issuer)
                 .claim("userEmail", user.getUserEmail())
@@ -121,7 +121,7 @@ public class JwtTokenProvider {
         try {
             return Jwts
                     .parserBuilder()
-                    .requireSubject("refresh")
+//                    .requireSubject("refresh")
                     .requireIssuer(issuer)
                     .setSigningKey(secretKey)
                     .build()

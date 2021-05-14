@@ -6,10 +6,9 @@ import com.deli.deliverypp.model.Store;
 import com.deli.deliverypp.service.StoreService;
 import com.deli.deliverypp.service.UserLoginService;
 import com.deli.deliverypp.util.ControlUtil;
-import com.deli.deliverypp.util.HttpConnectionHandler;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
 import com.deli.deliverypp.util.annotaions.RequiredModel;
-import com.deli.deliverypp.util.exp.AuthorityChecker;
+import com.deli.deliverypp.auth.AuthorityChecker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +17,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 @WebServlet(name = "StoreController", value = "/stores/*")
 public class StoreController extends HttpServlet {
