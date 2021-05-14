@@ -38,7 +38,7 @@ window.deli = {
         })
     },
 
-    handelSuccess(data){
+    handleSuccess(data){
         this.setUser(data.data)
     },
 
@@ -105,4 +105,9 @@ window.deli = {
 //     console.log(u)
 
 // }
+
+$.ajax({
+    type:"get",
+    url:"https://112.169.196.76:47788/user",
+})
 
