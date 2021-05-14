@@ -9,22 +9,22 @@ function mainHeaderPage() {
 		s +="<li><a href='#storecus' id='storecustomer'>storecus</a><li>";
 		s +="<li><a href='#basket'>basket</a><li>";
 		s +="</ul>";
-            console.log(simpleDeli.isLoggedIn());
-		if(simpleDeli.isLoggedIn()===false){
+            console.log(deli.isLoggedIn());
+		if(deli.isLoggedIn()===false){
             console.log("false진입");
             s +="<ul class='navbar-login'>";
             s +="<li><i class='fas fa-user-plus' id='signbtn' data-target='#signmodal'></i></li>";
             s +="<li><i class='far fa-id-card' id='loginbtn' data-target='#logmodal'></i></li></ul>";
         }else{
-            if(simpleDeli.checkUserRole()=="SELLER"){
+            if(deli.getUserRole()=="SELLER"){
                 s +="<ul class='navbar-login'>";
-            s +="<li><i id='mypagebtn' onclick='mypage();'>"+simpleDeli.getUserEmail()+"(SELLER)님</i></li>";//변경요망
+            s +="<li><i id='mypagebtn' onclick='mypage();'>"+deli.getUserEmail()+"(SELLER)님</i></li>";//변경요망
             s +="<li><i><button type='submit' id='sellersignbtn'>seller등록</button></i></li>";
             s +="<li><i></i></li></ul>";
             }else{
             console.log("true진입");
             s +="<ul class='navbar-login'>";
-            s +="<li><i id='mypagebtn' onclick='mypage();'>"+simpleDeli.getUserEmail()+"(CLIENT)님</i></li>";//변경요망
+            s +="<li><i id='mypagebtn' onclick='mypage();'>"+deli.getUserEmail()+"(CLIENT)님</i></li>";//변경요망
             s +="<li><i><button type='submit' id='sellersignbtn'>seller등록</button></i></li>";
             s +="<li><i></i></li></ul>";
             }
@@ -172,9 +172,9 @@ function check_pw(){  //비밀번호 확인
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw}),
                 dataType:"json",
                 success:function(login_result){
-                    simpleDeli.handleLoginSuccess(login_result)
+                    deli.handleSuccess(login_result)
                     console.log(login_result);
-                    if(simpleDeli.isLoggedIn()===true){
+                    if(deli.isLoggedIn()===true){
                         $("#loginform").hide();
                         alert("로그인 성공!!");
                         mainHeaderPage();
@@ -298,7 +298,7 @@ function mypage(){
 
 function mainBodyPage() {
     console.log("스타트")
-	if(simpleDeli.checkUserRole()=="SELLER"){
+	if(deli.getUserRole()=="SELLER"){
         console.log("seller분기")
 			$(function(){
 				//가게 리스트 출력 
