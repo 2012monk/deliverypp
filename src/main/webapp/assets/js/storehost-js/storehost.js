@@ -7,7 +7,7 @@
 			/*가게 상세 상품 목록 등장 */
 			$.ajax({
 	            type:"get",
-	            url:"http://112.169.196.76:47788/products/list/"+storeId, 
+	            url:"http://deli.alconn.co/products/list/"+storeId, 
 	            dataType:"json",
 	            success:function(data){
 					console.log(data);
@@ -46,7 +46,7 @@
 			/*매장 소개*/
 			$.ajax({
 	            type:"get",
-	            url:"http://112.169.196.76:47788/stores/"+storeId, 
+	            url:"http://deli.alconn.co/stores/"+storeId, 
 	            dataType:"json",
 	            success:function(data){
 	                var s="";
@@ -100,7 +100,7 @@
 	        console.log(productImage)
 	        $.ajax({
 	            type:"PUT",
-	            url:"http://112.169.196.76:47788/products",
+	            url:"http://deli.alconn.co/products",
 	            dataType: "json",
 	            data:JSON.stringify({"productId":productId,"productName":productName,"productPrice":productPrice,"productImage":productImage,"productDesc":productDesc}),
 	            success:function(data){
