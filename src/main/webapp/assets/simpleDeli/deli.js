@@ -38,20 +38,36 @@ window.deli = {
     },
     
     getUser () {
-        const data = JSON.parse(localStorage.getItem('deli'));
-        return data.user;
+        try{
+            const data = JSON.parse(localStorage.getItem('deli'));
+            return data.user;
+        }catch(err) {
+            return null;
+        }
     },
     
     isLoggedIn() {
-        return this.getUser().user.userEmail !== null;
+        try{
+            return this.getUser().user.userEmail !== null;
+        }catch(err) {
+            return null;
+        }
     },
     
     getUserRole() {
-        return this.getUser().user.userRole;
+        try{
+            return this.getUser().user.userRole;
+        }catch(err){
+            return null;
+        }
     },
     
     getUserEmail() {
-        return this.getUser().user.userEmail;
+        try{
+            return this.getUser().user.userEmail;
+        }catch(err) {
+            return null;
+        }
     }
 
 }
