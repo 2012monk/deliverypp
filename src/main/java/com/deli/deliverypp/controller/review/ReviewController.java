@@ -78,6 +78,7 @@ public class ReviewController extends HttpServlet {
         String reviewId = ControlUtil.getRequestUri(req);
         if (AuthorityChecker.checkUserEmail(req,Review.class,"reviewId", reviewId)){
             log.warn("passed annotaions test");
+            log.info(ControlUtil.getRequestUri(req));
             ControlUtil.responseMsg(resp, service.deleteReview(ControlUtil.getRequestUri(req)));
         }else{
             ControlUtil.sendResponseData(resp, MessageGenerator.makeErrorMsg("you don't have authority to access this resources \r\n 본인인증실패", "authority_error"));

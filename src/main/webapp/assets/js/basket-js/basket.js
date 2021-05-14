@@ -360,13 +360,13 @@ function add(data) {
 	 const kakaoOrderSuccessTmpl = `
 	 <div class="order-message">
 	 <div class="order-header">
-		 {{message}}
-	 </div>
-	 <div class="order-body">
+		 <span>{{message}}</span>
 		 <span>주문번호 : {{data.orderId}}</span>
 		 <span>결제번호 : {{data.tid}}</span>
 		 <span>주문 상태 : {{data.orderState}}</span>
-		 <span>{{data.storeName}}</span>
+		 <span>{{data.storeName}}</span> 
+	 <div>
+	 <div class="order-body">
 		 <div class="order-orderList">
 			 {{#data.orderList}}
 			 <div>
@@ -377,13 +377,13 @@ function add(data) {
 			 </div>
 			 {{/data.orderList}}
 		 </div>
-		 <div>
+		 <div class="order-footer">
 			 <span>총 금액 {{data.totalprice}}</span>
 			 <span>총 상품수 : {{data.queantity}}</span>
 			 <span>주문일시 : {{data.orderInitDate}}</span>
 		 </div>
  
-		 <div>
+		 <div class="order-deli-info">
 			 <span>{{data,userEmail}}</span>
 			 <span>{{data.userAddr}}</span>
 			 <span>{{data.userTelephone}}</span>

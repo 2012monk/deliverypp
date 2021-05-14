@@ -76,13 +76,13 @@ public class LoginController extends HttpServlet {
 
 
 
-    private void checkId (HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String id = ControlUtil.getRequestUri(request, 2);
-        ResponseMessage<?> msg = new ResponseMessage<>();
-        msg.setMessage(service.checkUserIdOverlap(id) ? "overlap" : "free");
-        msg.setData(id);
-        ControlUtil.sendResponseData(response, msg);
-    }
+//    private void checkId (HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        String id = ControlUtil.getRequestUri(request, 2);
+//        ResponseMessage<?> msg = new ResponseMessage<>();
+//        msg.setMessage(service.checkUserIdOverlap(id) ? "overlap" : "free");
+//        msg.setData(id);
+//        ControlUtil.sendResponseData(response, msg);
+//    }
 
 
 

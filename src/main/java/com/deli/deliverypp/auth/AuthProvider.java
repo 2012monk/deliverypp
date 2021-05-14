@@ -48,10 +48,10 @@ public class AuthProvider {
         return null;
     }
     public boolean checkUserStatusValid(HttpServletRequest request) {
-        String token = getToken(request.getHeader("Authorization"));
-        if (token == null) return false;
-
-        if (!provider.validateToken(token)) return false;
+//        String token = getToken(request.getHeader("Authorization"));
+//        if (token == null) return false;
+//
+//        if (!provider.validateToken(token)) return false;
 
         Cookie[] cookies = request.getCookies();
         Cookie sid = null;
