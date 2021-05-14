@@ -197,7 +197,6 @@ public class UserLoginService {
 
 
     public DeliUser parseUserFromToken(String jws) {
-
         try {
             log.debug(jws);
             Map<String ,Object> map = provider.getTokenBody(jws);

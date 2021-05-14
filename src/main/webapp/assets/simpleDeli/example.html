@@ -28,13 +28,31 @@
     </div>
     <button type="button" id="load">load</button>
 </body>
-<script src="./deliUploader.js"></script>
+<!-- <script src="./deliUploader.js"></script>
 <script src="./simpleDeli.js"></script>
-<script src="./deliUploader.js"></script>
+<script src="./deliUploader.js"></script> -->
+<script src="./deli.js"></script>
 <script>
     // document.querySelector('button').addEventListener('click', () => {
     //     console.log(simpleDeli.isLoggedIn());
     //     simpleDeli.checkUserRole();
     // })
+
+    window.onload = () => {
+        $.ajax({
+            url : "http://localhost:47788/user",
+            type: 'get',
+           
+            success:function(data){
+                console.log(data)
+            }
+            
+        })
+        console.log(deli.getUser())
+        // fetch("http://localhost:47788/user").then(res => res.json())
+        // .then((value) => {
+        //     document.querySelector('body').innerHTML = JSON.stringify(value);
+        // })
+    }
 </script>
 </html>
