@@ -36,51 +36,56 @@ public class AuthProvider {
     }
 
     public String parseHeader (HttpServletRequest request) {
-//        String header = request.getHeader("Authorization");
-//
-//        if (header != null) {
-//            String scheme = header.split(" ")[0];
-//            String token = header.split(" ")[1];
-//            if (scheme.equals("Bearer")) {
-//                return token;
-//            }
-//        }
+        String header = request.getHeader("Authorization");
 
-        Cookie[] cookies = request.getCookies();
-        Cookie sid = null;
-        try {
-            sid = Arrays.stream(cookies).filter(c -> c.getName().equals("SID")).collect(Collectors.toList()).get(0);
-            return sid.getValue();
-        } catch (Exception e) {
-            log.debug("refresh token xx");
-//            e.printStackTrace();
+        if (header != null) {
+            String scheme = header.split(" ")[0];
+            String token = header.split(" ")[1];
+            if (scheme.equals("Bearer")) {
+                return token;
+            }
         }
+
+//        Cookie[] cookies = request.getCookies();
+//        Cookie sid = null;
+//        try {
+//            sid = Arrays.stream(cookies).filter(c -> c.getName().equals("SID")).collect(Collectors.toList()).get(0);
+//            return sid.getValue();
+//        } catch (Exception e) {
+//            log.debug("refresh token xx");
+////            e.printStackTrace();
+//        }
         return null;
     }
-    public boolean checkUserStatusValid(HttpServletRequest request) {
-//        String token = getToken(request.getHeader("Authorization"));
-//        if (token == null) return false;
+//    public boolean checkUserStatusValid(HttpServletRequest request) {
+////        String token = getToken(request.getHeader("Authorization"));
+////        if (token == null) return false;
+////
+////        if (!provider.validateToken(token)) return false;
 //
-//        if (!provider.validateToken(token)) return false;
-
-        Cookie[] cookies = request.getCookies();
-        Cookie sid = null;
-        try {
-            sid = Arrays.stream(cookies).filter(c -> c.getName().equals("SID")).collect(Collectors.toList()).get(0);
-        } catch (Exception e) {
-            log.debug("refresh token xx");
+//        String token = parseHeader(request);
+//
+////        Cookie[] cookies = request.getCookies();
+////        Cookie sid = null;
+////        try {
+////            sid = Arrays.stream(cookies).filter(c -> c.getName().equals("SID")).collect(Collectors.toList()).get(0);
+////        } catch (Exception e) {
+////            log.debug("refresh token xx");
+//////            e.printStackTrace();
+////        }
+////
+////        if (sid == null) return false;
+//        if (token == null) return false;
+//        try {
+////            return provider.validateToken(sid.getValue());
+//            return provider.validateToken(token);
+//        } catch (Exception e) {
 //            e.printStackTrace();
-        }
-
-        if (sid == null) return false;
-        try {
-            return provider.validateToken(sid.getValue());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-
-    }
+//        }
+//        return false;
+//
+//    }
+    public boolean checkUserStatusValid(HttpServletRequest request) {return true;}
 
 //
 //
@@ -112,21 +117,21 @@ public class AuthProvider {
      * @param request request obj
      * @return true if passed
      */
-    public boolean checkId(String userEmail, HttpServletRequest request) {
-
-        try {
-            String token = parseHeader(request);
-            log.info(token);
-            String email = service.parseUserFromToken(token).getUserEmail();
-            return userEmail.equals(email);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 //    public boolean checkId(String userEmail, HttpServletRequest request) {
-//       return true;
+//
+//        try {
+//            String token = parseHeader(request);
+//            log.info(token);
+//            String email = service.parseUserFromToken(token).getUserEmail();
+//            return userEmail.equals(email);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return false;
 //    }
+    public boolean checkId(String userEmail, HttpServletRequest request) {
+       return true;
+    }
 
 
 

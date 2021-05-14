@@ -23,7 +23,7 @@ import static com.deli.deliverypp.util.JSONUtil.getMapper;
 public class AuthorityChecker {
 
     private static final ObjectMapper mapper = getMapper();
-    private final UserLoginService userLoginService = new UserLoginService();
+    private static final UserLoginService userLoginService = new UserLoginService();
     private static final AuthProvider authProvider = new AuthProvider();
     private static final Logger log = LogManager.getLogger(AuthorityChecker.class);
 
@@ -40,6 +40,19 @@ public class AuthorityChecker {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static String checkLogin(HttpServletRequest request) {
+        String token = authProvider.parseHeader(request);
+        if (token != null) {
+            DeliUser user = userLoginService.parseUserFromToken(token);
+            if (user != null) {
+                return  user.getUserEmail();
+            }
+
+        }
+
+        return null;
     }
 
 

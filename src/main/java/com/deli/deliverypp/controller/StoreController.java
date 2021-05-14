@@ -120,9 +120,21 @@ public class StoreController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         DeliUser user = provider.getUserFromHeader(request);
-        log.info(user);
-        String json = ControlUtil.getJson(request);
-        ControlUtil.responseMsg(response, service.insertStoreService(json, user.getUserEmail()));
+        if (user != null){
+            log.info(user);
+            try {
+                if (DeliUser.UserRole.SELLER.isHigher(user.getUserRole())){
+                    String json = ControlUtil.getJson(request);
+                    ControlUtil.responseMsg(response, service.insertStoreService(json, user.getUserEmail()));
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            ControlUtil.sendUnAuthorizeMsg(response);
+        }
     }
 
 

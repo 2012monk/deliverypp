@@ -3,37 +3,52 @@ $.ajaxSetup(
          xhrFields:{
                 withCredentials:true
             },
+        beforeSend:function(xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer "+deli.getToken())
+        }
     }
 )
 
 window.deli = {
+    domain : "http://112.169.196.76:47788",
     checkRefresh() {
-        fetch("https://deli.alconn.co/login/exchange",{
+        console.log(this.getToken())
+        fetch(this.domain+"/login/exchange",{
             method:"post",
-            credentials:'include'
+            credentials:'include',
+            headers:{
+                'Authorization' : "Bearer "+this.getToken()
+            }
         })
         .then(res => res.json())
         .then(data => {
+            console.log(data)
             this.setUser(data.data);
         })
     },
 
     login(data){
-        fetch("https://deli.alconn.co/login",{
+        fetch(this.domain+"/login",{
             method:'post',
             body:JSON.stringify(data)
         })
+        .then(res => res.json())
+        .then(data => {
+            this.setUser(data.data)
+        })
     },
 
-    handelSuccess(data){
+    handleSuccess(data){
         this.setUser(data.data)
     },
 
     logout() {
-        fetch("https://deli.alconn.co/logout")
+        localStorage.removeItem("deli");
+        fetch(this.domain+"/logout")
     },
     
     setUser(data) {
+        console.log(JSON.stringify(data))
         localStorage.setItem('deli', JSON.stringify(data))
     },
     
@@ -69,14 +84,30 @@ window.deli = {
         }catch(err) {
             return null;
         }
+    },
+
+    getToken() {
+        try{
+            return JSON.parse(localStorage.getItem('deli')).access_token
+        }catch(err){
+            console.log(err)
+        }
     }
 
 }
+// deli.login({
+//     userEmail : "test@test.com",
+//     userPw : "1234"
+// });
+// deli.checkRefresh();
+// window.onload = () => {
+//     const u = deli.getUser();
+//     console.log(u)
 
-window.onload = () => {
-    // deli.checkRefresh();
-    const u = deli.getUser();
-    console.log(u)
+// }
 
-}
+$.ajax({
+    type:"get",
+    url:"http://112.169.196.76:47788/user",
+})
 
