@@ -42,11 +42,13 @@ public class LoginController extends HttpServlet {
 
 
 
+        log.info(ControlUtil.getRequestUri(request));
         switch (ControlUtil.getRequestUri(request)) {
             case "google":
                 proceedWithGoogle(request, response);
                 break;
             case "exchange":
+                log.info("exchsn123 1231 3123 1");
                 exchangeToken(request, response);
                 break;
             default:
@@ -120,8 +122,10 @@ public class LoginController extends HttpServlet {
     }
 
     public void exchangeToken (HttpServletRequest request, HttpServletResponse response)  {
+        log.info("1234");
         Cookie refreshCookie = null;
         try {
+            log.info("exchange");
         refreshCookie = Arrays
                     .stream(request.getCookies())
                     .filter(c -> c.getName().equals("SID"))

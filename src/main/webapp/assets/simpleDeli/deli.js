@@ -1,4 +1,4 @@
-$.ajaxSetUp(
+$.ajaxSetup(
     {
         beforeSend:function(xhr){
             xhr.witCredentials = true;
@@ -8,10 +8,20 @@ $.ajaxSetUp(
 
 window.deli = {
     checkRefresh() {
-        fetch("https://deli.alconn.co/login/exhange")
+        fetch("https://deli.alconn.co/login/exchange",{
+            method:"post",
+            credentials:'include'
+        })
         .then(res => res.json())
         .then(data => {
             this.setUser(data.data);
+        })
+    },
+
+    login(data){
+        fetch("http://deli.alconn.co/login",{
+            method:'post',
+            body:JSON.stringify(data)
         })
     },
     
@@ -40,6 +50,7 @@ window.deli = {
 }
 
 window.onload = () => {
+    // deli.login();    
     deli.checkRefresh();
 }
 
