@@ -84,7 +84,7 @@ public class AuthenticationFilter implements Filter {
         // check if resource protected
         String reqKey = fullUri+" "+rq.getMethod().toLowerCase(Locale.ROOT);
         ProtectedResource resource = check.get(reqKey);
-        String refreshToken = getRefreshToken(rq);
+//        String refreshToken = getRefreshToken(rq);
         log.info(reqKey);
         log.info(resource);
         // NOTE only check user role

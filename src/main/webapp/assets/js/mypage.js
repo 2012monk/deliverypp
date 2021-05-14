@@ -26,7 +26,7 @@ $(function(){
     $(document).on("click","#userinformation",function(){
         $.ajax({
             type:"get",
-            url:"http://112.169.196.76:47788/user/"+simpleDeli.getUserEmail(),//E-Mail 변경요망 
+            url:"http://112.169.196.76:47788/user/",
             dataType:"json",
             success:function(data){
                 console.log(data);

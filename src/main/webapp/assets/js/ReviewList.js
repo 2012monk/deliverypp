@@ -50,7 +50,9 @@ function reviewPage(){
         //출력할 리뷰목록 DB에서 store id 로 받아오기
         $.ajax({
             type:"get",
+
             url:domain+"/review/store/"+storeId,
+
             dataType:"json",
             success:function(ajax_data){
                
@@ -294,6 +296,7 @@ function reviewPage(){
 
     // 리뷰 댓글 작성폼 출력
     $(document).on("click","#reply-write",function(){
+		console.log("작성버튼 실행");
         var review_id = $(this).parent().parent().attr("review_id");
         var s = "<table class='table table-bordered'>";
         s += "<tr><td>작성자</td><td>"+userEmail+"</td></tr>";
@@ -310,6 +313,7 @@ function reviewPage(){
 
     //리뷰 댓글 작성후 전송
     $(document).on("click","#reply-submit",function(){
+		console.log("댓글 전송");
         var review_id = $(this).attr("review_id");
         var reply = {};
         reply.reviewId = review_id;
