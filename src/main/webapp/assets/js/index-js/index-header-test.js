@@ -16,19 +16,15 @@ function mainHeaderPage() {
             s +="<li><i class='fas fa-user-plus' id='signbtn' data-target='#signmodal'></i></li>";
             s +="<li><i class='far fa-id-card' id='loginbtn' data-target='#logmodal'></i></li></ul>";
         }else{
-            if(deli.getUserRole()=="SELLER"){
-                s +="<ul class='navbar-login'>";
-            s +="<li><i id='mypagebtn' onclick='mypage();'>"+deli.getUserEmail()+"(SELLER)님</i></li>";//변경요망
-            s +="<li><i></i></li></ul>";
-            }else{
-            console.log("true진입");
             s +="<ul class='navbar-login'>";
-            s +="<li><i id='mypagebtn' onclick='mypage();'>"+deli.getUserEmail()+"(CLIENT)님</i></li>";//변경요망
-            s +="<li id='sellerForm'><i><button type='submit' id='sellersignbtn'>seller등록</button></i></li>";
-            s +="<li><i><button type='submit' id='sellersignbtn'>seller등록</button></i></li>";
+            s +="<li><i id='mypagebtn' onclick='mypage();'>"+deli.getUserEmail()+'['+deli.getUserRole()+"]님</i></li>";//변경요망
+
+            if(deli.getUserRole() !=="SELLER"){
+                s +="<li id='sellerForm'><i><button type='submit' id='sellersignbtn'>seller등록</button></i></li>";
+            }
             s +="<li><i></i></li></ul>";
             }
-        }
+        
 		
 		/*모달 코드div 렌더링 처음에 해놔야 나중에 */
 		s += '<div id="myModal" class="modal" tabindex="-1" role="dialog">';
@@ -51,15 +47,18 @@ function mainHeaderPage() {
   		s += '</div>';
 		s += '</div>';
 		$("#index-header").html(s); 
-        $("#loginbtn").click(function(){
-            $("#logmodal").modal();
-            login();
-        });
-        $("#signbtn").click(function(){
-            $("#signmodal").modal();
-            signup();
-        });       
+    // }
+    $("#loginbtn").click(function(){
+        $("#logmodal").modal();
+        console.log(this);
+        login();
+    });
+    $("#signbtn").click(function(){
+        $("#signmodal").modal();
+        signup();
+    });
 }
+
 
 function check_pw(){  //비밀번호 확인 
     var p = document.getElementById('pw').value; 
@@ -158,6 +157,8 @@ function check_pw(){  //비밀번호 확인
             s+="</table>";
             s+="</form>";
             $("#logbody").html(s);
+            $('#logmodal').modal();
+            console.log($('#logmodal'))
         });
 
         // login
@@ -172,10 +173,11 @@ function check_pw(){  //비밀번호 확인
             $.ajax({
                 type:"post",
                 //url:"<http://deli.alconn.co/login>",
-                url:"http://deli.alconn.co/login",
+                url:"http://112.169.196.76:47788/login",
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw}),
-                dataType:"json",
+                dataType:'json',
                 success:function(login_result){
+                    console.log(login_result)
                     deli.handleSuccess(login_result)
                     console.log(login_result);
                     if(deli.isLoggedIn()){
@@ -186,9 +188,16 @@ function check_pw(){  //비밀번호 확인
                     }else{
                         alert("로그인 실패!!");
                     }
+                    $('#logmodal').modal('hide')
                     //deli.handleLoginSuccess(login_result);
+                },
+                error:function(data) {
+                    console.log(data);
+                    deli.logout();
+                    alert('failed')
+                    $('#logmodal').modal('hide')
                 }
-            });
+            })
         });
 
 
@@ -210,42 +219,12 @@ function check_pw(){  //비밀번호 확인
         
     }
 
-
-function mypage(){
-    $(document).on("click","#mypagebtn",function(){
-        $.ajax({
-            type:"get",
-            url:"http://deli.alconn.co/user/",//E-Mail 변경요망 
-            dataType:"json",
-            beforeSend:function(xhr){
-                xhr.withCredentials = true;
-            },
-            success:function(data){
-                console.log(data);
-                    var s="";
-                    s= "<form>";
-                    //s+="<input type='hidden' name='userPw' value='"+data.data.userPw+"'>";
-                    s+="<table>";
-                    s+="<caption>회원정보</caption> &nbsp;&nbsp;&nbsp;";
-                    s+="<tr><th>E-Mail</th><td userEmail='userEmail'>"+data.data.userEmail+"</td></tr>";
-                    s+="<tr><th>UserRole</th><td userRole='userRole'>"+data.data.userRole+"</td></tr>";
-                    s+="<tr><th>UserType</th><td userType='userType'>"+data.data.userType+"</td></tr>";
-                    s+="<tr><th>UserAddr</th><td userAddr='userAddr'>"+data.data.userAddr+"</td></tr>";
-                    s+="<tr><th>userTelephone</th><td userTelephone='userTelephone'>"+data.data.userTelephone+"</td></tr>";
-                    s+="<tr><td  colspan='2'><button id='userupdatebtn'>정보수정</button>&nbsp;<button id='userdeletebtn'>회원탈퇴</button>&nbsp;<button id='logoutbtn'>로그아웃</button><td></tr>";
-                    s+="</table>";
-                    s+="</form>";
-                $("#index-main").html(s);
-            }
-        });
-    });
-
     //로그아웃버튼이벤트
     $(document).on("click","#logoutbtn",function(){
         deli.logout();
         $.ajax({
             type:"get",
-            url:"http://deli.alconn.co/logout",
+            url:"http://112.169.196.76:47788/logout",
             dataType:"json",
             success:function(data){
                 console.log(data);
@@ -338,30 +317,6 @@ function (e) {
             alert("정보가 수정되었습니다.");
             console.log(data);
         }
-    $(document).on("click","#userupdatesuccessbtn",function(e){
-        e.preventDefault();
-        var userEmail=$("#userupdateform").find("#userEmail").val();
-        var userPw=$("#userupdateform").find("#userPw").val();
-        var userRole=$("#userupdateform").find("#userRole").val();
-        var userType=$("#userupdateform").find("#userType").val();
-        var userAddr=$("#userupdateform").find("#userAddr").val();
-        var userTelephone=$("#userupdateform").find("#userTelephone").val();
-        console.log(userEmail);
-        console.log(userPw);
-        console.log(userRole);
-        console.log(userType);
-        console.log(userAddr);
-        console.log(userTelephone);
-        $.ajax({
-            type:"PUT",
-            url:"http://deli.alconn.co/user",
-            dataType: "json",
-            data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole,"userType":userType,"userAddr":userAddr,"userTelephone":userTelephone}),
-            success:function(data){
-                alert("정보가 수정되었습니다.");
-                console.log(data);
-            }
-        });
     });
 }
 
@@ -377,18 +332,6 @@ $(document).on("click", "#userdeletebtn", function(e){
             alert("회원탈퇴가 완료되었습니다.");
             console.log(data);
         }
-    $(document).on("click", "#userdeletebtn", function(e){
-        e.preventDefault();
-        var userEmail=$("td[userEmail]").text()
-        console.log(userEmail);
-        $.ajax({
-            type:"DELETE",
-            url:"http://deli.alconn.co/user/"+userEmail,
-            success:function(data){
-                alert("회원탈퇴가 완료되었습니다.");
-                console.log(data);
-            }
-        });
     });
 });
 function mypage(){
@@ -451,4 +394,37 @@ function mainBodyPage() {
 			});
 			storeCustomerProductList()
 		}
-} 
+}
+
+
+function loginmodal(){
+    var s="";
+    s+="<div class='modal fade' id='logmodal' role='dialog'>";
+    s+="<div class='modal-dialog'>";
+    s+="<div class='modal-content'>"
+    s+="<div class='modal-header'>"
+    s+="<button type='button' class='close' data-dismiss='modal'>&times;</button>"
+    s+="<h4 class='modal-title'>Modal Header</h4>"
+    s+="</div>"
+    s+="<div class='modal-body' id='logbody'>"
+    s+="<p>Some text in the modal.</p>"
+    s+="</div>"
+    s+="<div class='modal-footer'>"
+    s+="<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>"
+    s+="</div>"
+    s+="</div>"
+    s+="</div>"
+    s+="</div>"
+    s+="</div>"
+    $("#hiddenlogin").html(s);
+
+}
+
+function init() {
+    // modal insert
+    mainHeaderPage();
+    mainBodyPage();
+    console.log('dfidf')
+}
+
+init();

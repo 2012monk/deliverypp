@@ -4,7 +4,11 @@ $.ajaxSetup(
                 withCredentials:true
             },
         beforeSend:function(xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer "+deli.getToken())
+            try{
+                xhr.setRequestHeader("Authorization", "Bearer "+deli.getToken())
+            }catch(err) {
+                console.log(err);
+            }
         }
     }
 )
@@ -34,11 +38,12 @@ window.deli = {
         })
         .then(res => res.json())
         .then(data => {
-            this.setUser(data.data)
+            this.setUser(data)
         })
     },
 
     handleSuccess(data){
+        console.log(data);
         this.setUser(data.data)
     },
 
@@ -55,6 +60,7 @@ window.deli = {
     getUser () {
         try{
             const data = JSON.parse(localStorage.getItem('deli'));
+            console.log(data)
             return data.user;
         }catch(err) {
             console.log(err)
@@ -66,7 +72,7 @@ window.deli = {
         try{
             return this.getUser().userEmail !== null;
         }catch(err) {
-            return null;
+            return false;
         }
     },
     
