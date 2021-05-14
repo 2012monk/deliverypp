@@ -37,7 +37,7 @@ $(document).on("click","#test_seller_login",function(){
 	// 	"userType" : "DELI"
 	// })
 	setTimeout(function(){
-		var role = deli.checkUserRole();
+		var role = deli.getUserRole();
 		var islogin = deli.isLoggedIn();
 		console.log(deli.getUser())
 		if(islogin == true)
@@ -51,7 +51,7 @@ $(document).on("click","#test_seller_login",function(){
 $(document).on("click","#test_client_login",function(){
 	
 	setTimeout(function(){
-		var role = deli.checkUserRole();
+		var role = deli.getUserRole();
 		var islogin = deli.isLoggedIn();
 		if(islogin == true)
 			$("#test_login_info").html(role+" 로그인");
