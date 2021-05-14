@@ -27,7 +27,6 @@ function cartPage(){
 	s+="<div class='modal-body' style='padding:40px 50px;'>";
 	
     s+="<div id='test'></div><div id='test2'></div></div>";
-    s+="<div class='modal-footer' style='padding:20px 20px;'>test2</div>";
     s+="</div></div></div></div>";
 
 	/*s+="<div id='storecus-header'></div><div id='storecus-btn-crud'></div>";
@@ -37,9 +36,7 @@ function cartPage(){
 	/*index-header에 모달창 숨기기*/
 	$("#hidden-basket").html(s);
 
-
 }
-
 
 $(document).on("click","button.cart-add",function(e){
 	//console.log("추가버튼");
@@ -341,9 +338,8 @@ function CartClearCheck(){
 	}
 }
 
-function add(data) {
-	var ran = Math.random()*100;
-	CartLoad(data, ran>50?"A업체":"B업체");
+function add(data, storeName) {
+	CartLoad(data, storeName);
 	CartMain();
 	CartMain2();
 }
