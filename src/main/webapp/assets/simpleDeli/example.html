@@ -39,10 +39,10 @@
     // })
 
     window.onload = () => {
+        deli.login();
         $.ajax({
-            url : "http://localhost:47788/user",
-            type: 'get',
-           
+            url : "http://112.169.196.76:47788/user/signup/seller",
+            type: 'post',
             success:function(data){
                 console.log(data)
             }

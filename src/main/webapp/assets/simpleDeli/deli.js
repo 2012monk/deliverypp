@@ -3,6 +3,9 @@ $.ajaxSetup(
          xhrFields:{
                 withCredentials:true
             },
+        beforeSend:function(xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer "+deli.getToken())
+        }
     }
 )
 
@@ -68,6 +71,14 @@ window.deli = {
             return this.getUser().userEmail;
         }catch(err) {
             return null;
+        }
+    },
+
+    getToken() {
+        try{
+            return JSON.parse(localStorage.getItem('deli')).access_token
+        }catch(err){
+            console.log(err)
         }
     }
 

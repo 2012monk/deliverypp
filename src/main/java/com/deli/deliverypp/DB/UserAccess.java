@@ -102,8 +102,9 @@ public class UserAccess {
 
 
 
+
     public boolean updateUser (DeliUser user) {
-        String sql = "UPDATE USER SET USER_ADDR=?,USER_ROLE=?,USER_TELEPHONE=?, USER_PW=? WHERE USER_EMAIL=?";
+        String sql = "UPDATE USER SET USER_ADDR=?,USER_ROLE=?,USER_TELEPHONE=? WHERE USER_EMAIL=?";
         System.out.println(user);
         Connection conn = getConn();
         try {
@@ -111,8 +112,7 @@ public class UserAccess {
             prst.setString(1, user.getUserAddr());
             prst.setString(2, user.getUserRole().name());
             prst.setString(3, user.getUserTelephone());
-            prst.setString(4, user.getUserPw());
-            prst.setString(5, user.getUserEmail());
+            prst.setString(4, user.getUserEmail());
 
             if (prst.executeUpdate() > 0) {
                 conn.commit();

@@ -36,25 +36,25 @@ public class AuthProvider {
     }
 
     public String parseHeader (HttpServletRequest request) {
-//        String header = request.getHeader("Authorization");
-//
-//        if (header != null) {
-//            String scheme = header.split(" ")[0];
-//            String token = header.split(" ")[1];
-//            if (scheme.equals("Bearer")) {
-//                return token;
-//            }
-//        }
+        String header = request.getHeader("Authorization");
 
-        Cookie[] cookies = request.getCookies();
-        Cookie sid = null;
-        try {
-            sid = Arrays.stream(cookies).filter(c -> c.getName().equals("SID")).collect(Collectors.toList()).get(0);
-            return sid.getValue();
-        } catch (Exception e) {
-            log.debug("refresh token xx");
-//            e.printStackTrace();
+        if (header != null) {
+            String scheme = header.split(" ")[0];
+            String token = header.split(" ")[1];
+            if (scheme.equals("Bearer")) {
+                return token;
+            }
         }
+
+//        Cookie[] cookies = request.getCookies();
+//        Cookie sid = null;
+//        try {
+//            sid = Arrays.stream(cookies).filter(c -> c.getName().equals("SID")).collect(Collectors.toList()).get(0);
+//            return sid.getValue();
+//        } catch (Exception e) {
+//            log.debug("refresh token xx");
+////            e.printStackTrace();
+//        }
         return null;
     }
     public boolean checkUserStatusValid(HttpServletRequest request) {
@@ -63,18 +63,22 @@ public class AuthProvider {
 //
 //        if (!provider.validateToken(token)) return false;
 
-        Cookie[] cookies = request.getCookies();
-        Cookie sid = null;
-        try {
-            sid = Arrays.stream(cookies).filter(c -> c.getName().equals("SID")).collect(Collectors.toList()).get(0);
-        } catch (Exception e) {
-            log.debug("refresh token xx");
-//            e.printStackTrace();
-        }
+        String token = parseHeader(request);
 
-        if (sid == null) return false;
+//        Cookie[] cookies = request.getCookies();
+//        Cookie sid = null;
+//        try {
+//            sid = Arrays.stream(cookies).filter(c -> c.getName().equals("SID")).collect(Collectors.toList()).get(0);
+//        } catch (Exception e) {
+//            log.debug("refresh token xx");
+////            e.printStackTrace();
+//        }
+//
+//        if (sid == null) return false;
+        if (token == null) return false;
         try {
-            return provider.validateToken(sid.getValue());
+//            return provider.validateToken(sid.getValue());
+            return provider.validateToken(token);
         } catch (Exception e) {
             e.printStackTrace();
         }
