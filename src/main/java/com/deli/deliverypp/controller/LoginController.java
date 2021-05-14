@@ -122,35 +122,38 @@ public class LoginController extends HttpServlet {
     }
 
     public void exchangeToken (HttpServletRequest request, HttpServletResponse response)  {
-        log.info("1234");
-        Cookie refreshCookie = null;
-        try {
-            log.info("exchange");
-        refreshCookie = Arrays
-                    .stream(request.getCookies())
-                    .filter(c -> c.getName().equals("SID"))
-                    .collect(Collectors.toList()).get(0);
+//        log.warn("1234");
+//        Cookie refreshCookie = null;
+//        try {
+//            log.warn("exchange");
+//        refreshCookie = Arrays
+//                    .stream(request.getCookies())
+//                    .filter(c -> c.getName().equals("SID"))
+//                    .collect(Collectors.toList()).get(0);
+//
+//        } catch (Exception e) {
+//            ControlUtil.sendResponseData(response,
+//                MessageGenerator.makeMsg("refresh failed", "refresh_token doesn't exist", "111"));
+//            e.printStackTrace();
+//        }
+        String token = new AuthProvider().parseHeader(request);
 
-        } catch (Exception e) {
-            ControlUtil.sendResponseData(response,
-                MessageGenerator.makeMsg("refresh failed", "refresh_token doesn't exist", "111"));
-            e.printStackTrace();
-        }
-
-
-        if (refreshCookie != null && provider.checkRefreshToken(refreshCookie.getValue())) {
-            String token = refreshCookie.getValue();
-            DeliUser user = service.parseUserFromRefreshToken(token);
-
+        if (token != null) {
+//            String token = refreshCookie.getValue();
+            DeliUser user = service.parseUserFromToken(token);
+            System.out.println(user);
+            UserLoginService s = new UserLoginService();
+            DeliUser u = service.getUserInfo(user.getUserEmail());
+            System.out.println(u);
             AuthInfo info = null;
             try {
-                info = service.generateAuthInfo(user);
+                info = service.generateAuthInfo(u);
             } catch (Exception e) {
                 ControlUtil.sendResponseData(response,
                         MessageGenerator.makeErrorMsg("refresh failed", "invalid_token"));
                 e.printStackTrace();
             }
-
+            log.warn(u);
             ResponseMessage<AuthInfo> msg = authInfoMsg(info);
             msg.setMessage("exchange success");
             ControlUtil.sendResponseData(response, msg);

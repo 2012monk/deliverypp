@@ -149,11 +149,7 @@ public class UserController extends HttpServlet {
         } catch (Exception e) {
             ControlUtil.sendUnAuthorizeMsg(response);
             e.printStackTrace();
-
         }
-//        if (provider.checkId(email, request)){
-//        }else {
-//        }
     }
 
 

@@ -10,21 +10,31 @@ $.ajaxSetup(
 )
 
 window.deli = {
+    domain : "http://112.169.196.76:47788",
     checkRefresh() {
-        fetch("https://deli.alconn.co/login/exchange",{
+        console.log(this.getToken())
+        fetch(this.domain+"/login/exchange",{
             method:"post",
-            credentials:'include'
+            credentials:'include',
+            headers:{
+                'Authorization' : "Bearer "+this.getToken()
+            }
         })
         .then(res => res.json())
         .then(data => {
+            console.log(data)
             this.setUser(data.data);
         })
     },
 
     login(data){
-        fetch("https://deli.alconn.co/login",{
+        fetch(this.domain+"/login",{
             method:'post',
             body:JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+            this.setUser(data.data)
         })
     },
 
@@ -33,10 +43,12 @@ window.deli = {
     },
 
     logout() {
-        fetch("https://deli.alconn.co/logout")
+        localStorage.removeItem("deli");
+        fetch(this.domain+"/logout")
     },
     
     setUser(data) {
+        console.log(JSON.stringify(data))
         localStorage.setItem('deli', JSON.stringify(data))
     },
     
@@ -83,11 +95,14 @@ window.deli = {
     }
 
 }
+// deli.login({
+//     userEmail : "test@test.com",
+//     userPw : "1234"
+// });
+// deli.checkRefresh();
+// window.onload = () => {
+//     const u = deli.getUser();
+//     console.log(u)
 
-window.onload = () => {
-    // deli.checkRefresh();
-    const u = deli.getUser();
-    console.log(u)
-
-}
+// }
 

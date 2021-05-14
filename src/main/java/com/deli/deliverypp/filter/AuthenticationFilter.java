@@ -62,8 +62,8 @@ public class AuthenticationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
-        log.info(new Date());
-        log.info("auth");
+//        log.info(new Date());
+//        log.info("auth");
 
         // html, js, css 파일 통과
 
@@ -85,14 +85,14 @@ public class AuthenticationFilter implements Filter {
         String reqKey = fullUri+" "+rq.getMethod().toLowerCase(Locale.ROOT);
         ProtectedResource resource = check.get(reqKey);
 //        String refreshToken = getRefreshToken(rq);
-        log.info(reqKey);
-        log.info(resource);
+//        log.info(reqKey);
+//        log.info(resource);
         // NOTE only check user role
 
         // TODO 필터에서 체크시 CORS issue 발생
         if (false) {
             boolean isPassed = false;
-            log.info("auth required");
+            log.debug("auth required");
 
 
             HttpServletResponse response = (HttpServletResponse) servletResponse;
@@ -144,7 +144,7 @@ public class AuthenticationFilter implements Filter {
         String header = request.getHeader("Authorization");
 
         if (header != null) {
-            log.info(header);
+//            log.info(header);
             String scheme = header.split(" ")[0];
             String token = header.split(" ")[1];
             if (scheme.equals("Bearer")) {
