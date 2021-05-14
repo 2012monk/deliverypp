@@ -74,7 +74,7 @@ public class AuthProvider {
 
         if (sid == null) return false;
         try {
-            return provider.validateRefreshToken(sid.getValue());
+            return provider.validateToken(sid.getValue());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,23 +82,23 @@ public class AuthProvider {
 
     }
 
-
-
-    public String getToken (String header) {
-        if (header == null) return null;
-        try {
-            log.info(header);
-            String type = header.split(" ")[0];
-            String token = header.split(" ")[1];
-            if (!type.equals("Bearer")) {
-                return null;
-            }
-            return token;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//
+//
+//    public String getToken (String header) {
+//        if (header == null) return null;
+//        try {
+//            log.info(header);
+//            String type = header.split(" ")[0];
+//            String token = header.split(" ")[1];
+//            if (!type.equals("Bearer")) {
+//                return null;
+//            }
+//            return token;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
 //    public String getTokenFromHeader (HttpServletRequest request) {
 //        return parseHeader(request);
