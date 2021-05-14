@@ -33,42 +33,6 @@ $(function(){
 
 var login_id;
 $(document).on("click","#test_seller_login",function(){
-
-<<<<<<< HEAD
-	// simpleDeli.loginAttempt({
-	// 	"userEmail" : "seller@seller.com",
-	// 	"userPw" : "1234",
-	// 	"userType" : "DELI"
-	// })
-	setTimeout(function(){
-		var role = deli.checkUserRole();
-		var islogin = deli.isLoggedIn();
-		console.log(deli.getUser())
-		if(islogin == true)
-			$("#test_login_info").html(role+" 로그인");
-		mainHeaderPage();
-		clientPage();
-		sellerPage();
-	},1000);
-
-
-})
-$(document).on("click","#test_client_login",function(){
-	simpleDeli.loginAttempt({
-		"userEmail" : "test0513@test.com",
-		"userPw" : "1234",
-		"userType" : "DELI"
-	})
-	setTimeout(function(){
-		var role = simpleDeli.checkUserRole();
-		var islogin = simpleDeli.isLoggedIn();
-		if(islogin == true)
-			$("#test_login_info").html(role+" 로그인");
-		mainHeaderPage();
-		clientPage();
-		sellerPage();
-	},1000);
-=======
 	login_id = "SELLER";
 	$("#test_login_info").html(login_id+" 로그인");
 	mainHeaderPage();
@@ -81,8 +45,6 @@ $(document).on("click","#test_client_login",function(){
 	$("#test_login_info").html(login_id+" 로그인");
 	mainHeaderPage();
 	mainBodyPage();
-	
->>>>>>> c3d1d64b16c3cd852c0a6ed5b3ffacafe97bfb9a
 })
 $(document).on("click","#test_logout",function(){
 
@@ -123,11 +85,7 @@ $(document).on("click","#test_logout",function(){
 
 <script>
 	loginmodal();
-<<<<<<< HEAD
     signmodal();
-=======
-	signmodal();
->>>>>>> c3d1d64b16c3cd852c0a6ed5b3ffacafe97bfb9a
 	cartPage();
 </script>
 </body>

@@ -82,7 +82,6 @@ function check_pw(){  //비밀번호 확인
                 type:"post",
                 //url:"<http://deli.alconn.co/login>",
                 url:"http://deli.alconn.co/user/signup/seller",
-
                 success:function(d){
                     console.log(d)
                     alert("seller등록이 되었습니다.");
