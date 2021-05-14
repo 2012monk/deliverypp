@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-<script src="./assets/simpleDeli/simpleDeli.js"></script>
+<script src="./assets/simpleDeli/deli.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -21,6 +21,8 @@
 <script src="./assets/js/basket-js/basket.js" ></script>
 <!-- <script src="./assets/js/storehost-js/storehost.js"></script> -->
 <script src="./assets/js/ReviewList.js"></script>
+<script src="./assets/js/loginmodal.js"></script>
+<script src="./assets/js/signmodal.js"></script>
 <script>
 $(function(){
 	mainHeaderPage();
@@ -110,6 +112,8 @@ $(document).on("click","#test_logout",function(){
 	<div id="hidden-store-add-modal"></div>
 	<div id="hidden-product-add-modal"></div>
 	<div id="hidden-product-update-modal"></div>
+	<div id="hiddenlogin"></div>
+	<div id="hiddensign"></div>
 
 	<!-- <div>
 		<a href="main.html">main</a> 
@@ -119,7 +123,8 @@ $(document).on("click","#test_logout",function(){
 	</div> -->
 
 <script>
-	
+	loginmodal();
+	signmodal();
 	cartPage();
 </script>
 </body>
