@@ -19,12 +19,19 @@ window.deli = {
     },
 
     login(data){
-        fetch("http://deli.alconn.co/login",{
+        fetch("https://deli.alconn.co/login",{
             method:'post',
             body:JSON.stringify(data)
         })
     },
-    
+
+    handelSuccess(data){
+        this.setUser(data.data)
+    },
+
+    logout() {
+        fetch("https://deli.alconn.co/logout")
+    },
     
     setUser(data) {
         localStorage.setItem('deli', JSON.stringify(data))
