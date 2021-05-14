@@ -126,7 +126,6 @@ public class StoreController extends HttpServlet {
                 if (DeliUser.UserRole.SELLER.isHigher(user.getUserRole())){
                     String json = ControlUtil.getJson(request);
                     ControlUtil.responseMsg(response, service.insertStoreService(json, user.getUserEmail()));
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();
