@@ -1,7 +1,8 @@
 $(function(){
     $.ajax({
         type:"get",
-        url:"http://112.169.196.76:47788/user/test@test.com",//E-Mail 변경요망
+        // url:"http://112.169.196.76:47788/user/test@test.com",//E-Mail 변경요망
+        url:"https://deli.alconn.co/user/test@test.com",
         dataType:"json",
         success:function(data){
             console.log(data);
