@@ -31,7 +31,7 @@ function idCheckBtn() {
 	console.log(storeName);
 	$.ajax({
 		type:"get",
-		url:"http://112.169.196.76:47788/stores/check-name/"+storeName,
+		url:"http://deli.alconn.co/stores/check-name/"+storeName,
 		success:function(data){
 			console.log(data.message);
 			if(data.message=="overlap")
@@ -57,7 +57,7 @@ $(document).on("submit", "#mdform", function(e){
 	console.log(storeAddr);
 	$.ajax({
 		type:"post",
-		url:"http://112.169.196.76:47788/stores",
+		url:"http://deli.alconn.co/stores",
 		data:JSON.stringify({"storeName":storeName, "storeDesc":storeDesc, "storeImage":storeImage, "storeAddr":storeAddr}),
 		success:function(data){
 			//alert("success");
@@ -73,7 +73,7 @@ $(document).on("click",".storelist-btn-delete",function(){
 	console.log(storeId);
 	$.ajax({
 		type:"delete",
-		url:"http://112.169.196.76:47788/stores/"+storeId,
+		url:"http://deli.alconn.co/stores/"+storeId,
 		success:function(data){
 			console.log(data);
 		}
@@ -125,7 +125,7 @@ $(document).on("click","#storelist-btn-update",function(e){
 	console.log(storeId);
 	$.ajax({
 	    type:"PUT",
-	    url:"http://112.169.196.76:47788/stores",
+	    url:"http://deli.alconn.co/stores",
 	    /*dataType: "json",*/
 	    data:JSON.stringify({"storeId":storeId, "storeName":storeName, "storeDesc":storeDesc, "storeImage":storeImage, "storeAddr":storeAddr}),
 	    success:function(data){

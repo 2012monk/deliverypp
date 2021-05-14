@@ -25,6 +25,7 @@ function mainHeaderPage() {
             s +="<ul class='navbar-login'>";
             s +="<li><i id='mypagebtn' onclick='mypage();'>"+deli.getUserEmail()+"(CLIENT)님</i></li>";//변경요망
             s +="<li id='sellerForm'><i><button type='submit' id='sellersignbtn'>seller등록</button></i></li>";
+            s +="<li><i><button type='submit' id='sellersignbtn'>seller등록</button></i></li>";
             s +="<li><i></i></li></ul>";
             }
         }
@@ -84,7 +85,7 @@ function check_pw(){  //비밀번호 확인
             $.ajax({
                 type:"post",
                 //url:"<http://deli.alconn.co/login>",
-                url:"http://112.169.196.76:47788/user/signup/seller",
+                url:"http://deli.alconn.co/user/signup/seller",
                 success:function(d){
                     if (d === "SUCCESS"){
                         alert("seller등록이 되었습니다.");
@@ -135,7 +136,7 @@ function check_pw(){  //비밀번호 확인
             
             $.ajax({
                 type:"post",
-                url:"http://112.169.196.76:47788/user/signup",
+                url:"http://deli.alconn.co/user/signup",
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole, "userType":userType,"userTelephone":userTelephone,"userAddr":userAddr}),
                 success:function(d){
                     console.log(d);
@@ -171,7 +172,7 @@ function check_pw(){  //비밀번호 확인
             $.ajax({
                 type:"post",
                 //url:"<http://deli.alconn.co/login>",
-                url:"http://112.169.196.76:47788/login",
+                url:"http://deli.alconn.co/login",
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw}),
                 dataType:"json",
                 success:function(login_result){
@@ -209,12 +210,42 @@ function check_pw(){  //비밀번호 확인
         
     }
 
+
+function mypage(){
+    $(document).on("click","#mypagebtn",function(){
+        $.ajax({
+            type:"get",
+            url:"http://deli.alconn.co/user/",//E-Mail 변경요망 
+            dataType:"json",
+            beforeSend:function(xhr){
+                xhr.withCredentials = true;
+            },
+            success:function(data){
+                console.log(data);
+                    var s="";
+                    s= "<form>";
+                    //s+="<input type='hidden' name='userPw' value='"+data.data.userPw+"'>";
+                    s+="<table>";
+                    s+="<caption>회원정보</caption> &nbsp;&nbsp;&nbsp;";
+                    s+="<tr><th>E-Mail</th><td userEmail='userEmail'>"+data.data.userEmail+"</td></tr>";
+                    s+="<tr><th>UserRole</th><td userRole='userRole'>"+data.data.userRole+"</td></tr>";
+                    s+="<tr><th>UserType</th><td userType='userType'>"+data.data.userType+"</td></tr>";
+                    s+="<tr><th>UserAddr</th><td userAddr='userAddr'>"+data.data.userAddr+"</td></tr>";
+                    s+="<tr><th>userTelephone</th><td userTelephone='userTelephone'>"+data.data.userTelephone+"</td></tr>";
+                    s+="<tr><td  colspan='2'><button id='userupdatebtn'>정보수정</button>&nbsp;<button id='userdeletebtn'>회원탈퇴</button>&nbsp;<button id='logoutbtn'>로그아웃</button><td></tr>";
+                    s+="</table>";
+                    s+="</form>";
+                $("#index-main").html(s);
+            }
+        });
+    });
+
     //로그아웃버튼이벤트
     $(document).on("click","#logoutbtn",function(){
         deli.logout();
         $.ajax({
             type:"get",
-            url:"http://112.169.196.76:47788/logout",
+            url:"http://deli.alconn.co/logout",
             dataType:"json",
             success:function(data){
                 console.log(data);
@@ -307,6 +338,30 @@ function (e) {
             alert("정보가 수정되었습니다.");
             console.log(data);
         }
+    $(document).on("click","#userupdatesuccessbtn",function(e){
+        e.preventDefault();
+        var userEmail=$("#userupdateform").find("#userEmail").val();
+        var userPw=$("#userupdateform").find("#userPw").val();
+        var userRole=$("#userupdateform").find("#userRole").val();
+        var userType=$("#userupdateform").find("#userType").val();
+        var userAddr=$("#userupdateform").find("#userAddr").val();
+        var userTelephone=$("#userupdateform").find("#userTelephone").val();
+        console.log(userEmail);
+        console.log(userPw);
+        console.log(userRole);
+        console.log(userType);
+        console.log(userAddr);
+        console.log(userTelephone);
+        $.ajax({
+            type:"PUT",
+            url:"http://deli.alconn.co/user",
+            dataType: "json",
+            data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole,"userType":userType,"userAddr":userAddr,"userTelephone":userTelephone}),
+            success:function(data){
+                alert("정보가 수정되었습니다.");
+                console.log(data);
+            }
+        });
     });
 }
 
@@ -322,6 +377,18 @@ $(document).on("click", "#userdeletebtn", function(e){
             alert("회원탈퇴가 완료되었습니다.");
             console.log(data);
         }
+    $(document).on("click", "#userdeletebtn", function(e){
+        e.preventDefault();
+        var userEmail=$("td[userEmail]").text()
+        console.log(userEmail);
+        $.ajax({
+            type:"DELETE",
+            url:"http://deli.alconn.co/user/"+userEmail,
+            success:function(data){
+                alert("회원탈퇴가 완료되었습니다.");
+                console.log(data);
+            }
+        });
     });
 });
 function mypage(){
@@ -339,7 +406,7 @@ function mainBodyPage() {
 				var storeId = $(this).attr("value");
 				$.ajax({
 					type:"get",
-					url:"http://112.169.196.76:47788/stores/list",
+					url:"http://deli.alconn.co/stores/list",
 					dataType:"json",
 					success:function(data){
                         console.log(data)
@@ -365,7 +432,7 @@ function mainBodyPage() {
 			var a = "";
 			$.ajax({
 				type:"get",
-				url:"http://112.169.196.76:47788/stores/list",
+				url:"http://deli.alconn.co/stores/list",
 				dataType:"json",
 				success:function(d){
 					$.each(d.data, function(i, elt) {

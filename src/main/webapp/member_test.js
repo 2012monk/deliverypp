@@ -18,7 +18,7 @@ $(function(){
 		$.ajax({
 			type:"post",
 			//url:"http://deli.alconn.co/signup",
-			url:"http://112.169.196.76:47788/signup",
+			url:"http://deli.alconn.co/signup",
 			data:JSON.stringify(data),
 			success:function(d){
 				alert("회원가입 성공!");

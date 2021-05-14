@@ -162,7 +162,7 @@ $("button#order").click(function(){
 	$.ajax({
 		type:"post",
 		dataType:"json",
-		url:"http://112.169.196.76:47788/",
+		url:"http://deli.alconn.co/",
 	})
 	
 	
