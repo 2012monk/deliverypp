@@ -1,3 +1,6 @@
+window.config = {
+    domain : "https://deli.alconn.co"
+}
 function mainHeaderPage() {
 	s = "<div class='navbar-logo'>";
 		s += "<a href=''>배달의 민족</a>";
@@ -16,19 +19,14 @@ function mainHeaderPage() {
             s +="<li><i class='fas fa-user-plus' id='signbtn' data-target='#signmodal'></i></li>";
             s +="<li><i class='far fa-id-card' id='loginbtn' data-target='#logmodal'></i></li></ul>";
         }else{
-            if(deli.getUserRole()=="SELLER"){
-                s +="<ul class='navbar-login'>";
-            s +="<li><i id='mypagebtn' onclick='mypage();'>"+deli.getUserEmail()+"(SELLER)님</i></li>";//변경요망
-            s +="<li><i></i></li></ul>";
-            }else{
-            console.log("true진입");
             s +="<ul class='navbar-login'>";
-            s +="<li><i id='mypagebtn' onclick='mypage();'>"+deli.getUserEmail()+"(CLIENT)님</i></li>";//변경요망
-            s +="<li id='sellerForm'><i><button type='submit' id='sellersignbtn'>seller등록</button></i></li>";
-            s +="<li><i></i></li></ul>";
+            s +="<li><i id='mypagebtn' onclick='mypage();'>"+deli.getUserEmail()+'['+deli.getUserRole()+"]님</i></li>";//변경요망
+            
+            if(deli.getUserRole() !=="SELLER"){
+                s +="<li id='sellerForm'><i><button type='submit' id='sellersignbtn'>seller등록</button></i></li>";
             }
+            s +="<li><i></i></li></ul>";
         }
-		
 		/*모달 코드div 렌더링 처음에 해놔야 나중에 */
 		s += '<div id="myModal" class="modal" tabindex="-1" role="dialog">';
   		s += '<div class="modal-dialog" role="document">';
@@ -50,15 +48,16 @@ function mainHeaderPage() {
   		s += '</div>';
 		s += '</div>';
 		$("#index-header").html(s); 
-        $("#loginbtn").click(function(){
-            $("#logmodal").modal();
-            login();
-        });
-        $("#signbtn").click(function(){
-            $("#signmodal").modal();
-            signup();
-        });       
-}
+    }
+    $("#loginbtn").click(function(){
+        $("#logmodal").modal();
+        console.log(this);
+        login();
+    });
+    $("#signbtn").click(function(){
+        $("#signmodal").modal();
+        signup();
+    });       
 
 function check_pw(){  //비밀번호 확인 
     var p = document.getElementById('pw').value; 
@@ -149,6 +148,7 @@ function check_pw(){  //비밀번호 확인
 
         // login modal
         $(document).on("click","#loginbtn",function(){
+            console.log("login!")
             s="<form id='loginform'>";
             s+="<table>";
             s+="<caption><b>로그인</b></caption>"
@@ -157,6 +157,7 @@ function check_pw(){  //비밀번호 확인
             s+="</table>";
             s+="</form>";
             $("#logbody").html(s);
+            $('#logmodal').modal();
         });
 
         // login
@@ -173,8 +174,9 @@ function check_pw(){  //비밀번호 확인
                 //url:"<http://deli.alconn.co/login>",
                 url:"http://112.169.196.76:47788/login",
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw}),
-                dataType:"json",
+                dataType:'json',
                 success:function(login_result){
+                    console.log(login_result)
                     deli.handleSuccess(login_result)
                     console.log(login_result);
                     if(deli.isLoggedIn()){
@@ -185,9 +187,16 @@ function check_pw(){  //비밀번호 확인
                     }else{
                         alert("로그인 실패!!");
                     }
+                    $('#logmodal').modal('hide')
                     //deli.handleLoginSuccess(login_result);
+                },
+                error:function(data) {
+                    console.log(data);
+                    deli.logout();
+                    alert('failed')
+                    $('#logmodal').modal('hide')
                 }
-            });
+            })
         });
 
 
@@ -246,6 +255,7 @@ $(document).on("click","#mypagebtn",function(){
                 s+="</table>";
                 s+="</form>";
             $("#index-main").html(s);
+            deli.setUser(data)
         }
     });
 });
@@ -324,11 +334,7 @@ $(document).on("click", "#userdeletebtn", function(e){
         }
     });
 });
-function mypage(){
 
-    
-
-}
 
 function mainBodyPage() {
     console.log("스타트")
@@ -385,3 +391,35 @@ function mainBodyPage() {
 			storeCustomerProductList()
 		}
 } 
+
+
+function loginmodal(){
+    var s="";
+    s+="<div class='modal fade' id='logmodal' role='dialog'>";
+    s+="<div class='modal-dialog'>";
+    s+="<div class='modal-content'>"
+    s+="<div class='modal-header'>"
+    s+="<button type='button' class='close' data-dismiss='modal'>&times;</button>"
+    s+="<h4 class='modal-title'>Modal Header</h4>"
+    s+="</div>"
+    s+="<div class='modal-body' id='logbody'>"
+    s+="<p>Some text in the modal.</p>"
+    s+="</div>"
+    s+="<div class='modal-footer'>"
+    s+="<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>"
+    s+="</div>"
+    s+="</div>"
+    s+="</div>"
+    s+="</div>"
+    s+="</div>"
+    $("#hiddenlogin").html(s);
+    
+}
+
+function init() {
+    // modal insert
+    mainBodyPage();
+    mainHeaderPage();
+}
+
+init();
