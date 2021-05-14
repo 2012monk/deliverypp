@@ -87,10 +87,6 @@ public class UserAccess {
             ResultSet rs = prst.executeQuery();
 
             if (rs.next()) {
-//                user.setUserEmail(rs.getString("USER_EMAIL"));
-//                user.setUserPw(rs.getString("USER_PW"));
-//                user.setUserType(DeliUser.UserType.valueOf(rs.getString("USER_TYPE")));
-//                user.setUserRole(DeliUser.UserRole.valueOf(rs.getString("USER_ROLE")));
                 user = setPOJO(DeliUser.class, rs);
                 return user;
             }
@@ -104,12 +100,7 @@ public class UserAccess {
         return null;
     }
 
-//    public DeliUser signInUser (DeliUser user) {
-//        if (loginUser(user) != null) {
-//            return user;
-//        }
-//        return null;
-//    }
+
 
     public boolean updateUser (DeliUser user) {
         String sql = "UPDATE USER SET USER_ADDR=?,USER_ROLE=?,USER_TELEPHONE=?, USER_PW=? WHERE USER_EMAIL=?";

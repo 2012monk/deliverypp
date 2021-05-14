@@ -25,25 +25,31 @@
  */
 
 
- const send = window.XMLHttpRequest.prototype.send;
- window.XMLHttpRequest.prototype.send = function() {
-    const header = new Headers();
-    const pointer = this;
-    const args = [].slice.call(arguments)
-    this.withCredentials = true;
-    if (simpleDeli.auth.token === null) {
-        simpleDeli.unit.refresh().then(data => {
-            console.log(data)
-            this.setRequestHeader("Authorization", "Bearer "+ data.access_token);
-            send.call(this, args)
-        })
-    }
-    else {
+// override ajax request
+(function() {
+
+    const send = window.XMLHttpRequest.prototype.send;
+    window.XMLHttpRequest.prototype.send = function() {
+       const header = new Headers();
+       const pointer = this;
+       const args = [].slice.call(arguments)
+       this.withCredentials = true;
+       if (simpleDeli.auth.token === null) {
+           simpleDeli.unit.refresh().then(data => {
+               console.log(data)
+               this.setRequestHeader("Authorization", "Bearer "+ data.access_token);
+               console.log("send!")
+               send.call(this, args)
+           })
+       }
+       else {
+        console.log(simpleDeli.auth.token)
         this.setRequestHeader("Authorization", "Bearer "+ data.access_token);
-        send.call(this, args);
-        
-    }
-}
+        console.log('just send!')
+        send.call(this, args);   
+       }
+   }
+})();
 window.simpleDeli = {
     // host : "http://112.169.196.76:47788/",
     host : "https://deli.alconn.co/",
@@ -59,30 +65,32 @@ window.simpleDeli = {
     },
 
     async viewByRole (sellerCallback, clientCallback) {
+        console.log(simpleDeli.deliUser)
         if (this.deliUser.userRole === null) {
             const data = await this.unit.refresh();
         }
-
+        console.log(simpleDeli.deliUser)
         if (this.deliUser.userRole === 'SELLER'){
             // render as seller
             console.log("seller")
             // seller view();
-            sellerCallback();
+            sellerCallback.call();
         }
         else {
             // render as client
             console.log("client")
-            clientCallback();
+            clientCallback.call();
         }
     },
 
     async checkUser () {
-        if (this.deliUser.userEmail === null) {
-            const data = await this.unit.refresh();
-        }
-        else {
+        // if (this.deliUser.userEmail === null) {
+        //     const data = await this.unit.refresh();
+        // }
+        // else {
 
-        }
+        // }
+        return this.sub.getInfo
     },
 
     async handleLogOut() {
@@ -96,12 +104,13 @@ window.simpleDeli = {
      * @returns {null|string|*} if logged in return role or return null
      */
     checkUserRole() {
-        console.log(simpleDeli.deliUser)
-        if (this.deliUser.userRole !== null && this.deliUser.userRole !== undefined) {
-            return simpleDeli.deliUser.userRole;
-        }
+        // console.log(simpleDeli.deliUser)
+        // if (this.deliUser.userRole !== null && this.deliUser.userRole !== undefined) {
+        //     return simpleDeli.deliUser.userRole;
+        // }
     
-        return null;
+        // return null;
+        return this.sub.getInfo().userRole
     },
 
     
@@ -122,16 +131,7 @@ window.simpleDeli = {
      * @returns {user || null}
      */
     getUserInfo() {
-        console.log(this.deliUser)
-        if (Object.keys(simpleDeli.deliUser).length === 3){
-            return this.unit.refresh();
-        }else {
-            console.log("oo")
-            console.log(this.deliUser);
-            return this.unit.refresh()
-            // return this.deliUser;
-        }
-        
+        return this.deliUser
     },
 
     getUserEmail() {
@@ -153,7 +153,7 @@ window.simpleDeli = {
     },
 
     isLoggedIn() {
-        return this.unit.isValidUser();
+        return this.sub.getInfo().userEmail !== null;
     },
     handleLoginSuccess(data) {
 
@@ -198,13 +198,13 @@ simpleDeli.unit = {
             .then(d => {
                 console.log(d);
                 const data = d.data;
-                if (data.access_token != null) {
-                    simpleDeli.auth = {
-                        "type" : data["auth_type"],
-                        "token" : data["access_token"],
-                        "exp" : data["exp"]
-                    };
-                }
+                simpleDeli.deliUser = data.user;
+                simpleDeli.auth = {
+                    "type" : data["auth_type"],
+                    "token" : data["access_token"],
+                    "exp" : data["exp"]
+                };
+                this.setUser(data);
                 resolve(data)
             })
             .catch(err => reject(err))
@@ -225,24 +225,24 @@ simpleDeli.unit = {
          * over ride XMLHttpRequest to set credentials , header
          * over ride global fetch
          */
-        (function() {
-            const fetch = window.fetch;
-            window.fetch = function(){
-                console.log(arguments)
-                const headers = simpleDeli.unit.generateAuthHeader();
-                const args = [].slice.call(arguments);
-                if (headers !== null) {
+        // (function() {
+        //     const fetch = window.fetch;
+        //     window.fetch = function(){
+        //         console.log(arguments)
+        //         const headers = simpleDeli.unit.generateAuthHeader();
+        //         const args = [].slice.call(arguments);
+        //         if (headers !== null) {
          
-                    const originHeaders = args.headers;
-                    if (originHeaders !== null) {
+        //             const originHeaders = args.headers;
+        //             if (originHeaders !== null) {
          
-                    }
-                }
-                return Promise.resolve(fetch.apply(window, arguments))
-            }
+        //             }
+        //         }
+        //         return Promise.resolve(fetch.apply(window, arguments))
+        //     }
          
             
-        })();
+        // })();
     },
     checkExp(){
         const now = new Date().getTime();
@@ -260,6 +260,17 @@ simpleDeli.unit = {
         }
     },
 
+    setUser(data) {
+        if (data.access_token != null) {
+            const auth = {
+                "type" : data["auth_type"],
+                "token" : data["access_token"],
+                "exp" : data["exp"]
+            };
+
+            localStorage.setItem('deli', JSON.stringify(data))
+        }
+    },
 
     setDevice() {
     
@@ -373,7 +384,11 @@ simpleDeli.unit = {
 
 
 simpleDeli.sub = {
-    
+    getInfo() {
+        const user = JSON.parse(localStorage.getItem('deli'));
+        return user.user;
+    },
+
 }
 
 simpleDeli.unit.init();
@@ -384,3 +399,35 @@ simpleDeli.unit.init();
 //     "userPw" : "1234",
 //     "userType" : "DELI"
 // })
+
+document.getElementById('load').addEventListener('click', () => {
+    main();
+})
+
+// function seller() {
+//     console.log("start")
+//     $.ajax({
+//         type: "get",
+//         url: "https://deli.alconn.co/stores/list",
+//         success: function (response) {
+//             document.querySelector('body').innerHTML = JSON.stringify(response);
+//         },
+        
+//     });
+
+//     // fetch("https://deli.alconn.co/stores/list")
+//     // .then(res => res.json())
+//     // .then(data => {
+//     //     document.querySelector('body').innerHTML = JSON.stringify(data)
+//     // })
+//     console.log("end")
+// }
+
+// function cl() {
+//     console.log('df')
+// }
+
+// function main() {
+//     // seller()
+//     simpleDeli.viewByRole(cl, seller);
+// }
