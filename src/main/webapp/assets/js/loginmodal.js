@@ -18,5 +18,9 @@ function loginmodal(){
     s+="</div>"
     s+="</div>"
     $("#hiddenlogin").html(s);
+    console.log( document.getElementById('hiddenlogin'));
+    document.getElementById('hiddenlogin').innerHTML = s;
     
 }
+
+loginmodal();
