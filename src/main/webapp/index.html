@@ -21,6 +21,8 @@
 <script src="./assets/js/basket-js/basket.js" ></script>
 <!-- <script src="./assets/js/storehost-js/storehost.js"></script> -->
 <script src="./assets/js/ReviewList.js"></script>
+<script src="./assets/js/loginmodal.js"></script>
+<script src="./assets/js/signmodal.js"></script>
 <script>
 $(function(){
 	mainHeaderPage();
@@ -71,6 +73,8 @@ $(document).on("click","#test_logout",function(){
 	<div id="hidden-store-add-modal"></div>
 	<div id="hidden-product-add-modal"></div>
 	<div id="hidden-product-update-modal"></div>
+	<div id="hiddenlogin"></div>
+	<div id="hiddensign"></div>
 
 	<!-- <div>
 		<a href="main.html">main</a> 
@@ -80,7 +84,8 @@ $(document).on("click","#test_logout",function(){
 	</div> -->
 
 <script>
-	
+	loginmodal();
+	signmodal();
 	cartPage();
 </script>
 </body>
