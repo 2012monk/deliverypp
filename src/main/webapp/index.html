@@ -27,72 +27,31 @@
 <script src="./assets/js/signmodal.js"></script>
 <script>
 
-// <script>
-// $(function(){
-// 	mainHeaderPage();
-	//mainBodyPage();
-//})
-/*
-* @function checkUserRole()
- * @returns {userRole || null} user role if logged in
- *
- *
- * @function isLoggedIn()
- * @returns {boolean} true if logged in
- *
- * @function getUserInfo()
- * @returns {user || null}
- * user info if logged in null
- *
- * @function getUserEmail()
- * @returns {userEmail || null}
- * user Email if logged in or null
- *
- *
-simpleDeli.loginAttempt({
-    "userEmail" : "test@test.com",
-    "userPw" : "1234",
-    "userType" : "DELI"
+$(function(){
+	mainHeaderPage();
+	mainBodyPage();
+	reviewPageEvent();	
 })
 
-*/
-
+// var login_id;
 // $(document).on("click","#test_seller_login",function(){
-//
-// 	// simpleDeli.loginAttempt({
-// 	// 	"userEmail" : "seller@seller.com",
-// 	// 	"userPw" : "1234",
-// 	// 	"userType" : "DELI"
-// 	// })
-// 	setTimeout(function(){
-// 		var role = deli.checkUserRole();
-// 		var islogin = deli.isLoggedIn();
-// 		console.log(deli.getUser())
-// 		if(islogin == true)
-// 			$("#test_login_info").html(role+" 로그인");
-// 		mainHeaderPage();
-// 		mainBodyPage();
-// 	},1000);
-//
-//
+
+// 	login_id = "SELLER";
+// 	$("#test_login_info").html(login_id+" 로그인");
+// 	mainHeaderPage();
+// 	mainBodyPage();
+
 // })
 // $(document).on("click","#test_client_login",function(){
-// 	simpleDeli.loginAttempt({
-// 		"userEmail" : "test0513@test.com",
-// 		"userPw" : "1234",
-// 		"userType" : "DELI"
-// 	})
-// 	setTimeout(function(){
-// 		var role = simpleDeli.checkUserRole();
-// 		var islogin = simpleDeli.isLoggedIn();
-// 		if(islogin == true)
-// 			$("#test_login_info").html(role+" 로그인");
-// 		mainHeaderPage();
-// 		mainBodyPage();
-// 	},1000);
+	
+// 	login_id = "CLIENT";
+// 	$("#test_login_info").html(login_id+" 로그인");
+// 	mainHeaderPage();
+// 	mainBodyPage();
+	
 // })
 // $(document).on("click","#test_logout",function(){
-//
+
 // 	login_id = "logout";
 // 	$("#test_login_info").html("로그아웃됨");
 // 	mainHeaderPage();
@@ -107,52 +66,41 @@ simpleDeli.loginAttempt({
 <button type="button" id='test_client_login'>Client 로그인</button>
 <button type="button" id='test_logout'>로그아웃(작동x)</button>
 <span id="test_login_info">로그인 정보</span>
-<!-- <ul>
-	<li class="history" route="/main"></li>
-	<li class="history" route="/storecus"></li>
-	<li class="history" route="/basket"></li>
-</ul> -->
-<div id="index-header"></div>
-<div id="index-main"></div>
-<div id="hidden-basket"></div>
-<div id="hidden-store-add-modal"></div>
-<div id="hidden-product-add-modal"></div>
-<div id="hidden-product-update-modal"></div>
-<div id="hiddenlogin"></div>
-<div id="hiddensign"></div>
 
+	<!-- <ul>
+		<li class="history" route="/main"></li>
+		<li class="history" route="/storecus"></li>
+		<li class="history" route="/basket"></li>
+	</ul> -->
+	<div id="index-header"></div>
+	<div id="index-main"></div>
+	<div id="hidden-basket"></div>
+	<div id="hidden-store-add-modal"></div>
+	<div id="hidden-product-add-modal"></div>
+	<div id="hidden-product-update-modal"></div>
+	<div id="hiddenlogin"></div>
+	<div id="hiddensign"></div>
 
-<div id="userupdateform"></div>
+	<!-- <div>
+		<a href="main.html">main</a> 
+		<a href="storecus.html">storecus</a> 
+		<a href="basket.html">basket</a>
+		<a href="storehost.html">storehost</a>
+	</div> -->
 
-<!-- <div>
-	<a href="main.html">main</a> 
-	<a href="storecus.html">storecus</a> 
-	<a href="basket.html">basket</a>
-	<a href="storehost.html">storehost</a>
-</div> -->
-
-
-</body>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="./assets/css/style.css" type="text/css">
-<script src="https://kit.fontawesome.com/c06c7c1f00.js" crossorigin="anonymous"></script>
- <!-- <script src="./assets/js/index-js/index-header.js"></script> -->
-
-<script src="./assets/js/storecustomer-js/storecustomer.js"></script>
-<script src="./assets/js/storehost-js/storehostdetail.js"></script>
-<script src="./assets/js/basket-js/basket.js" ></script>
-<!-- <script src="./assets/js/storehost-js/storehost.js"></script> -->
-<script src="./assets/js/ReviewList.js"></script>
-<script src="./assets/js/loginmodal.js"></script>
-<script src="./assets/js/signmodal.js"></script>
-<script src="./assets/js/index-js/index-header-test.js"></script>
-
-
+  
 <script>
-	
+	loginmodal();
+	signmodal();
 	cartPage();
 </script>
 </body>
-<script src="./assets/js/index-js/index-header.js"></script>
+<script src="./assets/js/signmodal.js"></script>
+<!-- <script src="./assets/js/index-js/index-header.js"></script> -->
+<script src="./assets/js/index-js/index-header-final.js"></script>
+<script>
+	mainHeaderPage();
+	clientPage();
+	sellerPage();
+</script>
 </html>
