@@ -18,7 +18,7 @@ function mainHeaderPage() {
             s +="<li><i class='fas fa-user-plus' id='signbtn' data-target='#signmodal'></i></li>";
             s +="<li><i class='far fa-id-card' id='loginbtn' data-target='#logmodal'></i></li></ul>";
         }else{
-            if(deli.checkUserRole()=="SELLER"){
+            if(deli.getUserRole()=="SELLER"){
                 s +="<ul class='navbar-login'>";
             s +="<li><i id='mypagebtn' onclick='mypage();'>"+deli.getUserEmail()+"(SELLER)님</i></li>";//변경요망
             s +="<li><i></i></li></ul>";
@@ -83,7 +83,7 @@ function check_pw(){  //비밀번호 확인
             $.ajax({
                 type:"post",
                 //url:"<http://deli.alconn.co/login>",
-                url:"http://112.169.196.76:47788/user/signup/seller",
+                url:"http://deli.alconn.co/user/signup/seller",
                 success:function(d){
                     console.log(d)
                     alert("seller등록이 되었습니다.");
@@ -133,7 +133,7 @@ function check_pw(){  //비밀번호 확인
             
             $.ajax({
                 type:"post",
-                url:"http://112.169.196.76:47788/user/signup",
+                url:"http://deli.alconn.co/user/signup",
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole, "userType":userType,"userTelephone":userTelephone,"userAddr":userAddr}),
                 success:function(d){
                     console.log(d);
@@ -169,7 +169,7 @@ function check_pw(){  //비밀번호 확인
             $.ajax({
                 type:"post",
                 //url:"<http://deli.alconn.co/login>",
-                url:"http://112.169.196.76:47788/login",
+                url:"http://deli.alconn.co/login",
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw}),
                 dataType:"json",
                 success:function(login_result){
@@ -192,7 +192,7 @@ function mypage(){
     $(document).on("click","#mypagebtn",function(){
         $.ajax({
             type:"get",
-            url:"http://112.169.196.76:47788/user/",//E-Mail 변경요망 
+            url:"http://deli.alconn.co/user/",//E-Mail 변경요망 
             dataType:"json",
             success:function(data){
                 console.log(data);
@@ -218,7 +218,7 @@ function mypage(){
     $(document).on("click","#logoutbtn",function(){
         $.ajax({
             type:"get",
-            url:"http://112.169.196.76:47788/logout",
+            url:"http://deli.alconn.co/logout",
             dataType:"json",
             success:function(data){
                 console.log(data);
@@ -272,7 +272,7 @@ function mypage(){
         console.log(userTelephone);
         $.ajax({
             type:"PUT",
-            url:"http://112.169.196.76:47788/user",
+            url:"http://deli.alconn.co/user",
             dataType: "json",
             data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole,"userType":userType,"userAddr":userAddr,"userTelephone":userTelephone}),
             success:function(data){
@@ -288,7 +288,7 @@ function mypage(){
         console.log(userEmail);
         $.ajax({
             type:"DELETE",
-            url:"http://112.169.196.76:47788/user/"+userEmail,
+            url:"http://deli.alconn.co/user/"+userEmail,
             success:function(data){
                 alert("회원탈퇴가 완료되었습니다.");
                 console.log(data);

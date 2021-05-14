@@ -1,7 +1,7 @@
 $(function(){
     $.ajax({
         type:"get",
-        // url:"http://112.169.196.76:47788/user/test@test.com",//E-Mail 변경요망
+        // url:"http://deli.alconn.co/user/test@test.com",//E-Mail 변경요망
         url:"https://deli.alconn.co/user/test@test.com",
         dataType:"json",
         success:function(data){
@@ -26,7 +26,7 @@ $(function(){
     $(document).on("click","#userinformation",function(){
         $.ajax({
             type:"get",
-            url:"http://112.169.196.76:47788/user/",
+            url:"http://deli.alconn.co/user/",
             dataType:"json",
             success:function(data){
                 console.log(data);
@@ -52,7 +52,7 @@ $(function(){
     $(document).on("click","#logoutbtn",function(){
         $.ajax({
             type:"get",
-            url:"http://112.169.196.76:47788/logout",
+            url:"http://deli.alconn.co/logout",
             dataType:"json",
             success:function(data){
                 console.log(data);
@@ -106,7 +106,7 @@ $(function(){
         console.log(userTelephone);
         $.ajax({
             type:"PUT",
-            url:"http://112.169.196.76:47788/user",
+            url:"http://deli.alconn.co/user",
             dataType: "json",
             data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole,"userType":userType,"userAddr":userAddr,"userTelephone":userTelephone}),
             success:function(data){
@@ -122,7 +122,7 @@ $(function(){
         console.log(userEmail);
         $.ajax({
             type:"DELETE",
-            url:"http://112.169.196.76:47788/user/"+userEmail,
+            url:"http://deli.alconn.co/user/"+userEmail,
             success:function(data){
                 alert("회원탈퇴가 완료되었습니다.");
                 console.log(data);
