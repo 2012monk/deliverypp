@@ -1,5 +1,5 @@
 
-function mainerPage() {
+function mainHeaderPage() {
 	s = "<div class='navbar-logo'>";
 		s += "<a href=''>배달의 민족</a>";
 		s +="<i class='fas fa-space-shuttle'></i>"
