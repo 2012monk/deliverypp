@@ -326,6 +326,7 @@ $(document).on("click","td.storehostdetail-page",function(e){
     $(document).on("submit","#spaddform", function(e){
         e.preventDefault();
         console.log(this);
+		console.log("상품등록진입?");
         var productName = $(this).find('input[name="productName"]').val();
         var productPrice = $(this).find('input[name="productPrice"]').val();
         var productImage = $(this).find('input[name="productImage"]').val();

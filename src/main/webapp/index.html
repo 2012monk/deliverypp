@@ -33,30 +33,30 @@ $(function(){
 	reviewPageEvent();	
 })
 
-var login_id;
-$(document).on("click","#test_seller_login",function(){
+// var login_id;
+// $(document).on("click","#test_seller_login",function(){
 
-	login_id = "SELLER";
-	$("#test_login_info").html(login_id+" 로그인");
-	mainHeaderPage();
-	mainBodyPage();
+// 	login_id = "SELLER";
+// 	$("#test_login_info").html(login_id+" 로그인");
+// 	mainHeaderPage();
+// 	mainBodyPage();
 
-})
-$(document).on("click","#test_client_login",function(){
+// })
+// $(document).on("click","#test_client_login",function(){
 	
-	login_id = "CLIENT";
-	$("#test_login_info").html(login_id+" 로그인");
-	mainHeaderPage();
-	mainBodyPage();
+// 	login_id = "CLIENT";
+// 	$("#test_login_info").html(login_id+" 로그인");
+// 	mainHeaderPage();
+// 	mainBodyPage();
 	
-})
-$(document).on("click","#test_logout",function(){
+// })
+// $(document).on("click","#test_logout",function(){
 
-	login_id = "logout";
-	$("#test_login_info").html("로그아웃됨");
-	mainHeaderPage();
-	clientPage();
-})
+// 	login_id = "logout";
+// 	$("#test_login_info").html("로그아웃됨");
+// 	mainHeaderPage();
+// 	clientPage();
+// })
 
 
 </script>
@@ -66,24 +66,6 @@ $(document).on("click","#test_logout",function(){
 <button type="button" id='test_client_login'>Client 로그인</button>
 <button type="button" id='test_logout'>로그아웃(작동x)</button>
 <span id="test_login_info">로그인 정보</span>
-<!-- <ul>
-	<li class="history" route="/main"></li>
-	<li class="history" route="/storecus"></li>
-	<li class="history" route="/basket"></li>
-</ul> -->
-<div id="index-header"></div>
-<div id="index-main"></div>
-<div id="hidden-basket"></div>
-<div id="hidden-store-add-modal"></div>
-<div id="hidden-product-add-modal"></div>
-<div id="hidden-product-update-modal"></div>
-
-<!-- <div>
-	<a href="main.html">main</a> 
-	<a href="storecus.html">storecus</a> 
-	<a href="basket.html">basket</a>
-	<a href="storehost.html">storehost</a>
-</div> -->
 
 	<!-- <ul>
 		<li class="history" route="/main"></li>
@@ -113,7 +95,9 @@ $(document).on("click","#test_logout",function(){
 	cartPage();
 </script>
 </body>
-<script src="./assets/js/index-js/index-header.js"></script>
+<script src="./assets/js/signmodal.js"></script>
+<!-- <script src="./assets/js/index-js/index-header.js"></script> -->
+<script src="./assets/js/index-js/index-header-final.js"></script>
 <script>
 	mainHeaderPage();
 	clientPage();

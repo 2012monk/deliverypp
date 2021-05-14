@@ -1,4 +1,4 @@
-var userEmail = "abc@abc.net";
+var userEmail = deli.getUserEmail();
 var list_range = "";
 //var domain = "http://112.169.196.76:47788";
 var domain = "http://deli.alconn.co";
