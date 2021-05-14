@@ -23,6 +23,31 @@ $(function(){
         }
     });
 
+    $(document).on("click","#userinformation",function(){
+        $.ajax({
+            type:"get",
+            url:"http://112.169.196.76:47788/user/"+simpleDeli.getUserEmail(),//E-Mail 변경요망 
+            dataType:"json",
+            success:function(data){
+                console.log(data);
+                    var s="";
+                    s= "<form>";
+                    //s+="<input type='hidden' name='userPw' value='"+data.data.userPw+"'>";
+                    s+="<table>";
+                    s+="<caption>회원정보</caption> &nbsp;&nbsp;&nbsp;";
+                    s+="<tr><th>E-Mail</th><td userEmail='userEmail'>"+data.data.userEmail+"</td></tr>";
+                    s+="<tr><th>UserRole</th><td userRole='userRole'>"+data.data.userRole+"</td></tr>";
+                    s+="<tr><th>UserType</th><td userType='userType'>"+data.data.userType+"</td></tr>";
+                    s+="<tr><th>UserAddr</th><td userAddr='userAddr'>"+data.data.userAddr+"</td></tr>";
+                    s+="<tr><th>userTelephone</th><td userTelephone='userTelephone'>"+data.data.userTelephone+"</td></tr>";
+                    s+="<tr><td  colspan='2'><button id='userupdatebtn'>정보수정</button>&nbsp;<button id='userdeletebtn'>회원탈퇴</button>&nbsp;<button id='logoutbtn'>로그아웃</button><td></tr>";
+                    s+="</table>";
+                    s+="</form>";
+                $("#userinformation").html(s);
+            }
+        });
+    })
+
     //로그아웃버튼이벤트
     $(document).on("click","#logoutbtn",function(){
         $.ajax({
