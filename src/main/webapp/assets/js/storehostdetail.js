@@ -2,7 +2,7 @@ $(function(){
     //상품리스트
         $.ajax({
             type:"get",
-            url:"http://112.169.196.76:47788/products/list/stid3", 
+            url:"http://deli.alconn.co/products/list/stid3", 
             dataType:"json",
             success:function(data){
                 localStorage.setItem("product-list",JSON.stringify(data));
@@ -28,7 +28,7 @@ $(function(){
             console.log(productId);
             $.ajax({
                 type:"DELETE",
-                url:"http://112.169.196.76:47788/products/"+productId,
+                url:"http://deli.alconn.co/products/"+productId,
                 success:function(data){
                     console.log(data);
                     
@@ -71,7 +71,7 @@ $(function(){
             console.log(productImage)
             $.ajax({
                 type:"PUT",
-                url:"http://112.169.196.76:47788/products",
+                url:"http://deli.alconn.co/products",
                 dataType: "json",
                 data:JSON.stringify({"productId":productId,"productName":productName,"productPrice":productPrice,"productImage":productImage,"productDesc":productDesc}),
                 success:function(data){
@@ -84,7 +84,7 @@ $(function(){
         //매장정보
         $.ajax({
             type:"get",
-            url:"http://112.169.196.76:47788/stores/stid3", 
+            url:"http://deli.alconn.co/stores/stid3", 
             success:function(data){
                 var s="";
                     s+="<b>매장소개</b>";
@@ -127,7 +127,7 @@ $(function(){
             console.log(storeId);
             $.ajax({
                 type:"post",
-                url:"http://112.169.196.76:47788/products",
+                url:"http://deli.alconn.co/products",
                 dataType:"json",
                 data:JSON.stringify({"productName":productName, "productPrice":productPrice,"productImage":productImage,"storeId":storeId}),
                 success:function(data){

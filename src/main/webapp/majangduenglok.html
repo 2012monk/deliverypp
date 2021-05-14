@@ -45,7 +45,7 @@ $(function(){
 		console.log(storeAddr);
 		$.ajax({
 			type:"post",
-			url:"http://112.169.196.76:47788/stores",
+			url:"http://deli.alconn.co/stores",
 			data:JSON.stringify({"storeName":storeName, "storeDesc":storeDesc, "storeImage":storeImage, "storeAddr":storeAddr}),
 			success:function(data){
 				//alert("success");
@@ -62,7 +62,7 @@ $(function(){
 		console.log(storeName);
 		$.ajax({
 			type:"get",
-			url:"http://112.169.196.76:47788/stores/check-name/"+storeName,
+			url:"http://deli.alconn.co/stores/check-name/"+storeName,
 			success:function(data){
 				console.log(data);
 					if(storeName==JSON.stringify(data.storeName))

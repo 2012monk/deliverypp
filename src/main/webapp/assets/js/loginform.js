@@ -24,7 +24,7 @@ $(document).on("submit","form",function(e){
 	$.ajax({
 		type:"post",
 		//url:"<http://deli.alconn.co/login>",
-		url:"http://112.169.196.76:47788/login",
+		url:"http://deli.alconn.co/login",
 		data:JSON.stringify({"userEmail":userEmail,"userPw":userPw}),
 		dataType:"json",
 		success:function(login_result){

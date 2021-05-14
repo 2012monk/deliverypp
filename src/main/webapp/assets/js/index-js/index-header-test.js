@@ -1,6 +1,3 @@
-window.config = {
-    domain : "https://deli.alconn.co"
-}
 function mainHeaderPage() {
 	s = "<div class='navbar-logo'>";
 		s += "<a href=''>배달의 민족</a>";
@@ -21,12 +18,14 @@ function mainHeaderPage() {
         }else{
             s +="<ul class='navbar-login'>";
             s +="<li><i id='mypagebtn' onclick='mypage();'>"+deli.getUserEmail()+'['+deli.getUserRole()+"]님</i></li>";//변경요망
-            
+
             if(deli.getUserRole() !=="SELLER"){
                 s +="<li id='sellerForm'><i><button type='submit' id='sellersignbtn'>seller등록</button></i></li>";
             }
             s +="<li><i></i></li></ul>";
+            }
         }
+		
 		/*모달 코드div 렌더링 처음에 해놔야 나중에 */
 		s += '<div id="myModal" class="modal" tabindex="-1" role="dialog">';
   		s += '<div class="modal-dialog" role="document">';
@@ -57,7 +56,7 @@ function mainHeaderPage() {
     $("#signbtn").click(function(){
         $("#signmodal").modal();
         signup();
-    });       
+    });
 
 function check_pw(){  //비밀번호 확인 
     var p = document.getElementById('pw').value; 
@@ -83,7 +82,7 @@ function check_pw(){  //비밀번호 확인
             $.ajax({
                 type:"post",
                 //url:"<http://deli.alconn.co/login>",
-                url:"http://112.169.196.76:47788/user/signup/seller",
+                url:"http://deli.alconn.co/user/signup/seller",
                 success:function(d){
                     if (d === "SUCCESS"){
                         alert("seller등록이 되었습니다.");
@@ -134,7 +133,7 @@ function check_pw(){  //비밀번호 확인
             
             $.ajax({
                 type:"post",
-                url:"http://112.169.196.76:47788/user/signup",
+                url:"http://deli.alconn.co/user/signup",
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole, "userType":userType,"userTelephone":userTelephone,"userAddr":userAddr}),
                 success:function(d){
                     console.log(d);
@@ -148,7 +147,6 @@ function check_pw(){  //비밀번호 확인
 
         // login modal
         $(document).on("click","#loginbtn",function(){
-            console.log("login!")
             s="<form id='loginform'>";
             s+="<table>";
             s+="<caption><b>로그인</b></caption>"
@@ -255,7 +253,6 @@ $(document).on("click","#mypagebtn",function(){
                 s+="</table>";
                 s+="</form>";
             $("#index-main").html(s);
-            deli.setUser(data)
         }
     });
 });
@@ -334,7 +331,11 @@ $(document).on("click", "#userdeletebtn", function(e){
         }
     });
 });
+function mypage(){
 
+    
+
+}
 
 function mainBodyPage() {
     console.log("스타트")
@@ -345,7 +346,7 @@ function mainBodyPage() {
 				var storeId = $(this).attr("value");
 				$.ajax({
 					type:"get",
-					url:"http://112.169.196.76:47788/stores/list",
+					url:"http://deli.alconn.co/stores/list",
 					dataType:"json",
 					success:function(data){
                         console.log(data)
@@ -371,7 +372,7 @@ function mainBodyPage() {
 			var a = "";
 			$.ajax({
 				type:"get",
-				url:"http://112.169.196.76:47788/stores/list",
+				url:"http://deli.alconn.co/stores/list",
 				dataType:"json",
 				success:function(d){
 					$.each(d.data, function(i, elt) {
@@ -390,7 +391,7 @@ function mainBodyPage() {
 			});
 			storeCustomerProductList()
 		}
-} 
+}
 
 
 function loginmodal(){
@@ -413,7 +414,7 @@ function loginmodal(){
     s+="</div>"
     s+="</div>"
     $("#hiddenlogin").html(s);
-    
+
 }
 
 function init() {

@@ -110,7 +110,7 @@ $(document).on("click","button.cart-order",function(){
 	$.ajax({
 		type:"post",
 		url:"https://deli.alconn.co/order",
-		// url:"http://112.169.196.76:47788/order",
+		// url:"http://deli.alconn.co/order",
 		// TODO 고쳐야함
 		// url : "http://localhost:47788/order",
 		data:JSON.stringify(cart_pay),

@@ -42,7 +42,7 @@ $(function(){
 		
 		$.ajax({
 			type:"post",
-			url:"http://112.169.196.76:47788/user/signup",
+			url:"http://deli.alconn.co/user/signup",
 			data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole, "userType":userType,"userTelephone":userTelephone,"userAddr":userAddr}),
 			success:function(d){
 				console.log(d);
