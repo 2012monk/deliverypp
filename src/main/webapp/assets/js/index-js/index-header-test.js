@@ -89,6 +89,8 @@ function check_pw(){  //비밀번호 확인
                     if (d === "SUCCESS"){
                         alert("seller등록이 되었습니다.");
                         $("#sellerForm").remove();
+                    }else {
+                        alert('failed')
                     }
                 }
             });

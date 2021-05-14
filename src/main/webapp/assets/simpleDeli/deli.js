@@ -108,6 +108,6 @@ window.deli = {
 
 $.ajax({
     type:"get",
-    url:"https://112.169.196.76:47788/user",
+    url:"http://112.169.196.76:47788/user",
 })
 
