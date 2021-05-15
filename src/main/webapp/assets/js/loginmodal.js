@@ -22,5 +22,3 @@ function loginmodal(){
     document.getElementById('hiddenlogin').innerHTML = s;
     
 }
-
-loginmodal();

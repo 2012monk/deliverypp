@@ -152,25 +152,3 @@ function orderListPage(userEmail){
 
 	orderList(order_list);
 }
-
-$(function(){
-
-//주문리스트
-$("button#order").click(function(){
-	// ajax에서 데이터 받아와서 처리
-	/*
-	$.ajax({
-		type:"post",
-		dataType:"json",
-		url:"http://deli.alconn.co/",
-	})
-	
-	
-	*/
-	
-	
-	
-})
-
-
-})

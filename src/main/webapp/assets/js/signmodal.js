@@ -20,5 +20,3 @@ function signmodal(){
     $("#hiddensign").html(s);
     
 }
-
-signmodal();
