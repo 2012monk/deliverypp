@@ -1,8 +1,6 @@
 $(document).on("click","td.storehostdetail-page",function(e){
-	alert("설마이것도 이벤트 발생");
 	e.preventDefault();
 	var storeId = $(this).parent().attr("value");
-	console.log(storeId);
 	/*가게 상세 상품 목록 등장 */
 	productListPage(storeId);
 	
@@ -48,14 +46,13 @@ $(document).on("click","td.storehostdetail-page",function(e){
 	//가게 추가 폼 뜨게 하는 이벤트 
 	$(document).on("click","#storehost-btn-add",function(e){
 		e.preventDefault();
-		alert("추가하기");
 		/*모달 코드 렌더링 처음에 해놔야 나중에 */
 		var m="";
 		m += '<div id="store-myModal" class="modal" tabindex="-1" role="dialog">';
   		m += '<div class="modal-dialog" role="document">';
         m += '<div class="modal-content">';
     	m += '<div class="modal-header">';
-        m += '<h5 class="modal-title">Modal title</h5>';
+        m += '<h3 class="modal-title"><b>매장 등록</b></h3>';
         m += '<button type="button" class="close" data-dismiss="modal" aria-label="Close">';
         m += ' <span aria-hidden="true">&times;</span>';
         m += '</button>';
@@ -72,9 +69,8 @@ $(document).on("click","td.storehostdetail-page",function(e){
 		var s="";
 		s+="<form id='mdform-add'>";
 		s+="<input type='hidden' id='storeId' value=''>";
-		s+="<table>";
-		s+="<caption><b>매장등록</b></caption>";
-		s+="<tr><td>매장명</td><td><input type='text' name='storeName'></td><td><button type='button' id='idcheckbtn' onclick='addIdCheckBtn()'>중복확인</button></td></tr>";
+		s+="<table class='table table-bordered'>";
+		s+="<tr><td>매장명</td><td><input type='text' name='storeName'>&nbsp;&nbsp;<button type='button' id='idcheckbtn' onclick='addIdCheckBtn()'>중복확인</button></td></tr>";
 		s+="<tr><td>매장소개</td><td><textarea name='storeDesc' required></textarea></td></tr>";
 		s+="<tr><td>매장사진</td><td><input type='text' name='storeImage' required></td></tr>";
 		s+="<tr><td>매장주소</td><td><input type='text' name='storeAddr' required></td></tr>";
@@ -117,7 +113,6 @@ $(document).on("click","td.storehostdetail-page",function(e){
 	//가게 리스트 수정하기 버튼 클릭시 
 	$(document).on("click",".storelist-btn-update",function(e){
 		e.preventDefault();
-		alert("제발");
 		var storeId = $(this).attr("value");
 		var storeName = $(this).parent().parent().find('td[name="storeName"]').text();
 		var storeDesc = $(this).parent().parent().find('td[name="storeDesc"]').text();
@@ -132,11 +127,11 @@ $(document).on("click","td.storehostdetail-page",function(e){
 		var s="";
 		s+="<form id='mdform-update'>";
 		s+="<input type='hidden' id='storeId' value='"+storeId+"'>";
-		s+="<table>";
-		s+="<caption><b>매장수정</b></caption>";
-		s+="<tr><td>매장명</td><td><input type='text' name='storeName' required value='"+storeName+"'></td><td><button type='button' id='idcheckbtn' onclick='updateIdCheckBtn()'>중복확인</button></td></tr>";
+		s+="<h2><b>매장수정</b></h2><hr>";
+		s+="<table class='table table-bordered'>";
+		s+="<tr><td>매장명</td><td><input type='text' name='storeName' required value='"+storeName+"'>&nbsp;&nbsp;<button type='button' id='idcheckbtn' onclick='updateIdCheckBtn()'>중복확인</button></td></tr>";
 		s+="<tr><td>매장소개</td><td><textarea name='storeDesc' required>"+storeDesc+"</textarea></td></tr>";
-		s+="<tr><td>매장사진</td><td><input type='text' name='storeImage' required value='"+storeImage+"'></td></tr>";
+		s+="<tr><td>매장사진</td><td><input type='text' name='storeImage' required></td></tr>";
 		s+="<tr><td>매장주소</td><td><input type='text' name='storeAddr' required value='"+storeAddr+"'></td></tr>";
 		s+="<tr><td colspan='2' align='center'><button id='storelistform-btn-update'>수정하기</button></td></tr>";
 		s+="</table>";
@@ -271,7 +266,7 @@ $(document).on("click","td.storehostdetail-page",function(e){
 		console.log(productDesc);
         $.ajax({
             type:"PUT",
-            url:"https://deli.alconn.co/products",
+            url:"http://deli.alconn.co/products",
             dataType: "json",
             data:JSON.stringify({"productId":productId,"productName":productName,"productPrice":productPrice,"productImage":productImage,"productDesc":productDesc}),
             success:function(data){
@@ -338,7 +333,7 @@ $(document).on("click","td.storehostdetail-page",function(e){
         console.log(storeId);
         $.ajax({
             type:"post",
-            url:"https://deli.alconn.co/products",
+            url:"http://deli.alconn.co/products",
           	dataType:"json",
             data:JSON.stringify({"productName":productName, "productPrice":productPrice,"productImage":productImage,"storeId":storeId,"productDesc":productDesc}),
             success:function(data){
@@ -355,29 +350,13 @@ $(document).on("click","td.storehostdetail-page",function(e){
 
 function productListPage(storeId) {
 
-	/*매장 소개*/
-	$.ajax({
-        type:"get",
-        url:"https://deli.alconn.co/stores/"+storeId, 
-        dataType:"json",
-        success:function(data){
-            var s="";
-            s+="<b>매장소개</b>";
-            s+="<div id='ssss' data-store='"+storeId+"'>매장명 : "+data.data.storeName+"</div>";
-            s+="<div>매장소개 : "+data.data.storeDesc+"</div>";
-            s+="<div>매장사진 : "+data.data.storeImage+"</div>";
-            s+="<div>매장주소 : "+data.data.storeAddr+"</div>";
-        
-           	$("#index-main-first").html(s);
-			reviewPage();
-        }
-    });
+
 
 
 	//상품리스트 출력
 	$.ajax({
         type:"get",
-        url:"https://deli.alconn.co/products/list/"+storeId, 
+        url:"http://deli.alconn.co/products/list/"+storeId, 
         dataType:"json",
         success:function(data){
 			console.log(data);
@@ -385,18 +364,18 @@ function productListPage(storeId) {
             var z="";
                 z+="<form>";
                 z+="<input type='hidden' value='"+data.data.productId+"'>";
-                z+="<table>";
-                z+="<caption><b>상품 리스트</b><button id='storehost-product-btn-add'>상품추가</button></caption>";
-                z+="<tr><th>가게ID</th><th>상품ID</th><th>상품명</th><th>상품가격</th><th>상품 정보</th><th>상품 이미지</th></tr>";
+                z+="<table class='table table-bordered'>";
+                z+="<br><br><h2>상품 리스트</h2><hr><button id='storehost-product-btn-add'>상품추가</button>";
+                z+="<tr><th>가게ID</th><th>상품ID</th><th>상품명</th><th>상품가격</th><th>상품 정보</th><th>상품 이미지</th><th>수정</th><th>삭제</th></tr>";
                 $.each(data.data, function(i,elt){
                     z+="<tr><td>"+elt.storeId+"</td>";
 					z+="<td>"+elt.productId+"</td>";
 					z+="<td>"+elt.productName+"</td>";
 					z+="<td>"+elt.productPrice+"</td>";
 					z+="<td>"+elt.productDesc+"</td>";
-					/*z+="<td>"+elt.productImage+"</td>";*/
-					z+="<td><button class='product-btn-updateform' value='"+i+"'>update</button>&nbsp;";
-					z+="<button type='button' class='deletebtn' value='"+elt.productId+"'>delete</button></td></tr>";
+					z+="<td>"+elt.productImage+"</td>";
+					z+="<td><button class='product-btn-updateform' value='"+i+"'>update</button></td>";
+					z+="<td><button type='button' class='deletebtn' value='"+elt.productId+"'>delete</button></td></tr>";
             });
             z+="</table>"; 
             z+="</form><br><br><br><br><br><br>";
@@ -406,7 +385,25 @@ function productListPage(storeId) {
 			/*장바구니 이동하는 버튼 여기밖에 ??*/
 			c +="<div id='index-main-third'><button id='basket-movepage' style='btn btn-lg'>장바구니 이동 하는 버튼 </button></div>";
 		  	$("#index-main").html(c);
-              
+
+			/*매장 소개*/
+			$.ajax({
+				type:"get",
+				url:"http://deli.alconn.co/stores/"+storeId,
+				dataType:"json",
+				success:function(data){
+					var s="";
+					s+="<h1><b>"+data.data.storeName+"</b></h1><hr>";
+					s+="<div id='ssss' data-store='"+storeId+"' data-storeName='"+data.data.storeName+"'></div>";
+					s+="<table class='table table-bordered'>";
+					s+="<tr><td>매장소개</td><td>"+data.data.storeDesc+"</td></tr>";
+					s+="<tr><td>매장사진</td><td>"+data.data.storeImage+"</td></tr>";
+					s+="<tr><td>매장주소</td><td>"+data.data.storeAddr+"</td></tr></table>";
+
+					$("#index-main-first").html(s);
+					reviewPage(storeId, data.data.storeName);
+				}
+			});
 			
 			$("#index-main-second").html(z);
 			
