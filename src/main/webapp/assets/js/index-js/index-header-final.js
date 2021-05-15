@@ -88,8 +88,8 @@ function check_pw(){  //비밀번호 확인
             alert("click")
             $.ajax({
                 type:"post",
-                //url:"<http://deli.alconn.co/login>",
-                url:"http://deli.alconn.co/user/signup/seller",
+                //url:"<https://deli.alconn.co/login>",
+                url:"https://deli.alconn.co/user/signup/seller",
                 success:function(d){
                     if (d === "SUCCESS"){
                         alert("seller등록이 되었습니다.");
@@ -140,7 +140,7 @@ function check_pw(){  //비밀번호 확인
             
             $.ajax({
                 type:"post",
-                url:"http://deli.alconn.co/user/signup",
+                url:"https://deli.alconn.co/user/signup",
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole, "userType":userType,"userTelephone":userTelephone,"userAddr":userAddr}),
                 success:function(d){
                     console.log(d);
@@ -177,7 +177,7 @@ function check_pw(){  //비밀번호 확인
             
             $.ajax({
                 type:"post",
-                //url:"<http://deli.alconn.co/login>",
+                //url:"<https://deli.alconn.co/login>",
                 url:config.domain+"/login",
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw}),
                 dataType:'json',
@@ -355,7 +355,7 @@ function sellerPage(){
 	var storeId = $(this).attr("value");
 	$.ajax({
 		type:"get",
-		url:"http://deli.alconn.co/stores/list",
+		url:"https://deli.alconn.co/stores/list",
 		dataType:"json",
 		success:function(data){
 			var s="";
@@ -381,7 +381,7 @@ function clientPage(){
 	var a = "";
 	$.ajax({
 		type:"get",
-		url:"http://deli.alconn.co/stores/list",
+		url:"https://deli.alconn.co/stores/list",
 		dataType:"json",
 		success:function(d){
 			$.each(d.data, function(i, elt) {

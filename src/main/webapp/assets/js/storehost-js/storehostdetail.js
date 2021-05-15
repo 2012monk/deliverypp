@@ -14,7 +14,7 @@ $(document).on("click","td.storehostdetail-page",function(e){
 		console.log(storeName);
 		$.ajax({
 			type:"get",
-			url:"http://deli.alconn.co/stores/check-name/"+storeName,
+			url:"https://deli.alconn.co/stores/check-name/"+storeName,
 			dataType:"json",
 			success:function(data){
 				console.log(data.message);
@@ -33,7 +33,7 @@ $(document).on("click","td.storehostdetail-page",function(e){
 		console.log(storeName);
 		$.ajax({
 			type:"get",
-			url:"http://deli.alconn.co/stores/check-name/"+storeName,
+			url:"https://deli.alconn.co/stores/check-name/"+storeName,
 			dataType:"json",
 			success:function(data){
 				console.log(data.message);
@@ -100,7 +100,7 @@ $(document).on("click","td.storehostdetail-page",function(e){
 		console.log(storeAddr);
 		$.ajax({
 			type:"post",
-			url:"http://deli.alconn.co/stores",
+			url:"https://deli.alconn.co/stores",
 			data:JSON.stringify({"storeName":storeName, "storeDesc":storeDesc, "storeImage":storeImage, "storeAddr":storeAddr}),
 			success:function(data){
 				//alert("success");
@@ -161,7 +161,7 @@ $(document).on("click","td.storehostdetail-page",function(e){
 		console.log(storeId);
 		$.ajax({
 		    type:"PUT",
-		    url:"http://deli.alconn.co/stores",
+		    url:"https://deli.alconn.co/stores",
 		    data:JSON.stringify({"storeId":storeId, "storeName":storeName, "storeDesc":storeDesc, "storeImage":storeImage, "storeAddr":storeAddr}),
 		    success:function(data){
 		        console.log(data);
@@ -181,7 +181,7 @@ $(document).on("click","td.storehostdetail-page",function(e){
 		
 		$.ajax({
 			type:"delete",
-			url:"http://deli.alconn.co/stores/"+storeId,
+			url:"https://deli.alconn.co/stores/"+storeId,
 			success:function(data){
 				console.log(data);
 			}
@@ -201,7 +201,7 @@ $(document).on("click","td.storehostdetail-page",function(e){
             console.log(productId);
             $.ajax({
                 type:"DELETE",
-                url:"http://deli.alconn.co/products/"+productId,
+                url:"https://deli.alconn.co/products/"+productId,
                 success:function(data){
                     console.log(data);
                     
@@ -271,7 +271,7 @@ $(document).on("click","td.storehostdetail-page",function(e){
 		console.log(productDesc);
         $.ajax({
             type:"PUT",
-            url:"http://deli.alconn.co/products",
+            url:"https://deli.alconn.co/products",
             dataType: "json",
             data:JSON.stringify({"productId":productId,"productName":productName,"productPrice":productPrice,"productImage":productImage,"productDesc":productDesc}),
             success:function(data){
@@ -338,7 +338,7 @@ $(document).on("click","td.storehostdetail-page",function(e){
         console.log(storeId);
         $.ajax({
             type:"post",
-            url:"http://deli.alconn.co/products",
+            url:"https://deli.alconn.co/products",
           	dataType:"json",
             data:JSON.stringify({"productName":productName, "productPrice":productPrice,"productImage":productImage,"storeId":storeId,"productDesc":productDesc}),
             success:function(data){
@@ -358,7 +358,7 @@ function productListPage(storeId) {
 	/*매장 소개*/
 	$.ajax({
         type:"get",
-        url:"http://deli.alconn.co/stores/"+storeId, 
+        url:"https://deli.alconn.co/stores/"+storeId, 
         dataType:"json",
         success:function(data){
             var s="";
@@ -377,7 +377,7 @@ function productListPage(storeId) {
 	//상품리스트 출력
 	$.ajax({
         type:"get",
-        url:"http://deli.alconn.co/products/list/"+storeId, 
+        url:"https://deli.alconn.co/products/list/"+storeId, 
         dataType:"json",
         success:function(data){
 			console.log(data);

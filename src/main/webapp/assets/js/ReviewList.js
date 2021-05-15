@@ -1,7 +1,7 @@
 var userEmail = deli.getUserEmail();
 var list_range = "";
-//var domain = "http://112.169.196.76:47788";
-var domain = "http://deli.alconn.co";
+//var domain = "https://112.169.196.76:47788";
+var domain = "https://deli.alconn.co";
 
 function reviewPage(){
 
@@ -213,7 +213,7 @@ function reviewPageEvent(){
             dataType:"json",
             success:function(r){
                 
-                var photo_url = "http://112.169.196.76:47788/static/image/";
+                var photo_url = "https://112.169.196.76:47788/static/image/";
 
                 var s = "<form method='post' enctype='multipart/form-data'><table class='table table-bordered'>";
                 s += "<tr><td>작성자</td><td id='userEmail'>"+r.data.userEmail+"</td></tr>";

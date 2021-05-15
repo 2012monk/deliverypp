@@ -14,7 +14,8 @@ $.ajaxSetup(
 )
 
 window.deli = {
-    domain : "http://112.169.196.76:47788",
+    // domain : "http://112.169.196.76:47788",
+    domain : "https://deli.alconn.co",
     checkRefresh() {
         console.log(this.getToken())
         fetch(this.domain+"/login/exchange",{
@@ -112,8 +113,8 @@ window.deli = {
 
 // }
 
-$.ajax({
-    type:"get",
-    url:"http://112.169.196.76:47788/user",
-})
+// $.ajax({
+//     type:"get",
+//     url:"http://112.169.196.76:47788/user",
+// })
 

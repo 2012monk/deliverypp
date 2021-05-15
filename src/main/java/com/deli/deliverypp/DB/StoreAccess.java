@@ -19,7 +19,28 @@ public class StoreAccess {
         System.out.println(new StoreAccess().getStoreById("stid3"));
     }
 
-//    private static  Connection conn;
+
+    public List<Store> getStoreListByUser (String userEmail) {
+        List<Store> list = new ArrayList<>();
+        String sql = "SELECT * FROM STORE WHERE USER_EMAIL=?";
+        Connection conn = getConn();
+        try {
+            PreparedStatement prst = conn.prepareStatement(sql);
+            prst.setString(1, userEmail);
+            ResultSet rs = prst.executeQuery();
+
+            while (rs.next()) {
+                list.add(setPOJO(Store.class, rs));
+            }
+
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            close(conn);
+        }
+        return list;
+    }
 
     public List<Store> getStoreList () {
         List<Store> list = new ArrayList<>();
@@ -44,7 +65,6 @@ public class StoreAccess {
     }
 
     public Store getStoreByName(String storeName) {
-        Store store = new Store();
         String sql = "SELECT * FROM STORE WHERE STORE_NAME=?";
         Connection conn = getConn();
         try {
