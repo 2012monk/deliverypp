@@ -167,7 +167,6 @@ $(document).on("click","#review-cancel",function(){
 // 리뷰 작성후 전송
 $(document).on("click","#review-submit",function(){
     var storeId = $("#review-write").attr("storeId");
-    alert(storeId);
     var table = $(this).closest("table");
     var review_json = {};
     review_json.userEmail = table.find("#userEmail").text();
@@ -205,7 +204,6 @@ $(document).on("click","#review-submit",function(){
         url:domain+"/review",
         //dataType:"json",
         success:function(d){
-            alert("작성 성공:"+JSON.stringify(d));
             $("#write-form").html("");
             var storeId = $("#review-write").attr("storeId");
             var storeName = $("#review-write").attr("storeName");
@@ -276,7 +274,7 @@ $(document).on("click","#review-mod-submit",function(){
             processData: false,
             contentType: false,
             success:function(d){
-                alert("이미지 전송 성공:"+JSON.stringify(d));
+                
             }
         })
     }
@@ -288,7 +286,6 @@ $(document).on("click","#review-mod-submit",function(){
         url:domain+"/review",
         //dataType:"json",
         success:function(d){
-            alert("리뷰 수정 성공:"+JSON.stringify(d));
             var storeId = $("#review-write").attr("storeId");
             var storeName = $("#review-write").attr("storeName");
             reviewPage(storeId, storeName);
@@ -307,7 +304,6 @@ $(document).on("click","#review-del",function(){
         //url:domain+"/review/null",
         //dataType:"json",
         success:function(d){
-            alert("리뷰삭제 성공:"+JSON.stringify(d));
             var storeId = $("#review-write").attr("storeId");
             var storeName = $("#review-write").attr("storeName");
             reviewPage(storeId, storeName);
@@ -352,7 +348,6 @@ $(document).on("click","#reply-submit",function(){
         url:domain+"/reply",
         dataType:"json",
         success:function(d){
-            alert("댓글 작성 성공"+JSON.stringify(d));
             var storeId = $("#review-write").attr("storeId");
             var storeName = $("#review-write").attr("storeName");
             reviewPage(storeId, storeName);
@@ -370,7 +365,6 @@ $(document).on("click","#reply-del",function(){
         type:"delete",
         url:domain+"/reply/"+reply_id,
         success:function(d){
-            alert("댓글 삭제 성공!:"+d);
             var storeId = $("#review-write").attr("storeId");
             var storeName = $("#review-write").attr("storeName");
             reviewPage(storeId, storeName);
@@ -441,7 +435,6 @@ $(document).on("click","#reply-mod-submit",function(){
         url:domain+"/reply",
         dataType:"json",
         success:function(d){
-            alert("댓글 수정 성공"+JSON.stringify(d));
             var storeId = $("#review-write").attr("storeId");
             var storeName = $("#review-write").attr("storeName");
             reviewPage(storeId, storeName);

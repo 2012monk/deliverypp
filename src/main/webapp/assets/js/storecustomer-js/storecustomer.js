@@ -18,15 +18,15 @@ $(document).on("click",".main-storelist",function(){
 				z+="<form>";
 				z+="<input type='hidden' value='"+data.data.productId+"'>";
 				z+="<table class='table table-bordered'>";
-				z+="<hr><br><br><h2>상품 리스트</h2>";
-				z+="<tr style='font-size:15pt;'><th>상품명</th><th>상품가격</th><th>상품 정보</th><th>상품 이미지</th></tr>";
+				z+="<br><br><h2>상품 리스트</h2><hr>";
+				z+="<tr style='font-size:15pt;'><th>상품명</th><th>상품가격</th><th>상품 정보</th><th colspan='2'>상품 이미지</th></tr>";
 				$.each(data.data, function(i,elt){
 					z+="<tr>";
 					z+="<td>"+elt.productName+"</td>";
 					z+="<td>"+elt.productPrice+"</td>";
 					z+="<td>"+elt.productDesc+"</td>";
 					z+="<td>"+elt.productImage+"</td>";
-					z+="<td><button class='btn btn-default' type='button' onClick='add("+JSON.stringify(elt)+","+storeName+")'><span class='fas fa-2x fa-cart-arrow-down'></span></button></td></tr>";
+					z+="<td><button class='cus-cart-add btn btn-default' type='button' add_product='"+JSON.stringify(elt)+"', add_storeName='"+storeName+"'><span class='fas fa-2x fa-cart-arrow-down'></span></button></td></tr>";
 			});
 			z+="</table>"; 
 			z+="</form><br><br><br><br><br><br>";
@@ -34,13 +34,14 @@ $(document).on("click",".main-storelist",function(){
 			c = "<div id='index-main-first'></div>";
 			c +="<div id='index-main-second'></div>";
 			/*장바구니 이동하는 버튼 여기밖에 ??*/
-			c +="<div id='index-main-third'><button id='basket-movepage' style='btn btn-lg'>장바구니 이동 하는 버튼 </button></div>";
+			c +="<div id='index-main-third'></div>";
 			$("#index-main").html(c);
 			$.ajax({
 				type:"get",
 				url:"http://deli.alconn.co/stores/"+storeId, 
 				dataType:"json",
 				success:function(data){
+					/*매장 소개*/
 					var s="";
 					s+="<h1><b>"+data.data.storeName+"</b></h1><hr>";
 					s+="<div id='ssss' data-store='"+storeId+"' data-storeName='"+data.data.storeName+"'></div>";
@@ -58,8 +59,13 @@ $(document).on("click",".main-storelist",function(){
 		
 	});
 	
-	/*매장 소개*/
+	
 	
 	
 });
 
+$(document).on("click",".cus-cart-add",function(){
+	var product = JSON.parse($(this).attr("add_product"));
+	var storeName = $(this).attr("add_storeName");
+	add(product, storeName);
+})

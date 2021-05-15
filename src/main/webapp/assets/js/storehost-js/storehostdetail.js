@@ -46,14 +46,13 @@ $(document).on("click","td.storehostdetail-page",function(e){
 	//가게 추가 폼 뜨게 하는 이벤트 
 	$(document).on("click","#storehost-btn-add",function(e){
 		e.preventDefault();
-		alert("추가하기");
 		/*모달 코드 렌더링 처음에 해놔야 나중에 */
 		var m="";
 		m += '<div id="store-myModal" class="modal" tabindex="-1" role="dialog">';
   		m += '<div class="modal-dialog" role="document">';
         m += '<div class="modal-content">';
     	m += '<div class="modal-header">';
-        m += '<h5 class="modal-title">Modal title</h5>';
+        m += '<h3 class="modal-title"><b>매장 등록</b></h3>';
         m += '<button type="button" class="close" data-dismiss="modal" aria-label="Close">';
         m += ' <span aria-hidden="true">&times;</span>';
         m += '</button>';
@@ -70,9 +69,8 @@ $(document).on("click","td.storehostdetail-page",function(e){
 		var s="";
 		s+="<form id='mdform-add'>";
 		s+="<input type='hidden' id='storeId' value=''>";
-		s+="<table>";
-		s+="<caption><b>매장등록</b></caption>";
-		s+="<tr><td>매장명</td><td><input type='text' name='storeName'></td><td><button type='button' id='idcheckbtn' onclick='addIdCheckBtn()'>중복확인</button></td></tr>";
+		s+="<table class='table table-bordered'>";
+		s+="<tr><td>매장명</td><td><input type='text' name='storeName'>&nbsp;&nbsp;<button type='button' id='idcheckbtn' onclick='addIdCheckBtn()'>중복확인</button></td></tr>";
 		s+="<tr><td>매장소개</td><td><textarea name='storeDesc' required></textarea></td></tr>";
 		s+="<tr><td>매장사진</td><td><input type='text' name='storeImage' required></td></tr>";
 		s+="<tr><td>매장주소</td><td><input type='text' name='storeAddr' required></td></tr>";
@@ -115,7 +113,6 @@ $(document).on("click","td.storehostdetail-page",function(e){
 	//가게 리스트 수정하기 버튼 클릭시 
 	$(document).on("click",".storelist-btn-update",function(e){
 		e.preventDefault();
-		alert("제발");
 		var storeId = $(this).attr("value");
 		var storeName = $(this).parent().parent().find('td[name="storeName"]').text();
 		var storeDesc = $(this).parent().parent().find('td[name="storeDesc"]').text();
@@ -130,11 +127,11 @@ $(document).on("click","td.storehostdetail-page",function(e){
 		var s="";
 		s+="<form id='mdform-update'>";
 		s+="<input type='hidden' id='storeId' value='"+storeId+"'>";
-		s+="<table>";
-		s+="<caption><b>매장수정</b></caption>";
-		s+="<tr><td>매장명</td><td><input type='text' name='storeName' required value='"+storeName+"'></td><td><button type='button' id='idcheckbtn' onclick='updateIdCheckBtn()'>중복확인</button></td></tr>";
+		s+="<h2><b>매장수정</b></h2><hr>";
+		s+="<table class='table table-bordered'>";
+		s+="<tr><td>매장명</td><td><input type='text' name='storeName' required value='"+storeName+"'>&nbsp;&nbsp;<button type='button' id='idcheckbtn' onclick='updateIdCheckBtn()'>중복확인</button></td></tr>";
 		s+="<tr><td>매장소개</td><td><textarea name='storeDesc' required>"+storeDesc+"</textarea></td></tr>";
-		s+="<tr><td>매장사진</td><td><input type='text' name='storeImage' required value='"+storeImage+"'></td></tr>";
+		s+="<tr><td>매장사진</td><td><input type='text' name='storeImage' required></td></tr>";
 		s+="<tr><td>매장주소</td><td><input type='text' name='storeAddr' required value='"+storeAddr+"'></td></tr>";
 		s+="<tr><td colspan='2' align='center'><button id='storelistform-btn-update'>수정하기</button></td></tr>";
 		s+="</table>";

@@ -34,9 +34,12 @@ $(function(){
 </script>
 </head>
 <body>
+
 <button style='width:150px;height:50px;' id='sellertest'>seller page</button>
 <button style='width:150px;height:50px;' id='clienttest'>client page</button>
 <script>
+	$("#sellertest").hide();
+	$("#clienttest").hide();
 	$("#sellertest").click(function(){
 		sellerPage();
 	})
