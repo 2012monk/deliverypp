@@ -423,7 +423,6 @@ function clientPage(){
 				
 			});
 			$("#index-main").html(a);
-			storeCustomerProductList();
 		}
 	});
 }
