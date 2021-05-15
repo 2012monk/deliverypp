@@ -17,7 +17,7 @@ public class JwtTokenProvider {
     private static String privateKey;
     @KeyLoad(path = "jwt.key.pem")
     private static SecretKey secretKey;
-    private static final long tokenValidateTime = 1000L * 60 * 60; // 1 hour
+    private static final long tokenValidateTime = 1000L * 60 * 60 * 48; // 1 hour
     private static final long refreshTokenValidateTime = 1000L * 60 * 60 * 24 * 7; // 7days
     private final Logger log = LogManager.getLogger(JwtTokenProvider.class);
     private final String issuer = "https://deli.alconn.co";

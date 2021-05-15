@@ -4,12 +4,12 @@ $(document).on("click",".main-storelist",function(){
 	var storeId = $(this).attr("data-storeId");
 	var storeName = $(this).attr("data-storeName");
 
-	
+
 
 	/*가게 상세 상품 목록 등장 */
 	$.ajax({
 		type:"get",
-		url:"http://deli.alconn.co/products/list/"+storeId, 
+		url:"https://deli.alconn.co/products/list/"+storeId,
 		dataType:"json",
 		success:function(data){
 			console.log(data);
@@ -28,9 +28,9 @@ $(document).on("click",".main-storelist",function(){
 					z+="<td>"+elt.productImage+"</td>";
 					z+="<td><button class='cus-cart-add btn btn-default' type='button' add_product='"+JSON.stringify(elt)+"', add_storeName='"+storeName+"'><span class='fas fa-2x fa-cart-arrow-down'></span></button></td></tr>";
 			});
-			z+="</table>"; 
+			z+="</table>";
 			z+="</form><br><br><br><br><br><br>";
-			
+
 			c = "<div id='index-main-first'></div>";
 			c +="<div id='index-main-second'></div>";
 			/*장바구니 이동하는 버튼 여기밖에 ??*/
@@ -38,7 +38,7 @@ $(document).on("click",".main-storelist",function(){
 			$("#index-main").html(c);
 			$.ajax({
 				type:"get",
-				url:"http://deli.alconn.co/stores/"+storeId, 
+				url:"https://deli.alconn.co/stores/"+storeId,
 				dataType:"json",
 				success:function(data){
 					/*매장 소개*/
@@ -49,7 +49,7 @@ $(document).on("click",".main-storelist",function(){
 					s+="<tr><td style='font-size:15pt;'>매장소개</td><td>"+data.data.storeDesc+"</td></tr>";
 					s+="<tr><td style='font-size:15pt;'>매장사진</td><td>"+data.data.storeImage+"</td></tr>";
 					s+="<tr><td style='font-size:15pt;'>매장주소</td><td>"+data.data.storeAddr+"</td></tr></table>";
-				
+
 					$("#index-main-first").html(s);
 					reviewPage(storeId, storeName);
 				}
@@ -58,10 +58,10 @@ $(document).on("click",".main-storelist",function(){
 		}
 		
 	});
-	
-	
-	
-	
+
+
+
+
 });
 
 $(document).on("click",".cus-cart-add",function(){

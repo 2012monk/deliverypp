@@ -27,8 +27,8 @@ public class ReviewService {
         try {
             review = mapper.readValue(json, Review.class);
             review.generateReviewId();
+            review.setUserEmail(userId);
             if (review.getUserEmail() == null) {
-                review.setUserEmail(userId);
             }
             review = access.insertReview(review);
         } catch (Exception e) {

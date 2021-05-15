@@ -10,10 +10,10 @@ function mainHeaderPage() {
 		s +="<ul class='navbar-menu'>";
 		s +="<li><a href='' id='mainpage'>배달의 민족</a><i class='fas fa-space-shuttle'></i></li>";
 		s +="</ul>";
-        
+
         s +="<ul class='navbar-login'>";
         s +="<li><i class='fas fa-2x fa-shopping-cart' id='basket-modal'></i></li>";
-    
+
 		if(!deli.isLoggedIn()){
             s +="<li><i class='fas fa-2x fa-user-plus' id='signbtn'></i></li>";
             s +="<li><i class='far fa-2x fa-id-card' id='loginbtn'></i></li></ul>";
@@ -78,7 +78,7 @@ function check_pw(){  //비밀번호 확인
 
 //장바구니 아이콘 클릭
 $(document).on("click","#basket-modal",function(){
-    
+
     if(localStorage.getItem("cartList") == null)
     {
         alert("장바구니가 비었습니다!");
@@ -92,23 +92,23 @@ $(document).on("click","#basket-modal",function(){
     }
 })
 
-//sellersign이벤트
-$(document).on("click","#sellersignbtn",function(){
-    alert("click")
-    $.ajax({
-        type:"post",
-        //url:"<http://deli.alconn.co/login>",
-        url:"http://deli.alconn.co/user/signup/seller",
-        success:function(d){
-            if (d === "SUCCESS"){
-                alert("seller등록이 되었습니다.");
-                $("#sellerForm").remove();
-            }else {
-                alert('failed')
-            }
-        }
-    });
-});
+        //sellersign이벤트
+        $(document).on("click","#sellersignbtn",function(){
+            alert("click")
+            $.ajax({
+                type:"post",
+                //url:"<https://deli.alconn.co/login>",
+                url:"https://deli.alconn.co/user/signup/seller",
+                success:function(d){
+                    if (d === "SUCCESS"){
+                        alert("seller등록이 되었습니다.");
+                        $("#sellerForm").remove();
+                    }else {
+                        alert('failed')
+                    }
+                }
+            });
+        });
 
 // singup render
 $(document).on("click","#signbtn",function(){
@@ -129,37 +129,37 @@ $(document).on("click","#signbtn",function(){
     $("#signbody").html(s);
 });
 
-// sing up start
-$(document).on("submit","#deliform", function(e){
-    e.preventDefault();
-    console.log(this);
-    userType="deli";
-    var userEmail = $(this).find('input[name="userEmail"]').val();
-    var userPw = $(this).find('input[name="userPw"]').val();
-    var userTelephone = $(this).find('input[name="userTelephone"]').val();
-    var userAddr = $(this).find('input[name="userAddr"]').val();
-    var userRole= $(this).find('input:checkbox[name="userRole"]:checked').val();
-    
-    console.log(userType);
-    console.log(userEmail);
-    console.log(userPw);
-    console.log(userRole);
-    console.log(userAddr);
-    console.log(userTelephone);
-    
-    $.ajax({
-        type:"post",
-        url:"http://deli.alconn.co/user/signup",
-        data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole, "userType":userType,"userTelephone":userTelephone,"userAddr":userAddr}),
-        success:function(d){
-            console.log(d);
-            alert("회원가입을 축하드립니다!!");
-            alert("로그인을 해주세요");
-            $('#signmodal').modal('hide');
-        }
-    });
-    
-});
+        // sing up start
+        $(document).on("submit","#deliform", function(e){
+            e.preventDefault();
+            console.log(this);
+            userType="deli";
+            var userEmail = $(this).find('input[name="userEmail"]').val();
+            var userPw = $(this).find('input[name="userPw"]').val();
+            var userTelephone = $(this).find('input[name="userTelephone"]').val();
+            var userAddr = $(this).find('input[name="userAddr"]').val();
+            var userRole= $(this).find('input:checkbox[name="userRole"]:checked').val();
+            
+            console.log(userType);
+            console.log(userEmail);
+            console.log(userPw);
+            console.log(userRole);
+            console.log(userAddr);
+            console.log(userTelephone);
+            
+            $.ajax({
+                type:"post",
+                url:"https://deli.alconn.co/user/signup",
+                data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole, "userType":userType,"userTelephone":userTelephone,"userAddr":userAddr}),
+                success:function(d){
+                    console.log(d);
+                    alert("회원가입을 축하드립니다!!");
+                    alert("로그인을 해주세요");
+                    $('#signmodal').modal('hide');
+                }
+            });
+           
+        });
 
 // login modal
 $(document).on("click","#loginbtn",function(){
@@ -183,7 +183,7 @@ $(document).on("submit","#loginform",function(e){
     var userPw = $(this).find('input[name="userPw"]').val();
     console.log(userEmail);
     console.log(userPw);
-    
+
     $.ajax({
         type:"post",
         //url:"<http://deli.alconn.co/login>",
@@ -237,7 +237,7 @@ $(document).on("click","#logoutbtn",function(){
 $(document).on("click","#mypagebtn",function(){
     $.ajax({
         type:"get",
-        url:config.domain+"/user/"+config.userEmail,//E-Mail 변경요망 
+        url:config.domain+"/user/"+config.userEmail,//E-Mail 변경요망
         dataType:"json",
         success:function(data){
             console.log(data);
@@ -278,6 +278,7 @@ $(document).on("click","#mypagebtn",function(){
 
 $(document).on("click","#userupdatebtn", 
 function(e) {
+    console.log($("#userupdateform").val())
     e.preventDefault();
     var userEmail=$("td[userEmail]").text()
     var userPw=$('input[name="userPw"]').val()
@@ -372,7 +373,7 @@ function sellerPage(){
 	var storeId = $(this).attr("value");
 	$.ajax({
 		type:"get",
-		url:"http://deli.alconn.co/stores/list",
+		url:"https://deli.alconn.co/stores/list",
 		dataType:"json",
 		success:function(data){
 			var s="";
@@ -383,7 +384,7 @@ function sellerPage(){
 					s +="<tr class='mouse-seller' value='"+elt.storeId+"'><td class='storehostdetail-page' name='storeName'>"+elt.storeName+"</td><td class='storehostdetail-page' name='storeDesc'>"+elt.storeDesc+"</td><td class='storehostdetail-page' name='storeImage'>"+elt.storeImage+"</td><td class='storehostdetail-page' name='storeAddr'>"+elt.storeAddr+"</td>";
 					s +="<td><button type='button' class='storelist-btn-update' value='"+elt.storeId+"'>update</button></td>";
                     s +="<td><button type='button' class='storelist-btn-delete' value='"+elt.storeId+"'>delete</button></td></tr>";
-					
+
 				});
 				s+="</table>"; 
 			
@@ -407,7 +408,7 @@ function clientPage(){
 	var a = "";
 	$.ajax({
 		type:"get",
-		url:"http://deli.alconn.co/stores/list",
+		url:"https://deli.alconn.co/stores/list",
 		dataType:"json",
 		success:function(d){
 			$.each(d.data, function(i, elt) {

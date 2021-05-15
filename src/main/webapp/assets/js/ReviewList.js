@@ -1,7 +1,7 @@
 
 var list_range = "";
-//var domain = "http://112.169.196.76:47788";
-var domain = "http://deli.alconn.co";
+//var domain = "https://112.169.196.76:47788";
+var domain = "https://deli.alconn.co";
 
 function reviewPage(storeId, storeName){
 
@@ -59,7 +59,7 @@ function reviewPage(storeId, storeName){
             sw+= "<button id='review-mylist'>내가 쓴 리뷰</button><button id='review-all'>전체글 보기</button>";
             sw+= "<div id='write-form'></div>";
             var idx=1;
-            
+
             if(ajax_data.data.length == 0)
                 sw+="<hr><h3>작성된 리뷰가 없습니다.</h3>";
             ajax_data.data.forEach(function(w){
@@ -112,9 +112,9 @@ function reviewPage(storeId, storeName){
                 idx++;
             })
             sw+= "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>";
-            
+
             $("#index-main-third").html(sw);
-            
+
 
         }
     })
@@ -144,7 +144,7 @@ $(document).on("click","#review-all",function(){
 
 // 리뷰 작성폼 출력
 $(document).on("click","#review-write",function(){
-    
+
     // 로그인 정보에서 접속중인 아이디정보 가져오기 ->작성자명(이메일)
     var s = "<form method='post' enctype='multipart/form-data'><table class='table table-bordered'>";
     s += "<tr><td>작성자</td><td id='userEmail'>"+config.userEmail+"</td></tr>";
@@ -175,14 +175,14 @@ $(document).on("click","#review-submit",function(){
     review_json.userEmail = config.userEmail;
     review_json.storeId = storeId;
     review_json.replyLIst = [];
-    
+
     // 첨부이미지 경로가 비어있지 않다면 사진이미지 전송
     if(table.find("input#photo").val()!="")
     {
         review_json.reviewImage = document.querySelector('#photo').files[0].name;
         var formData = new FormData();
         formData.append('photo',document.querySelector('#photo').files[0], document.querySelector('#photo').files[0].name);
-        
+
         $.ajax({
             type:"post",
             data:formData,
@@ -196,7 +196,7 @@ $(document).on("click","#review-submit",function(){
     }
     else
         console.log("이미지 첨부 없음");
-    
+
     // 텍스트 데이터 전송
     $.ajax({
         type:"post",
@@ -212,17 +212,17 @@ $(document).on("click","#review-submit",function(){
     })
 })
 
-//리뷰 수정폼 출력
-$(document).on("click","#review-mod",function(){
-    var review_div = $(this).parent();
-    var review_id = $(this).parent().attr("review_id");
-    $.ajax({
-        type:"get",
-        url:domain+"/review/"+review_id,
-        dataType:"json",
-        success:function(r){
-            
-            var photo_url = "http://112.169.196.76:47788/static/image/";
+    //리뷰 수정폼 출력
+    $(document).on("click","#review-mod",function(){
+        var review_div = $(this).parent();
+        var review_id = $(this).parent().attr("review_id");
+        $.ajax({
+            type:"get",
+            url:domain+"/review/"+review_id,
+            dataType:"json",
+            success:function(r){
+                
+                var photo_url = "https://112.169.196.76:47788/static/image/";
 
             var s = "<form method='post' enctype='multipart/form-data'><table class='table table-bordered'>";
             s += "<tr><td>작성자</td><td id='userEmail'>"+r.data.userEmail+"</td></tr>";
@@ -233,10 +233,10 @@ $(document).on("click","#review-mod",function(){
             s += "</table></form>";
             review_div.html(s);
             review_div.find("#review-rate").val(r.data.reviewRating).attr("selected","selected");
-            
+
         }
-    }) 
-    
+    })
+
 })
 
 //리뷰 수정폼 닫기
@@ -260,7 +260,7 @@ $(document).on("click","#review-mod-submit",function(){
     review_json.replyList = [];
 
     console.log("수정보낼 데이터:"+JSON.stringify(review_json));
-    
+
     // 첨부이미지 경로가 비어있지 않다면 사진이미지 전송
     if(table.find("input#photo").val()!="")
     {
@@ -274,7 +274,7 @@ $(document).on("click","#review-mod-submit",function(){
             processData: false,
             contentType: false,
             success:function(d){
-                
+
             }
         })
     }
@@ -370,7 +370,7 @@ $(document).on("click","#reply-del",function(){
             reviewPage(storeId, storeName);
         }
     })
-    
+
 })
 
 //리뷰 댓글 수정폼 출력
@@ -378,7 +378,7 @@ $(document).on("click","#reply-mod",function(){
     var this_tr = $(this).closest("tr");
     var reply_id = this_tr.attr("reply_id");
     var review_id = this_tr.attr("review_id");
-    
+
     $.ajax({
         type:"get",
         url:domain+"/review/store/stid22",
@@ -409,7 +409,7 @@ $(document).on("click","#reply-mod",function(){
             s += "<tr><td>댓글 내용</td><td><textarea style='width:300px;height:25px;'></textarea></td></tr>";
             s += "<tr><td><button review_id='"+review_id+"' reply_id='"+reply_id+"' id='reply-mod-submit'>등록</button></td><td><button id='reply-cancel'>취소</button></td></tr>";
             s += "</table>";
-            $(this_tr).html(s);    
+            $(this_tr).html(s);
 
         }
     })
@@ -440,5 +440,5 @@ $(document).on("click","#reply-mod-submit",function(){
             reviewPage(storeId, storeName);
         }
     })
-    
+
 })
