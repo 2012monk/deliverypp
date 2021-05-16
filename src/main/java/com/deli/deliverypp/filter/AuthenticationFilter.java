@@ -2,7 +2,7 @@ package com.deli.deliverypp.filter;
 
 
 import com.deli.deliverypp.DB.DeliUser;
-import com.deli.deliverypp.auth.AuthProvider;
+import com.deli.deliverypp.auth.provider.AuthProvider;
 import com.deli.deliverypp.service.UserLoginService;
 import com.deli.deliverypp.util.ControlUtil;
 import com.deli.deliverypp.util.MappingLoader;
@@ -10,11 +10,9 @@ import com.deli.deliverypp.util.annotaions.ProtectedResource;
 import com.deli.deliverypp.util.annotaions.RequiredModel;
 import com.deli.deliverypp.util.annotaions.RequiredParam;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.reflections.Reflections;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -22,7 +20,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.Matcher;

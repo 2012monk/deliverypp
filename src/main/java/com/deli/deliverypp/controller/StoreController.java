@@ -1,14 +1,14 @@
 package com.deli.deliverypp.controller;
 
 import com.deli.deliverypp.DB.DeliUser;
-import com.deli.deliverypp.auth.AuthProvider;
+import com.deli.deliverypp.auth.provider.AuthProvider;
 import com.deli.deliverypp.model.Store;
 import com.deli.deliverypp.service.StoreService;
 import com.deli.deliverypp.service.UserLoginService;
 import com.deli.deliverypp.util.ControlUtil;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
 import com.deli.deliverypp.util.annotaions.RequiredModel;
-import com.deli.deliverypp.auth.AuthorityChecker;
+import com.deli.deliverypp.auth.provider.AuthorityChecker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,48 +25,10 @@ public class StoreController extends HttpServlet {
     private static final Logger log = LogManager.getLogger(StoreController.class);
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final StoreService service = new StoreService();
+    private AuthProvider provider = new AuthProvider();
+    private UserLoginService userLoginService = new UserLoginService();
 
 
-
-//    private static HashMap<String , Store> list = new HashMap<>();
-//    private static List<Store> storeList = new ArrayList<>();
-//    private static String json;
-
-//    public void init(){
-//        try{
-//            URL url = StoreController.class.getClassLoader().getResource("/test.json");
-//            assert url != null;
-//            File file = new File(url.toURI());
-//            FileReader fr = new FileReader(file);
-//            BufferedReader br = new BufferedReader(fr);
-//            StringBuffer sb = new StringBuffer();
-//
-//            String current = null;
-//            while(( current = br.readLine() ) != null) {
-//                sb.append(current);
-//            }
-//
-//            json = new String(sb);
-//            storeList = mapper.readValue(file, new TypeReference<List<Store>>() {
-//            });
-//
-//
-//            for (Store s: storeList) {
-//                list.put(s.getStoreId(), s);
-//            }
-//
-//
-//        }catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    /**
-     * @UriSchema
-     * /store/info/id
-     * /store/list
-     */
-    // for test
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -95,39 +57,18 @@ public class StoreController extends HttpServlet {
 
     }
 
-
-    // URI ROUTING
-
-    // Create store
-
-    /**
-     *
-     *  RECEIVE JSON Format
-     *  {
-     *      storeName : ,
-     *      storeId : ,
-     *      storeDesc : ,
-     *      storeImage : ,
-     *      productList : [{},{}]
-     *  }
-     */
-
-
-    private AuthProvider provider = new AuthProvider();
-    private UserLoginService userLoginService = new UserLoginService();
-
     @ProtectedResource(role = DeliUser.UserRole.SELLER, uri = "/stores")
-    // CREATE
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         DeliUser user = provider.getUserFromHeader(request);
         if (user != null){
             log.info(user);
             try {
                 if (DeliUser.UserRole.SELLER.isHigher(user.getUserRole())){
                     String json = ControlUtil.getJson(request);
-                    ControlUtil.responseMsg(response, service.insertStoreService(json, user.getUserEmail()));
+                    ControlUtil.sendResponseData(response, service.insertStoreService(json, user.getUserEmail()));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -150,7 +91,7 @@ public class StoreController extends HttpServlet {
         String json = ControlUtil.getJson(req);
         if (AuthorityChecker.checkUserEmailFromJson(req, Store.class, "storeId", json)){
             try{
-                ControlUtil.responseMsg(resp, service.updateStore(json));
+                ControlUtil.sendResponseData(resp, service.updateStore(json));
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -168,7 +109,7 @@ public class StoreController extends HttpServlet {
         String id = ControlUtil.getRequestUri(req);
         if (AuthorityChecker.checkUserEmail(req, Store.class, "storeId", id)){
             try {
-                ControlUtil.responseMsg(resp, service.deleteStore(ControlUtil.getRequestUri(req, 1)));
+                ControlUtil.sendResponseData(resp, service.deleteStore(ControlUtil.getRequestUri(req)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -180,37 +121,19 @@ public class StoreController extends HttpServlet {
 
 
     public void sendStoreList(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String json = "";
-        try {
-            json = service.getStoreList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//
-//        response.getWriter().write(json);
-        ControlUtil.sendResponseData(response, json);
-
+        ControlUtil.sendResponseData(response, service.getStoreList());
     }
 
     public void sendStoreById (HttpServletRequest request, HttpServletResponse response) throws IOException {
         String storeId = ControlUtil.getRequestUri(request);
-//        System.out.println(storeId+"from con");
-        String json = "null";
-        if (storeId != null) {
-            try {
-                json = mapper.writeValueAsString(service.getStoreById(storeId));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        ControlUtil.sendResponseData(response, json);
+        ControlUtil.sendResponseData(response, service.getStoreById(storeId));
     }
 
 
 
     public void sendStoreByName (HttpServletRequest request, HttpServletResponse response) throws IOException {
         String storeName = ControlUtil.getRequestUri(request, 2);
-        String json = "null";
+        ControlUtil.sendResponseData(response, service.getStoreByName(storeName));
     }
 
 

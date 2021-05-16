@@ -1,7 +1,7 @@
 package com.deli.deliverypp.controller;
 
 import com.deli.deliverypp.DB.DeliUser;
-import com.deli.deliverypp.auth.AuthProvider;
+import com.deli.deliverypp.auth.provider.AuthProvider;
 import com.deli.deliverypp.model.AuthInfo;
 import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.service.UserLoginService;
@@ -14,8 +14,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.*;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @WebServlet(name = "LoginController", value = "/login/*")
 public class LoginController extends HttpServlet {
@@ -48,7 +46,6 @@ public class LoginController extends HttpServlet {
                 proceedWithGoogle(request, response);
                 break;
             case "exchange":
-                log.info("exchsn123 1231 3123 1");
                 exchangeToken(request, response);
                 break;
             default:
@@ -78,19 +75,11 @@ public class LoginController extends HttpServlet {
 
 
 
-//    private void checkId (HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        String id = ControlUtil.getRequestUri(request, 2);
-//        ResponseMessage<?> msg = new ResponseMessage<>();
-//        msg.setMessage(service.checkUserIdOverlap(id) ? "overlap" : "free");
-//        msg.setData(id);
-//        ControlUtil.sendResponseData(response, msg);
-//    }
 
 
 
     // TODO set exp time with options
     private void setRefreshToken(HttpServletResponse response, String token) {
-//        String refreshToken = service
         Cookie authCookie = new Cookie("SID", token);
         authCookie.setPath("/");
         authCookie.setHttpOnly(true);
@@ -98,20 +87,8 @@ public class LoginController extends HttpServlet {
         authCookie.setMaxAge(60 * 60 * 24 * 7); // 7days
         response.setHeader("Set-Cookie", "SID="+token+";SameSite=None; HttpOnly; Secure; path=/;max-age="+(60 * 60 * 24 * 7));
         log.info("cookie generated");
-//        response.addCookie(authCookie);
     }
 
-
-    private void invalidateAuth (HttpServletRequest request,HttpServletResponse response) {
-        Cookie[] cookies = request.getCookies();
-        for (Cookie c:cookies) {
-            if (c.getName().equals("SID")) {
-                c.setMaxAge(-1);
-                c.setValue(null);
-                response.addCookie(c);
-            }
-        }
-    }
 
     // NOTE sign up and login integration
     public void proceedWithGoogle(HttpServletRequest request, HttpServletResponse response)  {

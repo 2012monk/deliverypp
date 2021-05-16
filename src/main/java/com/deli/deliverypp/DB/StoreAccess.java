@@ -107,7 +107,7 @@ public class StoreAccess {
     }
 
 
-    public boolean insertStore (Store store) {
+    public Store insertStore (Store store) {
         String sql = "INSERT INTO STORE (STORE_ID, STORE_NAME, STORE_DESC, STORE_IMAGE, STORE_ADDR, USER_EMAIL,STORE_TELEPHONE) VALUES (?,?,?,?,?,?,?)";
         Connection conn = getConn();
         try {
@@ -122,7 +122,7 @@ public class StoreAccess {
 
             if (prst.executeUpdate() > 0) {
                 conn.commit();
-                return true;
+                return store;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -130,10 +130,10 @@ public class StoreAccess {
             close(conn);
         }
 
-        return false;
+        return null;
     }
 
-    public boolean updateStore (Store store) {
+    public Store updateStore (Store store) {
         String sql = "UPDATE STORE SET STORE_IMAGE=?,STORE_TELEPHONE=?,STORE_DESC=?,STORE_NAME=?,STORE_ADDR=? WHERE STORE_ID=?";
         Connection conn = getConn();
         try {
@@ -147,7 +147,7 @@ public class StoreAccess {
 
             if (prst.executeUpdate() > 0) {
                 conn.commit();
-                return true;
+                return store;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,7 +155,7 @@ public class StoreAccess {
         finally {
             close(conn);
         }
-        return false;
+        return null;
     }
 
     public boolean deleteStore (String storeId) {

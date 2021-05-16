@@ -1,7 +1,7 @@
 package com.deli.deliverypp.controller.review;
 
 import com.deli.deliverypp.DB.DeliUser;
-import com.deli.deliverypp.auth.AuthProvider;
+import com.deli.deliverypp.auth.provider.AuthProvider;
 import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.model.Review;
 import com.deli.deliverypp.service.ReviewService;
@@ -10,7 +10,7 @@ import com.deli.deliverypp.util.MessageGenerator;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
 import com.deli.deliverypp.util.annotaions.RequiredModel;
 import com.deli.deliverypp.util.annotaions.RequiredParam;
-import com.deli.deliverypp.auth.AuthorityChecker;
+import com.deli.deliverypp.auth.provider.AuthorityChecker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,12 +40,10 @@ public class ReviewController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String json = ControlUtil.getJson(request);
-        DeliUser user = provider.getUserFromHeader(request);
 
-        log.info(json);
-        log.info(user);
-        if (user != null) {
-            ControlUtil.sendResponseData(response, service.insertNewReview(json, user.getUserEmail()));
+        String userEmail = provider.getUserEmailFromHeader(request);
+        if (userEmail != null) {
+            ControlUtil.sendResponseData(response, service.insertNewReview(json, userEmail));
         }else {
             ControlUtil.sendResponseData(response, service.insertNewReview(json, null));
         }
@@ -59,7 +57,8 @@ public class ReviewController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
         String json = ControlUtil.getJson(req);
-        if (AuthorityChecker.checkUserEmailFromJson(req,Review.class,"reviewId", json)){
+
+        if (AuthorityChecker.checkUserEmailFromJson(req, Review.class,"reviewId", json)){
             ControlUtil.sendResponseData(resp, service.updateReview(json));
         }else {
             ControlUtil.sendResponseData(resp, MessageGenerator.makeErrorMsg("you don't have authority to access this resources \r\n 본인인증실패", "authority_error"));

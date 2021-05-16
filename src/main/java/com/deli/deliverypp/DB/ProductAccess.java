@@ -76,7 +76,7 @@ public class ProductAccess {
         return null;
     }
 
-    public boolean insertProduct(Product product) {
+    public Product insertProduct(Product product) {
         String sql = "INSERT INTO PRODUCT " +
                 "(PRODUCT_ID, STORE_ID, PRODUCT_NAME, PRODUCT_IMAGE, PRODUCT_PRICE,PRODUCT_DESC) " +
                 "VALUES (?,?,?,?,?,?)";
@@ -92,7 +92,7 @@ public class ProductAccess {
 
             if (prst.executeUpdate() > 0) {
                 conn.commit();
-                return true;
+                return product;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,10 +100,10 @@ public class ProductAccess {
             close(conn);
         }
 
-        return false;
+        return null;
     }
 
-    public boolean updateProduct(Product product) {
+    public Product updateProduct(Product product) {
         String sql = "UPDATE PRODUCT SET PRODUCT_DESC=?,PRODUCT_IMAGE=?,PRODUCT_NAME=?,PRODUCT_PRICE=? WHERE PRODUCT_ID=?";
         Connection conn = getConn();
         try {
@@ -116,7 +116,7 @@ public class ProductAccess {
 
             if (prst.executeUpdate() > 0) {
                 conn.commit();
-                return true;
+                return product;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,7 +124,7 @@ public class ProductAccess {
         finally {
             close(conn);
         }
-        return false;
+        return null;
     }
 
 

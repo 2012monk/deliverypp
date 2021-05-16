@@ -1,4 +1,4 @@
-package com.deli.deliverypp.auth;
+package com.deli.deliverypp.auth.provider;
 
 import com.deli.deliverypp.DB.DeliUser;
 import com.deli.deliverypp.service.UserLoginService;
@@ -27,6 +27,9 @@ public class AuthorityChecker {
     private static final AuthProvider authProvider = new AuthProvider();
     private static final Logger log = LogManager.getLogger(AuthorityChecker.class);
 
+
+
+
     public static  <T> boolean selfCheck(String userEmail, String key, String value, Class<T> model) {
         T target = getModelFromKey(model, key, value);
 
@@ -41,6 +44,8 @@ public class AuthorityChecker {
         }
         return false;
     }
+
+
 
     public static String checkLogin(HttpServletRequest request) {
         String token = authProvider.parseHeader(request);
@@ -61,26 +66,17 @@ public class AuthorityChecker {
 
     public static  <T> T getModelFromKey (Class<T> tClass, String key, String value) {
         String table = DBUtil.convertClassNameToDbName(tClass.getSimpleName());
-
         String field = DBUtil.convertToDbNameConvention(key);
-
-        log.info(table+ field);
-
 
         String sql = "SELECT * FROM "+table+" WHERE "+key;
 
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT * FROM")
-                .append(" ")
-                .append(table)
-                .append(" ")
-                .append("WHERE")
-                .append(" ")
-                .append(field)
-                .append("=")
-                .append("'")
-                .append(value)
-                .append("'");
+        sb.append("SELECT * FROM").append(" ")
+                .append(table).append(" ")
+                .append("WHERE").append(" ")
+                .append(field).append("=")
+                .append("'").append(value).append("'");
+
         log.info(sb.toString());
         Connection conn = getConn();
         try {
@@ -103,9 +99,6 @@ public class AuthorityChecker {
 
         return null;
     }
-//    public static <T> boolean checkUserEmail(HttpServletRequest request, Class<T> targetClass, String key, String value) {
-//        return true;
-//    }
 
 
     public static <T> boolean checkUserEmail(HttpServletRequest request, Class<T> targetClass, String key, String value) {
@@ -133,13 +126,14 @@ public class AuthorityChecker {
 
     public static <T> T parseModelFromRequest (HttpServletRequest request, Class<T> tClass){
         try {
-            T model = mapper.readValue(ControlUtil.getJson(request), tClass);
-            return model;
+            return mapper.readValue(ControlUtil.getJson(request), tClass);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
+
     public static <T> boolean checkUserEmailFromJson(HttpServletRequest request, Class<T> targetClass, String key, String json) {
         try {
             T keyModel = mapper.readValue(json, targetClass);
@@ -149,20 +143,16 @@ public class AuthorityChecker {
 
             // id 로 db 조회
             T targetModel = getModelFromKey(targetClass, key, id);
-            DeliUser user = authProvider.getUserFromHeader(request);
-            if (targetModel != null && user != null){
+//            DeliUser user = authProvider.getUserFromHeader(request);
+            String userEmail = authProvider.getUserEmailFromHeader(request);
+            if (targetModel != null && userEmail != null){
                 try {
-                    String email = user.getUserEmail();
                     Field field = targetModel.getClass().getDeclaredField("userEmail");
                     field.setAccessible(true);
 
-                    log.info(email);
-                    log.info(field.getName());
-
                     String tEmail = (String) field.get(targetModel);
-                    log.info(tEmail);
 
-                    return email.equals(tEmail);
+                    return userEmail.equals(tEmail);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -174,10 +164,6 @@ public class AuthorityChecker {
 
         return false;
     }
-
-//    public static <T> boolean checkUserEmailFromJson(HttpServletRequest request, Class<T> targetClass, String key, String json){
-//        return true;
-//    }
 
 
 

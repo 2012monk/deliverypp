@@ -10,7 +10,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.List;
 
 import static com.deli.deliverypp.util.JSONUtil.getMapper;
@@ -38,27 +37,35 @@ public class StoreService {
         return store;
     }
 
+    // TODO Implement me
     public ResponseMessage<List<Store>> getStoreListByUser (String userEmail) {
         return null;
     }
 
-    public boolean insertStoreService (String json, String userEmail) {
+
+    public ResponseMessage<Store> insertStoreService (String json, String userEmail) {
         Store store = jsonToStoreObject(json);
 
-        if (store == null) return false;
+        if (store == null) {
+            return MessageGenerator.makeErrorMsg("failed", "데이터가 올바르지 않습니다");
+        }
         store.generateStoreId();
         store.setUserEmail(userEmail);
+        Store res = storeAccess.insertStore(store);
+        if (res == null) {
+            return MessageGenerator.makeErrorMsg("failed", "db_error");
+        }
 
-        return storeAccess.insertStore(store);
+        return MessageGenerator.makeMsg("create_success", res);
     }
 
-    public boolean insertProductListService (String json) {
-        return false;
+    public ResponseMessage<List<Product>> insertProductListService (String json) {
+        return MessageGenerator.makeErrorMsg("failed", "완성이 안되었습니다");
     }
 
 
 
-    public boolean insertProductService (String json) {
+    public ResponseMessage<Product> insertProductService (String json) {
         Product product = null;
         log.info(json);
         try {
@@ -68,92 +75,113 @@ public class StoreService {
             e.printStackTrace();
         }
 
-        if (product == null) return false;
+        if (product == null) {
+            return MessageGenerator.makeErrorMsg("failed", "데이터가 올바르지 않습니다");
+        }
+        Product res = productAccess.insertProduct(product);
 
-        return productAccess.insertProduct(product);
+        return MessageGenerator.makeResultMsg(res);
     }
 
-    public Store getStoreById(String storeId) {
+
+    public ResponseMessage<Store> getStoreById(String storeId) {
         Store store = storeAccess.getStoreById(storeId);
         store.setProductList(productAccess.getProductListByStoreId(storeId));
 
-        return store;
+        return MessageGenerator.makeResultMsg(store);
     }
 
-    public String getStoreList () throws JsonProcessingException {
+    public ResponseMessage<List<Store>> getStoreList () {
         List<Store> list = storeAccess.getStoreList();
 
         for (Store s:list) {
-
             s.setProductList(productAccess.getProductListByStoreId(s.getStoreId()));
         }
 
-        return mapper.writeValueAsString(list);
+        return MessageGenerator.makeResultMsg(list);
     }
 
-    public String getProductListByStoreId (String storeId) {
-        try {
-            return mapper.writeValueAsString(productAccess.getProductListByStoreId(storeId));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+
+    public ResponseMessage<List<Product>> getProductListByStoreId (String storeId) {
+        List<Product> list = productAccess.getProductListByStoreId(storeId);
+        if (list == null) {
+            return MessageGenerator.makeErrorMsg("failed", "존재하지 않는 아이디");
         }
-        return "";
+
+        return MessageGenerator.makeMsg("success", list);
     }
 
-    public String getProductByProductId (String productId) {
-        try {
-            return mapper.writeValueAsString(productAccess.getProductById(productId));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+
+    public ResponseMessage<Product> getProductByProductId (String productId) {
+        Product product = productAccess.getProductById(productId);
+
+        if (product == null) {
+            return MessageGenerator.makeErrorMsg("failed", "id error");
         }
-        return "";
+
+        return MessageGenerator.makeMsg("success", product);
     }
 
-    public Product getProductById (String productId) {
+
+//    public ResponseMessage<Product> getProductById (String productId) {
+//        Product
+//        try {
+//            return productAccess.getProductById(productId);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+
+
+    public ResponseMessage<String> deleteStore(String storeId) {
+        if (storeAccess.deleteStore(storeId)) {
+            return MessageGenerator.makeMsg("success", storeId, "delete_success");
+        }
+        return MessageGenerator.makeErrorMsg("failed", "stored_id_error");
+    }
+
+
+
+    public ResponseMessage<Store> updateStore(String json){
+        Store store;
         try {
-            return productAccess.getProductById(productId);
+            store = mapper.readValue(json, Store.class);
         } catch (Exception e) {
             e.printStackTrace();
+            return MessageGenerator.makeErrorMsg("failed", "올바르지 않은 형식");
         }
-        return null;
+
+        return MessageGenerator.makeMsg("success", store, "update_success");
+    }
+
+    public ResponseMessage<Store> getStoreByName(String storeName) {
+        Store store = storeAccess.getStoreByName(storeName);
+        if (store == null) {
+            return MessageGenerator.makeErrorMsg("failed", "invalid_id");
+        }
+        return MessageGenerator.makeMsg("success", store, "store_update_success");
+    }
+
+    public ResponseMessage<String> deleteProduct(String productId) {
+        if (productAccess.deleteProduct(productId)) {
+            return MessageGenerator.makeMsg("success", productId, "delete_success");
+        }
+        return MessageGenerator.makeMsg("failed", productId, "invalid_product_id");
     }
 
 
-    public boolean deleteStore(String storeId) {
-        return storeAccess.deleteStore(storeId);
-    }
-
-    public boolean updateStore(String json){
+    public ResponseMessage<Product> updateProduct (String json) {
         try {
-            return storeAccess.updateStore(mapper.readValue(json, Store.class));
+            Product product = mapper.readValue(json, Product.class);
+            if (product != null) {
+                return MessageGenerator.makeMsg("success", product, "update_success");
+            }
+            return MessageGenerator.makeErrorMsg("failed", "invalid_product_id");
         } catch (Exception e) {
-            e.printStackTrace();
+            return MessageGenerator.makeErrorMsg("failed", "invalid_data_format");
         }
-        return false;
-    }
 
-    public String getStoreByName(String storeName) {
-        try {
-            return mapper.writeValueAsString(storeAccess.getStoreByName(storeName));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-
-        }
-    }
-
-    public boolean deleteProduct(String productId) {
-        return productAccess.deleteProduct(productId);
-    }
-
-    public boolean updateProduct (String json) {
-        try {
-            return productAccess.updateProduct(mapper.readValue(json, Product.class));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
 }

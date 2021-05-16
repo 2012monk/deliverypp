@@ -1,12 +1,11 @@
 package com.deli.deliverypp.controller;
 
 import com.deli.deliverypp.DB.DeliUser;
-import com.deli.deliverypp.auth.AuthProvider;
+import com.deli.deliverypp.auth.provider.AuthProvider;
 import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.service.UserLoginService;
 import com.deli.deliverypp.util.ControlUtil;
 import com.deli.deliverypp.util.MessageGenerator;
-import com.deli.deliverypp.util.annotaions.ProtectedResource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

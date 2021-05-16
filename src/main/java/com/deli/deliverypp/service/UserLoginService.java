@@ -9,7 +9,6 @@ import com.deli.deliverypp.model.GoogleToken;
 import com.deli.deliverypp.model.GoogleUser;
 import com.deli.deliverypp.model.ResponseMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +29,6 @@ public class UserLoginService {
     private static final UserAccess access = new UserAccess();
 
     public boolean signUpUser (String json) throws JsonProcessingException {
-        log.info(json);
         DeliUser user = parseUser(json);
         user.setUserRole(DeliUser.UserRole.CLIENT);
         return access.registerUser(user);
@@ -51,10 +49,6 @@ public class UserLoginService {
 
         return false;
     }
-
-//    public boolean userLogin(String json) throws JsonProcessingException {
-//        return access.loginUser(parseUser(json));
-//    }
 
     public boolean checkUserIdOverlap (String userEmail) {
         return access.isUserEmailOverlap(userEmail);
