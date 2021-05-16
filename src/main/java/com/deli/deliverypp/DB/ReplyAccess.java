@@ -69,7 +69,7 @@ public class ReplyAccess {
     }
 
     public Reply insertReply(Reply reply) {
-        String sql = "INSERT INTO REPLY (REVIEW_ID, REPLY_ID, REPLY_CONTENT, USER_EMAIL) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO REPLY (REVIEW_ID, REPLY_ID, REPLY_CONTENT, USER_EMAIL, REPLY_DATE) VALUES (?,?,?,?, ?)";
         Connection conn = getConn();
         try {
             PreparedStatement prst = conn.prepareStatement(sql);
@@ -77,6 +77,7 @@ public class ReplyAccess {
             prst.setString(2, reply.getReplyId());
             prst.setString(3, reply.getReplyContent());
             prst.setString(4, reply.getUserEmail());
+            prst.setString(5, reply.getReplyDate());
 
             if (prst.executeUpdate() > 0) {
                 conn.commit();

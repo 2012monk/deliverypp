@@ -1,6 +1,8 @@
 package com.deli.deliverypp.controller;
 
+import com.deli.deliverypp.DB.DeliUser;
 import com.deli.deliverypp.DB.OrderAccess;
+import com.deli.deliverypp.auth.provider.AuthProvider;
 import com.deli.deliverypp.model.OrderInfo;
 import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.service.OrderService;
@@ -23,6 +25,7 @@ public class OrderController extends HttpServlet {
     private static final OrderService service = new OrderService();
     private final Logger log = LogManager.getLogger(OrderService.class);
     private final OrderAccess access = new OrderAccess();
+    private final AuthProvider provider = new AuthProvider();
 
 
     // order/:order-id
@@ -65,14 +68,13 @@ public class OrderController extends HttpServlet {
     public void initiateOrder(HttpServletRequest request, HttpServletResponse response) {
         response.setCharacterEncoding("utf-8");
         String json = ControlUtil.getJson(request);
+        DeliUser user = provider.getUserFromHeader(request);
         ResponseMessage<?> msg = null;
         try {
-            msg = service.startKaKaoPayment(json);
+            msg = service.startKaKaoPayment(json, user);
             if (msg.getMessage() != null){
                 log.info(msg.getMessage());
                 request.getSession().setAttribute("tid", msg.getMessage());
-                log.info(msg.getMessage());
-
                 msg.setMessage("payment proceed");
             }
         } catch (IllegalArgumentException | IllegalStateException | JsonProcessingException e) {

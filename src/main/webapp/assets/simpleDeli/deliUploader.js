@@ -24,15 +24,17 @@
 
 window.simpleDeli = window.simpleDeli || {};
 simpleDeli.uploader = {
-    domain : "http://112.169.196.76:47788",
+    // domain : "http://112.169.196.76:47788",
     replace : true,
     config : {
     },
     addLiveEventListener(type, selector, callback) {
-        document.body.addEventListener(type, function(e){
+        window.addEventListener(type, function(e){
             console.log(e.target)
-            if (e.target && 
-                e.target.classList.contains(selector.substring(1)) || document.querySelector(selector) === e.target){
+            console.log(e.target.classList)
+            // console.log(e.target.classList.includes(selector.substring(1)));
+            console.log(selector)
+            if (e.target.classList.contains(selector.substring(1)) || document.querySelector(selector) === e.target){
                     console.log('success')
                     console.log(this);
                     return callback.bind(e.target)(e);
@@ -46,7 +48,7 @@ simpleDeli.uploader = {
             return;
         }
 
-        fetch(simpleDeli.uploader.domain+"/upload",{
+        fetch(config.domain+"/upload",{
             method:"POST",
             body:form
         })
@@ -108,17 +110,15 @@ simpleDeli.uploader = {
     },
 
     init(){
+        console.log("init deli uploader...")
         this.addLiveEventListener('click', '.deli-upload-trigger', this.upload);
         this.addLiveEventListener('submit', '.deli-upload-form', this.uploadForm)
-        window.addEventListener('upload', this.uploader);
-        window.uploadEvent = new CustomEvent('upload', {
-
-        })
+        console.log("deli uploader init complete");
+        // window.addEventListener('upload', this.uploader);
     },
-
 }
 simpleDeli.uploader.init();
 
 
-simpleDeli.uploader.addLiveEventListener('click','.deli-upload', simpleDeli.uploader.upload);
+// simpleDeli.uploader.addLiveEventListener('click','.deli-upload', simpleDeli.uploader.upload);
 

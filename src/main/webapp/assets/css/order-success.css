@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+    .order-message span:first-child {
+        text-align: center;
+        font-size: large;
+    }
+    .order-message {
+        width: 600px;
+        height: 800px;
+        display: flex;
+        flex-direction: column;
+        padding: 4px 1px;
+        font-family: "Noto Sans Kr", sans-serif;
+    }
+    .order-message div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .order-message table tr {
+        text-align: center;
+        height: 2.7em;
+        margin: 3px 1px;
+    }
+
+    .order-message table td {
+        border-top:.1em solid skyblue;
+        margin: 3px 1px;      
+    }
+
+    .order-message table tr:nth-child(1) td {
+        border-top:.1em solid #233e8b;
+    }
+
+    .order-message table:nth-last-child(1) tr:nth-last-child(1) td{
+        border-bottom: .1em solid #233e8b;
+        /* background-color: antiquewhite; */
+    }
+
+    .order-message div {
+        margin-top: .3rem;
+    }
+
+    .order-body div{
+        margin: 1rem .1em;
+    }

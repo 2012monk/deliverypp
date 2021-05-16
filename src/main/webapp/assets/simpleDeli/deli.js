@@ -13,6 +13,7 @@ $.ajaxSetup(
     }
 )
 
+
 window.deli = {
     domain : "https://deli.alconn.co",
     checkRefresh() {
@@ -94,13 +95,16 @@ window.deli = {
 
     getToken() {
         try{
-            return JSON.parse(localStorage.getItem('deli')).access_token
+            return JSON.parse(localStorage.getItem('deli')).access_token;
         }catch(err){
             console.log(err)
         }
     }
 
 }
+
+
+deli.checkRefresh();
 // deli.login({
 //     userEmail : "test@test.com",
 //     userPw : "1234"

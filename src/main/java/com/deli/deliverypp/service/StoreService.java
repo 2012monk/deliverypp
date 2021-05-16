@@ -6,7 +6,6 @@ import com.deli.deliverypp.model.Product;
 import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.model.Store;
 import com.deli.deliverypp.util.MessageGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,9 +36,9 @@ public class StoreService {
         return store;
     }
 
-    // TODO Implement me
+
     public ResponseMessage<List<Store>> getStoreListByUser (String userEmail) {
-        return null;
+        return MessageGenerator.makeMsg("success", storeAccess.getStoreListByUser(userEmail));
     }
 
 
@@ -147,6 +146,7 @@ public class StoreService {
         Store store;
         try {
             store = mapper.readValue(json, Store.class);
+            store = storeAccess.updateStore(store);
         } catch (Exception e) {
             e.printStackTrace();
             return MessageGenerator.makeErrorMsg("failed", "올바르지 않은 형식");
@@ -175,7 +175,7 @@ public class StoreService {
         try {
             Product product = mapper.readValue(json, Product.class);
             if (product != null) {
-                return MessageGenerator.makeMsg("success", product, "update_success");
+                return MessageGenerator.makeMsg("success", productAccess.updateProduct(product), "update_success");
             }
             return MessageGenerator.makeErrorMsg("failed", "invalid_product_id");
         } catch (Exception e) {

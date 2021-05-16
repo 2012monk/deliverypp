@@ -70,8 +70,8 @@ public class OrderAccess {
             add(info.getPaymentType());
             add(info.getStoreId());
             add(info.getStoreName());
-            add(info.getQuantityString());
-            add(info.getTotalPriceString());
+            add(String.valueOf(info.getTotalAmount()));
+            add(String.valueOf(info.getTotalPrice()));
         }};
         Connection conn = getConn();
         try {

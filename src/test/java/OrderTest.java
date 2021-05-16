@@ -50,7 +50,7 @@ public class OrderTest {
         FCMMessageService m2 = new FCMMessageService();
         m2.sendOrderMsgToSeller(info);
 //        System.out.println(new PaymentHandler().kakaoPaymentReadyStage(info));
-        System.out.println(s.startKaKaoPayment(m.writeValueAsString(info)));
+//        System.out.println(s.startKaKaoPayment(m.writeValueAsString(info)));
 
 
 

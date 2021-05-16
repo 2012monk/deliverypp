@@ -13,11 +13,12 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.StringJoiner;
 
 
 import static com.deli.deliverypp.DB.ConnHandler.close;
 import static com.deli.deliverypp.DB.ConnHandler.getConn;
-import static com.deli.deliverypp.util.DBUtil.setPOJO;
+import static com.deli.deliverypp.util.DBUtil.*;
 import static com.deli.deliverypp.util.JSONUtil.getMapper;
 
 public class AuthorityChecker {
@@ -100,6 +101,36 @@ public class AuthorityChecker {
         return null;
     }
 
+    public static <S, T> boolean checkUserEmailWithMultiKeys (HttpServletRequest request, Class<T> targetClass, String primaryKey,Class<S> subTargetClass,String subKey, String value) {
+        String test = "SELECT * FROM STORE WHERE STORE_ID=(SELECT STORE_ID FROM PRODUCT WHERE PRODUCT_ID=?)";
+        DeliUser user = authProvider.getUserFromHeader(request);
+        if (user == null) return false;
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT * FROM").append(" ")
+                .append(convertClassNameToDbName(targetClass.getSimpleName())).append(" ").append("WHERE").append(" ")
+                .append(convertToDbNameConvention(primaryKey)).append("=")
+                .append("(").append("SELECT").append(" ").append(convertToDbNameConvention(primaryKey)).append(" ")
+                .append("FROM").append(" ").append(convertClassNameToDbName(subTargetClass.getSimpleName())).append(" ")
+                .append("WHERE").append(" ")
+                .append(convertToDbNameConvention(subKey)).append("=").append("'").append(value).append("'").append(")");
+
+        log.debug(sb.toString());
+        Connection conn = getConn();
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(sb.toString());
+
+            if (rs.next()) {
+                T tObject = setPOJO(targetClass, rs);
+                return checkUserFromTypeObject(tObject, user.getUserEmail());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 
     public static <T> boolean checkUserEmail(HttpServletRequest request, Class<T> targetClass, String key, String value) {
         T model = getModelFromKey(targetClass, key, value);
@@ -133,6 +164,24 @@ public class AuthorityChecker {
         return null;
     }
 
+    public static <T> boolean checkUserFromTypeObject (T tObject, String userEmail) {
+        if (tObject == null || userEmail == null) {
+            return false;
+        }
+
+        try {
+            Field field = tObject.getClass().getDeclaredField("userEmail");
+            field.setAccessible(true);
+            String tEmail = (String) field.get(tObject);
+            if (tEmail != null) {
+                return tEmail.equals(userEmail);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 
     public static <T> boolean checkUserEmailFromJson(HttpServletRequest request, Class<T> targetClass, String key, String json) {
         try {

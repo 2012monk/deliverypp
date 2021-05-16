@@ -1,5 +1,6 @@
 package com.deli.deliverypp.service;
 
+import com.deli.deliverypp.DB.DeliUser;
 import com.deli.deliverypp.DB.OrderAccess;
 import com.deli.deliverypp.model.KaKaoPayment;
 import com.deli.deliverypp.model.OrderInfo;
@@ -27,31 +28,33 @@ public class OrderService {
 
     private static final FCMMessageService alertService = new FCMMessageService();
 
-    public ResponseMessage<OrderInfo> startKaKaoPayment(String json) throws JsonProcessingException {
+    public ResponseMessage<OrderInfo> startKaKaoPayment(String json, DeliUser user) throws JsonProcessingException {
 
         OrderInfo orderInfo;
 
         try {
-
             orderInfo = mapper.readValue(json, OrderInfo.class);
+
+            if (orderInfo.getUserEmail() == null) {
+                orderInfo.setUserEmail(user.getUserEmail());
+            }
             log.info(orderInfo);
         } catch (Exception e) {
             e.printStackTrace();
-            throw  new IllegalArgumentException("data mismatch" + e.getMessage());
+            return MessageGenerator.makeErrorMsg("failed", "주문정보 양식이 올바르지 않습니다");
         }
 
         // TODO order 검증 validate
 
-//        System.out.println(orderInfo);
         log.debug(orderInfo);
         assert  orderInfo != null;
 
         // 주문 번호 부여
-        orderInfo.generateOrderId();
+        orderInfo.initOrder();
 
         // TODO 주문별로 라우팅 필요
-        if (validateOrderInfo(orderInfo)){
-            throw new IllegalArgumentException("주문 사항 누락");
+        if (!validateOrderInfo(orderInfo)){
+            return MessageGenerator.makeErrorMsg("failed", "주문 사항 누락");
         }
 
         if (orderInfo.getPaymentType().equals("kakao")) {
@@ -60,7 +63,7 @@ public class OrderService {
                 paymentInfo = paymentHandler.kakaoPaymentReadyStage(orderInfo);
             }catch (Exception e) {
                 e.printStackTrace();
-                throw new IllegalStateException("결제 요청 실패!");
+                return MessageGenerator.makeErrorMsg("failed", "결제 요청 실패!");
             }
 
             ResponseMessage<OrderInfo> msg = new ResponseMessage<>();
@@ -79,9 +82,7 @@ public class OrderService {
                 msg.setMessage(paymentInfo.getTid());
             }
             else {
-//                msg.setMessage("failed");
-//                msg.setData("error");
-                throw new IllegalArgumentException("주문 실패!");
+                return MessageGenerator.makeErrorMsg("failed", "주문 실패");
             }
             return msg;
         }
@@ -121,13 +122,13 @@ public class OrderService {
 
     // TODO 주문 data 검증
     public boolean validateOrderInfo (OrderInfo info) {
-//        return info.getPaymentType() == null ||
-//                info.getAddress() == null ||
-//                info.getOrderList() == null ||
-//                info.getStoreId() == null ||
-//                info.getQuantity() == 0 ||
-//                info.getOrderId() == null;
-        return false;
+        return info.getPaymentType() != null ||
+                info.getUserAddr() != null ||
+                info.getOrderList() != null ||
+                info.getStoreId() != null ||
+                info.getTotalAmount() != 0 ||
+                info.getOrderId() != null;
+//        return false;
     }
 
 

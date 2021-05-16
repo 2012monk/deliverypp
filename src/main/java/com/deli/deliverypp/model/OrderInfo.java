@@ -2,6 +2,7 @@ package com.deli.deliverypp.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,29 +36,9 @@ public class OrderInfo {
     private OrderState orderState;
     private String orderInitDate;
 
-
-    public String getOrderInitDate() {
-        return orderInitDate;
-    }
-
-    public void setOrderInitDate(String orderInitDate) {
-        this.orderInitDate = orderInitDate;
-    }
-
-    public String getTid() {
-        return tid;
-    }
-
-    public void setTid(String tid) {
-        this.tid = tid;
-    }
-
-    public String getPaymentType() {
-        return paymentType;
-    }
-
-    public void setPaymentType(String paymentType) {
-        this.paymentType = paymentType;
+    public void initOrder() {
+        this.orderId = UUID.randomUUID().toString();
+        this.orderInitDate = new Date().toString();
     }
 
     public void generateOrderId() {
@@ -72,21 +53,12 @@ public class OrderInfo {
         this.orderId = orderId;
     }
 
-//    public String getOrderState() {
-//        return orderState;
-//    }
-//
-//    public void setOrderState(String orderState) {
-//        this.orderState = orderState;
-//    }
-
-
-    public OrderState getOrderState() {
-        return orderState;
+    public String getTid() {
+        return tid;
     }
 
-    public void setOrderState(OrderState orderState) {
-        this.orderState = orderState;
+    public void setTid(String tid) {
+        this.tid = tid;
     }
 
     public String getUserEmail() {
@@ -137,7 +109,7 @@ public class OrderInfo {
         this.storeName = storeName;
     }
 
-    public double getTotalAmount() {
+    public int getTotalAmount() {
         return totalAmount;
     }
 
@@ -152,25 +124,6 @@ public class OrderInfo {
     public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
     }
-    // parse string
-
-    @JsonProperty(value = "quantity")
-    public String getQuantityString() {
-        return String.valueOf(totalAmount);
-    }
-
-    public void setQuantity(String quantity) {
-        this.totalAmount = Integer.parseInt(quantity);
-    }
-
-    @JsonProperty(value = "totlaPrice")
-    public String  getTotalPriceString() {
-        return String.valueOf(totalPrice);
-    }
-
-    public void setTotalPrice(String totalPrice) {
-        this.totalPrice = Integer.parseInt(totalPrice);
-    }
 
     public List<Product> getOrderList() {
         return orderList;
@@ -178,6 +131,14 @@ public class OrderInfo {
 
     public void setOrderList(List<Product> orderList) {
         this.orderList = orderList;
+    }
+
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
     }
 
     public Payment getPayment() {
@@ -188,6 +149,21 @@ public class OrderInfo {
         this.payment = payment;
     }
 
+    public OrderState getOrderState() {
+        return orderState;
+    }
+
+    public void setOrderState(OrderState orderState) {
+        this.orderState = orderState;
+    }
+
+    public String getOrderInitDate() {
+        return orderInitDate;
+    }
+
+    public void setOrderInitDate(String orderInitDate) {
+        this.orderInitDate = orderInitDate;
+    }
 
     @Override
     public String toString() {

@@ -44,8 +44,9 @@ public class ReviewController extends HttpServlet {
         String userEmail = provider.getUserEmailFromHeader(request);
         if (userEmail != null) {
             ControlUtil.sendResponseData(response, service.insertNewReview(json, userEmail));
-        }else {
-            ControlUtil.sendResponseData(response, service.insertNewReview(json, null));
+        }
+        else {
+            ControlUtil.sendResponseData(response, MessageGenerator.makeErrorMsg("failed", "인증정보가 없습니다!"));
         }
     }
 
@@ -60,7 +61,8 @@ public class ReviewController extends HttpServlet {
 
         if (AuthorityChecker.checkUserEmailFromJson(req, Review.class,"reviewId", json)){
             ControlUtil.sendResponseData(resp, service.updateReview(json));
-        }else {
+        }
+        else {
             ControlUtil.sendResponseData(resp, MessageGenerator.makeErrorMsg("you don't have authority to access this resources \r\n 본인인증실패", "authority_error"));
             log.warn("failed to pass test");
         }
@@ -74,11 +76,11 @@ public class ReviewController extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp){
         String reviewId = ControlUtil.getRequestUri(req);
-        if (AuthorityChecker.checkUserEmail(req,Review.class,"reviewId", reviewId)){
-            log.warn("passed annotaions test");
-            log.info(ControlUtil.getRequestUri(req));
+        if (AuthorityChecker.checkUserEmail(req, Review.class,"reviewId", reviewId)){
+
             ControlUtil.responseMsg(resp, service.deleteReview(ControlUtil.getRequestUri(req)));
-        }else{
+        }
+        else{
             ControlUtil.sendResponseData(resp, MessageGenerator.makeErrorMsg("you don't have authority to access this resources \r\n 본인인증실패", "authority_error"));
             log.warn("failed to pass test");
         }

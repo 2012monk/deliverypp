@@ -9,6 +9,8 @@ import com.deli.deliverypp.util.MessageGenerator;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
 import com.deli.deliverypp.util.annotaions.RequiredModel;
 import com.deli.deliverypp.auth.provider.AuthorityChecker;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -19,7 +21,9 @@ import static com.deli.deliverypp.util.JSONUtil.getMapper;
 
 @WebServlet(name = "ProductController", value = "/products/*")
 public class ProductController extends HttpServlet {
+
     private static final StoreService service = new StoreService();
+    private static final Logger log = LogManager.getLogger(ProductController.class);
 
 
 
@@ -66,7 +70,7 @@ public class ProductController extends HttpServlet {
         String json = ControlUtil.getJson(req);
         try {
             Product product = getMapper().readValue(json, Product.class);
-            if (AuthorityChecker.checkUserEmail(req, Store.class, "storeId", product.getStoreId())) {
+            if (AuthorityChecker.checkUserEmailWithMultiKeys(req, Store.class, "storeId", Product.class, "productId", product.getProductId())) {
                 ControlUtil.sendResponseData(resp, service.updateProduct(json));
             }else {
                 ControlUtil.sendUnAuthorizeMsg(resp);
@@ -86,15 +90,8 @@ public class ProductController extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp){
         String pid = ControlUtil.getRequestUri(req);
-//        Product product = service.getProductByProductId(pid);
-        String sid = "";
-//        if (product != null) {
-//            sid = product.getStoreId();
-//        }
-
-        if (AuthorityChecker.checkUserEmail(req, Store.class, "productId", pid)){
+        if (AuthorityChecker.checkUserEmailWithMultiKeys(req, Store.class, "storeId", Product.class,"productId", pid)){
             ControlUtil.sendResponseData(resp, service.deleteProduct(pid));
-//            ControlUtil.responseMsg(resp, service.deleteProduct(ControlUtil.getRequestUri(req, 1)));
         }else {
             ControlUtil.sendUnAuthorizeMsg(resp);
         }
@@ -106,6 +103,7 @@ public class ProductController extends HttpServlet {
 
     public void insertProduct (HttpServletRequest request, HttpServletResponse response) {
         String json = ControlUtil.getJson(request);
+
         ControlUtil.sendResponseData(response, service.insertProductService(json));
     }
 

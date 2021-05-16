@@ -74,17 +74,6 @@ public class UserController extends HttpServlet {
     }
 
 
-//    private void handleSignUp (HttpServletRequest request, HttpServletResponse response){
-//
-//        String json = ControlUtil.getJson(request);
-//        log.debug(json);
-//        try {
-//            ControlUtil.responseMsg(response, service.signUpUser(json));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            ControlUtil.responseMsg(response, false);
-//        }
-//    }
 
     // 유저 등록
     private void registerAsUser (HttpServletRequest request, HttpServletResponse response){

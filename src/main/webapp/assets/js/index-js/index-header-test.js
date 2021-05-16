@@ -24,7 +24,6 @@ function mainHeaderPage() {
             }
             s +="<li><i></i></li></ul>";
             }
-        }
 		
 		/*모달 코드div 렌더링 처음에 해놔야 나중에 */
 		s += '<div id="myModal" class="modal" tabindex="-1" role="dialog">';

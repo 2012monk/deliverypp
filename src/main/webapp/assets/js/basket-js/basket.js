@@ -94,22 +94,21 @@ $(document).on("click","button.cart-order",function(){
 		cart_pay_list.push(cart_local_list[one]);
 		cart_count += parseInt(cart_local_list[one].quantity);
 	}
-	cart_pay.quantity = cart_count.toString();
+	cart_pay.totalAmount = cart_count.toString();
 	cart_pay.totalPrice = localStorage.getItem("cartPrice");
 	cart_pay.orderList = cart_pay_list;
-	cart_pay.address = $(this).parent().find("#address").val();
-	cart_pay.telephone = $(this).parent().find("#telephone").val();
+	// 변수명 수정
+	cart_pay.userAddr = $(this).parent().find("#address").val();
+	cart_pay.userTelephone = $(this).parent().find("#telephone").val();
 	cart_pay.orderRequirement = $(this).parent().find("#orderRequirement").val();
 	cart_pay.paymentType = $(this).parent().find("#paymentType").val();
 	
-	alert(JSON.stringify(cart_pay));
+	// alert(JSON.stringify(cart_pay));
+	console.log(JSON.stringify(cart_pay))
 	
 	$.ajax({
 		type:"post",
-		url:"https://deli.alconn.co/order",
-		// url:"http://deli.alconn.co/order",
-		// TODO 고쳐야함
-		// url : "http://localhost:47788/order",
+		url:config.domain + "/order",
 		data:JSON.stringify(cart_pay),
 		dataType:"json",
 		success:function(data){
@@ -147,8 +146,8 @@ function CartMain(){
 }
 
 function CartMain2(){
-	var	s= "<table class='table table-responsive'><tr><td>주소</td><td><input type='text' id='address'></td></tr>";
-	s+= "<tr><td>연락처</td><td><input type='text' id='telephone'></td></tr>";
+	var	s= "<table class='table table-responsive'><tr><td>주소</td><td><input type='text' id='address' required></td></tr>";
+	s+= "<tr><td>연락처</td><td><input type='text' id='telephone' required></td></tr>";
 	s+= "<tr><td>요청사항</td><td><input type='text' id='orderRequirement'></td></tr>";
 	s+= "<tr><td>결제수단</td><td><select id='paymentType'><option value='kakao'>카카오 페이</option></select></td></tr></table>";
 	
@@ -345,55 +344,6 @@ function add(data, storeName) {
 	CartMain2();
 }
 
-
-// 추가 부분입니다!
-
-/**
- *
- * @param data 성공시 데이터 주문 정보
- * @author monk
- */
- function success(data) {
-	 const kakaoOrderSuccessTmpl = `
-	 <div class="order-message">
-	 <div class="order-header">
-		 <span>{{message}}</span>
-		 <span>주문번호 : {{data.orderId}}</span>
-		 <span>결제번호 : {{data.tid}}</span>
-		 <span>주문 상태 : {{data.orderState}}</span>
-		 <span>{{data.storeName}}</span> 
-	 <div>
-	 <div class="order-body">
-		 <div class="order-orderList">
-			 {{#data.orderList}}
-			 <div>
-				 <span>{{data.orderList.productName}}</span>
-				 <span>{{data.orderList.productDesc}}</span>
-				 <span>{{data.orderList.productPrice}}</span>
-				 <span>{{data.orderList.quantity}}</span>
-			 </div>
-			 {{/data.orderList}}
-		 </div>
-		 <div class="order-footer">
-			 <span>총 금액 {{data.totalprice}}</span>
-			 <span>총 상품수 : {{data.queantity}}</span>
-			 <span>주문일시 : {{data.orderInitDate}}</span>
-		 </div>
- 
-		 <div class="order-deli-info">
-			 <span>{{data,userEmail}}</span>
-			 <span>{{data.userAddr}}</span>
-			 <span>{{data.userTelephone}}</span>
-			 <span>{{data.orderRequirement}}</span>
-		 </div>
-	 </div>
- </div>`
-	 const html = Mustache.render(kakaoOrderSuccessTmpl, data);
-	// document.querySelector('.onsuccess-msg').innerHTML = data;
-	document.querySelector('#index-main').innerHTML = html;
-	// kakaoOrderSuccessTmpl(data)
-
-}
 
 function kakaoFailed() {
 	document.getElementById('index-main').innerText = "실패 했습니다!";

@@ -6,6 +6,7 @@ import com.deli.deliverypp.model.Store;
 import com.deli.deliverypp.service.StoreService;
 import com.deli.deliverypp.service.UserLoginService;
 import com.deli.deliverypp.util.ControlUtil;
+import com.deli.deliverypp.util.MessageGenerator;
 import com.deli.deliverypp.util.annotaions.ProtectedResource;
 import com.deli.deliverypp.util.annotaions.RequiredModel;
 import com.deli.deliverypp.auth.provider.AuthorityChecker;
@@ -42,9 +43,10 @@ public class StoreController extends HttpServlet {
                 sendStoreList(request,response);
                 break;
             case "user":
-                sendStore(request, response);
+                sendStoreByUser(request, response);
                 break;
             case "name":
+                sendStoreByName(request, response);
                 break;
             case "check-name":
                 checkStoreName(request, response);
@@ -131,25 +133,38 @@ public class StoreController extends HttpServlet {
 
 
 
-    public void sendStoreByName (HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void sendStoreByName (HttpServletRequest request, HttpServletResponse response)  {
         String storeName = ControlUtil.getRequestUri(request, 2);
         ControlUtil.sendResponseData(response, service.getStoreByName(storeName));
     }
 
 
 
-    public void sendStore (HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void sendStoreByUser(HttpServletRequest request, HttpServletResponse response)  {
+        String userEmail = provider.getUserEmailFromHeader(request);
+        if (userEmail == null) {
+            ControlUtil.sendResponseData(response, MessageGenerator.makeErrorMsg("failed", "인증 정보가 없습니다"));
+        }
+        else {
+            ControlUtil.sendResponseData(response, service.getStoreListByUser(userEmail));
+        }
+
 
     }
 
     // TODO url encoding 되서 들어옴
     // TODO url decoding 으로 해결했지만  issue 해결방안 필요
-    public void checkStoreName (HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setCharacterEncoding("utf-8");
-        String r = ControlUtil.getRequestUri(request, 2);
-        String name = java.net.URLDecoder.decode(r, "UTF-8");
+    public void checkStoreName (HttpServletRequest request, HttpServletResponse response)  {
+        try {
+            request.setCharacterEncoding("utf-8");
+            String r = ControlUtil.getRequestUri(request, 2);
+            String name = java.net.URLDecoder.decode(r, "UTF-8");
+            ControlUtil.sendResponseData(response, name, service.checkStoreName(name) ? "overlap" : "free");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ControlUtil.sendResponseData(response, MessageGenerator.makeErrorMsg("failed", "encoding_error"));
+        }
 
-        ControlUtil.sendResponseData(response, name, service.checkStoreName(name) ? "overlap" : "free");
     }
 
 

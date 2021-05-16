@@ -9,7 +9,7 @@ $(document).on("click",".main-storelist",function(){
 	/*가게 상세 상품 목록 등장 */
 	$.ajax({
 		type:"get",
-		url:"https://deli.alconn.co/products/list/"+storeId,
+		url:config.domain + "/products/list/"+storeId,
 		dataType:"json",
 		success:function(data){
 			console.log(data);
@@ -25,7 +25,8 @@ $(document).on("click",".main-storelist",function(){
 					z+="<td>"+elt.productName+"</td>";
 					z+="<td>"+elt.productPrice+"</td>";
 					z+="<td>"+elt.productDesc+"</td>";
-					z+="<td>"+elt.productImage+"</td>";
+					// z+="<td>"+elt.productImage+"</td>";
+					z+="<td><img alt='상품이미지' src="+elt.productImage+"></td>";
 					z+="<td><button class='cus-cart-add btn btn-default' type='button' add_product='"+JSON.stringify(elt)+"', add_storeName='"+storeName+"'><span class='fas fa-2x fa-cart-arrow-down'></span></button></td></tr>";
 			});
 			z+="</table>";
@@ -38,7 +39,7 @@ $(document).on("click",".main-storelist",function(){
 			$("#index-main").html(c);
 			$.ajax({
 				type:"get",
-				url:"https://deli.alconn.co/stores/"+storeId,
+				url:config.domain + "/stores/"+storeId,
 				dataType:"json",
 				success:function(data){
 					/*매장 소개*/
@@ -47,7 +48,8 @@ $(document).on("click",".main-storelist",function(){
 					s+="<div id='ssss' data-store='"+storeId+"' data-storeName='"+data.data.storeName+"'></div>";
 					s+="<table class='table table-bordered'>";
 					s+="<tr><td style='font-size:15pt;'>매장소개</td><td>"+data.data.storeDesc+"</td></tr>";
-					s+="<tr><td style='font-size:15pt;'>매장사진</td><td>"+data.data.storeImage+"</td></tr>";
+					// s+="<tr><td style='font-size:15pt;'>매장사진</td><td>"+data.data.storeImage+"</td></tr>";
+					s+="<tr><td style='font-size:15pt;'>매장사진</td><td><img alt='매장사진' src="+data.data.storeImage+"></td></tr>";
 					s+="<tr><td style='font-size:15pt;'>매장주소</td><td>"+data.data.storeAddr+"</td></tr></table>";
 
 					$("#index-main-first").html(s);

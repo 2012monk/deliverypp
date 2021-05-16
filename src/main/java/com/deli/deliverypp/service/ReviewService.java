@@ -5,8 +5,10 @@ import com.deli.deliverypp.DB.ReviewAccess;
 import com.deli.deliverypp.model.Reply;
 import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.model.Review;
+import com.deli.deliverypp.util.MessageGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,24 +20,20 @@ public class ReviewService {
     private static final ObjectMapper mapper = getMapper();
     private static final ReplyAccess replyAccess = new ReplyAccess();
 
-    public boolean insertNewReview (String json) {
-        return false;
-    }
 
     public ResponseMessage<Review> insertNewReview (String json, String userId) {
-        Review review = null;
         try {
-            review = mapper.readValue(json, Review.class);
+            Review review = mapper.readValue(json, Review.class);
             review.generateReviewId();
+            review.setReviewDate(new Date().toString());
             review.setUserEmail(userId);
-            if (review.getUserEmail() == null) {
-            }
             review = access.insertReview(review);
+            return MessageGenerator.makeMsg("success", review, "create_success");
         } catch (Exception e) {
             e.printStackTrace();
+            return MessageGenerator.makeErrorMsg("failed", "invalid_data");
         }
 
-        return makeMsg("insert Success", review);
     }
 
     public boolean deleteReview (String reviewId) {

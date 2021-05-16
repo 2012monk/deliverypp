@@ -1,8 +1,9 @@
-window.config = {
-    domain : "https://deli.alconn.co",
-    userEmail : deli.isLoggedIn==false?"비회원":deli.getUserEmail()
-}
-
+// window.config = {
+//     domain : "https://deli.alconn.co",
+//     userEmail : deli.isLoggedIn==false?"비회원":deli.getUserEmail()
+// }
+console.log(config)
+console.log(deli.getUserRole())
 function mainHeaderPage() {
 
 	s = "";
@@ -98,8 +99,9 @@ $(document).on("click","#basket-modal",function(){
             $.ajax({
                 type:"post",
                 //url:"<https://deli.alconn.co/login>",
-                url:"https://deli.alconn.co/user/signup/seller",
+                url:config.domain + "/user/signup/seller",
                 success:function(d){
+                    deli.checkRefresh();
                     if (d === "SUCCESS"){
                         alert("seller등록이 되었습니다.");
                         $("#sellerForm").remove();
@@ -149,7 +151,7 @@ $(document).on("click","#signbtn",function(){
             
             $.ajax({
                 type:"post",
-                url:"https://deli.alconn.co/user/signup",
+                url:config.domain + "/user/signup",
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole, "userType":userType,"userTelephone":userTelephone,"userAddr":userAddr}),
                 success:function(d){
                     console.log(d);
@@ -235,9 +237,14 @@ $(document).on("click","#logoutbtn",function(){
 
 // function end!
 $(document).on("click","#mypagebtn",function(){
+    if (!deli.isLoggedIn()) {
+        $("#logoutbtn").trigger("click");
+    }
     $.ajax({
         type:"get",
-        url:config.domain+"/user/"+config.userEmail,//E-Mail 변경요망
+        // fix
+        // url:config.domain+"/user/"+config.userEmail,//E-Mail 변경요망
+        url:config.domain+"/user/"+ deli.getUserEmail(), // function 수정
         dataType:"json",
         success:function(data){
             console.log(data);
@@ -255,6 +262,10 @@ $(document).on("click","#mypagebtn",function(){
             s+="<button id='userupdatebtn'>정보수정</button><button id='userdeletebtn'>회원탈퇴</button><button id='logoutbtn'>로그아웃</button>";
             s+="</form>";
             $("#index-main").html(s);
+        },
+        error:function (error){
+            alert("로그인을 다시해주세요!")
+            deli.logout();
         }
     });
 
@@ -373,15 +384,22 @@ function sellerPage(){
 	var storeId = $(this).attr("value");
 	$.ajax({
 		type:"get",
-		url:"https://deli.alconn.co/stores/list",
+        // 수정 부분
+		url:config.domain + "/stores/user",
 		dataType:"json",
 		success:function(data){
 			var s="";
 				s+="<table class='table table-bordered'>";
-				s+="<h2><b>"+config.userEmail+"님의 SHOP LIST</b></h2><hr><button id='storehost-btn-add'>가게 추가</button>";
+				// s+="<h2><b>"+config.userEmail+"님의 SHOP LIST</b></h2><hr><button id='storehost-btn-add'>가게 추가</button>";
+            // image uploader trigger 추가
+				s+="<h2><b>"+deli.getUserEmail()+"님의 SHOP LIST</b></h2><hr><button class='deli-input-trigger' id='storehost-btn-add'>가게 추가</button>";
 				s+="<tr><th>가게명</th><th>가게 정보</th><th>가게 이미지</th><th>가게 주소</th><th>수정</th><th>삭제</th></tr>";
 				$.each(data.data, function(i,elt){
-					s +="<tr class='mouse-seller' value='"+elt.storeId+"'><td class='storehostdetail-page' name='storeName'>"+elt.storeName+"</td><td class='storehostdetail-page' name='storeDesc'>"+elt.storeDesc+"</td><td class='storehostdetail-page' name='storeImage'>"+elt.storeImage+"</td><td class='storehostdetail-page' name='storeAddr'>"+elt.storeAddr+"</td>";
+					s +="<tr class='mouse-seller' value='"+elt.storeId+"'>" +
+                        "<td class='storehostdetail-page' name='storeName'>"+elt.storeName+"</td>" +
+                        "<td class='storehostdetail-page' name='storeDesc'>"+elt.storeDesc+"</td>" +
+                        "<td class='storehostdetail-page' name='storeImage'><img alt='store image' src="+elt.storeImage+" /></td>" +
+                        "<td class='storehostdetail-page' name='storeAddr'>"+elt.storeAddr+"</td>";
 					s +="<td><button type='button' class='storelist-btn-update' value='"+elt.storeId+"'>update</button></td>";
                     s +="<td><button type='button' class='storelist-btn-delete' value='"+elt.storeId+"'>delete</button></td></tr>";
 
@@ -408,7 +426,7 @@ function clientPage(){
 	var a = "";
 	$.ajax({
 		type:"get",
-		url:"https://deli.alconn.co/stores/list",
+		url:config.domain + "/stores/list",
 		dataType:"json",
 		success:function(d){
 			$.each(d.data, function(i, elt) {
@@ -416,7 +434,7 @@ function clientPage(){
 				//console.log(i);
 				//a += "<div storename='"+elt.storeId+"'>";
 				a += "<div id='ttest' class='main-storelist' data-storeName='"+elt.storeName+"' data-storeId='"+elt.storeId+"'>";
-				/*a += "<img src='"+elt.storeImage+"'>";*/
+				a += "<img src='"+elt.storeImage+"'>";
 				a += "<div><h3>"+elt.storeName+"</h3></div>";
 				a +="<div><span>"+elt.storeDesc+"</span></div>";
 				a +="</div>";

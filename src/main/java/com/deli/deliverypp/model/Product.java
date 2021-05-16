@@ -1,5 +1,6 @@
 package com.deli.deliverypp.model;
 
+import com.deli.deliverypp.util.DescSerializer;
 import com.deli.deliverypp.util.ParseUtil;
 import com.deli.deliverypp.util.PathSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -16,6 +17,7 @@ public class Product {
     private String productImage;
     private String storeId;
     private int productPrice;
+    @JsonSerialize(using = DescSerializer.class, as = String.class)
     private String productDesc;
     private int quantity;
 

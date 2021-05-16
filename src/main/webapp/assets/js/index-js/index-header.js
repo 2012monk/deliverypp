@@ -82,8 +82,8 @@ function check_pw(){  //비밀번호 확인
             alert("click")
             $.ajax({
                 type:"post",
-                //url:"<http://deli.alconn.co/login>",
-                url:"http://deli.alconn.co/user/signup/seller",
+                //url:"<config.domain + "/login>",
+                url:config.domain + "/user/signup/seller",
                 success:function(d){
                     console.log(d)
                     alert("seller등록이 되었습니다.");
@@ -133,7 +133,7 @@ function check_pw(){  //비밀번호 확인
             
             $.ajax({
                 type:"post",
-                url:"http://deli.alconn.co/user/signup",
+                url:config.domain + "/user/signup",
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole, "userType":userType,"userTelephone":userTelephone,"userAddr":userAddr}),
                 success:function(d){
                     console.log(d);
@@ -168,8 +168,8 @@ function check_pw(){  //비밀번호 확인
             
             $.ajax({
                 type:"post",
-                //url:"<http://deli.alconn.co/login>",
-                url:"http://deli.alconn.co/login",
+                //url:"<config.domain + "/login>",
+                url:config.domain + "/login",
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw}),
                 dataType:"json",
                 success:function(login_result){
@@ -192,7 +192,7 @@ function mypage(){
     $(document).on("click","#mypagebtn",function(){
         $.ajax({
             type:"get",
-            url:"http://deli.alconn.co/user/",//E-Mail 변경요망 
+            url:config.domain + "/user/",//E-Mail 변경요망 
             dataType:"json",
             success:function(data){
                 console.log(data);
@@ -218,7 +218,7 @@ function mypage(){
     $(document).on("click","#logoutbtn",function(){
         $.ajax({
             type:"get",
-            url:"http://deli.alconn.co/logout",
+            url:config.domain + "/logout",
             dataType:"json",
             success:function(data){
                 console.log(data);
@@ -272,7 +272,7 @@ function mypage(){
         console.log(userTelephone);
         $.ajax({
             type:"PUT",
-            url:"http://deli.alconn.co/user",
+            url:config.domain + "/user",
             dataType: "json",
             data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole,"userType":userType,"userAddr":userAddr,"userTelephone":userTelephone}),
             success:function(data){
@@ -288,7 +288,7 @@ function mypage(){
         console.log(userEmail);
         $.ajax({
             type:"DELETE",
-            url:"http://deli.alconn.co/user/"+userEmail,
+            url:config.domain + "/user/"+userEmail,
             success:function(data){
                 alert("회원탈퇴가 완료되었습니다.");
                 console.log(data);
@@ -309,8 +309,8 @@ function mainBodyPage() {
             alert("click")
             $.ajax({
                 type:"post",
-                //url:"<http://deli.alconn.co/login>",
-                url:"http://112.169.196.76:47788/user/signup/seller",
+                //url:"<config.domain + "/login>",
+                url:config.domain + "/user/signup/seller",
                 beforeSend:function(xhr){
                     xhr.withCredentials = true;
                 },
@@ -363,7 +363,7 @@ function mainBodyPage() {
             
             $.ajax({
                 type:"post",
-                url:"http://112.169.196.76:47788/user/signup",
+                url:config.domain + "/user/signup",
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole, "userType":userType,"userTelephone":userTelephone,"userAddr":userAddr}),
                 success:function(d){
                     console.log(d);
@@ -398,8 +398,8 @@ function mainBodyPage() {
             
             $.ajax({
                 type:"post",
-                //url:"<http://deli.alconn.co/login>",
-                url:"http://112.169.196.76:47788/login",
+                //url:"<config.domain + "/login>",
+                url:config.domain + "/login",
                 data:JSON.stringify({"userEmail":userEmail,"userPw":userPw}),
                 dataType:"json",
                 success:function(login_result){
@@ -422,7 +422,7 @@ function mypage(){
     $(document).on("click","#mypagebtn",function(){
         $.ajax({
             type:"get",
-            url:"http://112.169.196.76:47788/user/",//E-Mail 변경요망 
+            url:config.domain + "/user/",//E-Mail 변경요망 
             dataType:"json",
             beforeSend:function(xhr){
                 xhr.withCredentials = true;
@@ -451,7 +451,7 @@ function mypage(){
     $(document).on("click","#logoutbtn",function(){
         $.ajax({
             type:"get",
-            url:"http://112.169.196.76:47788/logout",
+            url:config.domain + "/logout",
             dataType:"json",
             success:function(data){
                 console.log(data);
@@ -505,7 +505,7 @@ function mypage(){
         console.log(userTelephone);
         $.ajax({
             type:"PUT",
-            url:"http://112.169.196.76:47788/user",
+            url:config.domain + "/user",
             dataType: "json",
             data:JSON.stringify({"userEmail":userEmail,"userPw":userPw,"userRole":userRole,"userType":userType,"userAddr":userAddr,"userTelephone":userTelephone}),
             success:function(data){
@@ -521,7 +521,7 @@ function mypage(){
         console.log(userEmail);
         $.ajax({
             type:"DELETE",
-            url:"http://112.169.196.76:47788/user/"+userEmail,
+            url:config.domain + "/user/"+userEmail,
             success:function(data){
                 alert("회원탈퇴가 완료되었습니다.");
                 console.log(data);
@@ -535,7 +535,7 @@ function sellerPage(){
 	var storeId = $(this).attr("value");
 	$.ajax({
 		type:"get",
-		url:"http://deli.alconn.co/stores/list",
+		url:config.domain + "/stores/list",
 		dataType:"json",
 		success:function(data){
 			var s="";
@@ -561,7 +561,7 @@ function clientPage(){
 	var a = "";
 	$.ajax({
 		type:"get",
-		url:"http://deli.alconn.co/stores/list",
+		url:config.domain + "/stores/list",
 		dataType:"json",
 		success:function(d){
 			$.each(d.data, function(i, elt) {

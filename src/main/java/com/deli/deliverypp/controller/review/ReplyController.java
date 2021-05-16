@@ -16,6 +16,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import static com.deli.deliverypp.util.JSONUtil.getMapper;
@@ -29,8 +30,7 @@ public class ReplyController extends HttpServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ResponseMessage<?> msg = new ResponseMessage<>();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         switch (ControlUtil.getRequestUri(request)) {
             case "review-id":
                 List<Reply> list = access.getRepliesBiReview(ControlUtil.getRequestUri(request, 2));
@@ -48,7 +48,7 @@ public class ReplyController extends HttpServlet {
 
     @ProtectedResource(uri = "/reply", role = DeliUser.UserRole.CLIENT)
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)  {
 
         Reply reply = getReply(ControlUtil.getJson(request));
         DeliUser user = provider.getUserFromHeader(request);
@@ -56,6 +56,7 @@ public class ReplyController extends HttpServlet {
             reply.generateReplyId();
             if (reply.getUserEmail() == null) {
                 reply.setUserEmail(user.getUserEmail());
+                reply.setReplyDate(new Date().toString());
             }
         }
         ControlUtil.sendResponseData(response,

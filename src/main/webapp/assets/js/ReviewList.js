@@ -1,7 +1,7 @@
 
 var list_range = "";
 //var domain = "https://112.169.196.76:47788";
-var domain = "https://deli.alconn.co";
+// var domain = "https://deli.alconn.co";
 
 function reviewPage(storeId, storeName){
 
@@ -49,7 +49,7 @@ function reviewPage(storeId, storeName){
     $.ajax({
         type:"get",
 
-        url:domain+"/review/store/"+storeId,
+        url:config.domain +"/review/store/"+storeId,
 
         dataType:"json",
         success:function(ajax_data){
@@ -74,7 +74,8 @@ function reviewPage(storeId, storeName){
                 //리뷰 테이블
                 s+= "<table class='table table-bordered'><tr><td>번호</td><td>작성자</td><td>별점</td><td>작성일</td></tr>";
                 s+="<tr><td>"+idx+"</td><td>"+w.userEmail+"</td><td>"+rating+"</td><td>"+w.reviewDate.substring(0,10)+"</td></tr>";
-                var s_photo ="<tr class='photo'><td colspan='4'><img style='width:300px;height:300px;' src='"+w.reviewImage+"'></td></tr>";
+                // var s_photo ="<tr class='photo'><td colspan='4'><img style='width:300px;height:300px;' src='"+w.reviewImage+"'></td></tr>";
+                var s_photo ="<tr class='photo'><td colspan='4'><img src='"+w.reviewImage+"'></td></tr>";
                 if(w.reviewImage!=null)
                     s+=s_photo;
                 s+="<tr><td colspan='4' class='content'>"+w.reviewContent+"</td></tr></table>";
@@ -186,7 +187,7 @@ $(document).on("click","#review-submit",function(){
         $.ajax({
             type:"post",
             data:formData,
-            url:domain+"/upload",
+            url:config.domain +"/upload",
             processData: false,
             contentType: false,
             success:function(d){
@@ -201,7 +202,7 @@ $(document).on("click","#review-submit",function(){
     $.ajax({
         type:"post",
         data:JSON.stringify(review_json),
-        url:domain+"/review",
+        url:config.domain +"/review",
         //dataType:"json",
         success:function(d){
             $("#write-form").html("");
@@ -218,26 +219,21 @@ $(document).on("click","#review-submit",function(){
         var review_id = $(this).parent().attr("review_id");
         $.ajax({
             type:"get",
-            url:domain+"/review/"+review_id,
+            url:config.domain +"/review/"+review_id,
             dataType:"json",
             success:function(r){
-                
-                var photo_url = "https://112.169.196.76:47788/static/image/";
-
-            var s = "<form method='post' enctype='multipart/form-data'><table class='table table-bordered'>";
-            s += "<tr><td>작성자</td><td id='userEmail'>"+r.data.userEmail+"</td></tr>";
-            s += "<tr><td>별점</td><td><select id='review-rate'><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></td></tr>";
-            s += "<tr><td>사진 첨부</td><td><input id='photo' type='file'></td></tr>";
-            s += "<tr><td>리뷰</td><td><textarea id='content' style='width:500px;height:150px;'>"+r.data.reviewContent+"</textarea></td></tr>";
-            s += "<tr><td><button type='button' review_id='"+review_id+"' id='review-mod-submit'>등록</button><button type='button' id='review-mod-cancel'>취소</button></td></tr>";
-            s += "</table></form>";
-            review_div.html(s);
-            review_div.find("#review-rate").val(r.data.reviewRating).attr("selected","selected");
-
-        }
+                var s = "<form method='post' enctype='multipart/form-data'><table class='table table-bordered'>";
+                s += "<tr><td>작성자</td><td id='userEmail'>"+r.data.userEmail+"</td></tr>";
+                s += "<tr><td>별점</td><td><select id='review-rate'><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></td></tr>";
+                s += "<tr><td>사진 첨부</td><td><input id='photo' type='file'></td></tr>";
+                s += "<tr><td>리뷰</td><td><textarea id='content' style='width:500px;height:150px;'>"+r.data.reviewContent+"</textarea></td></tr>";
+                s += "<tr><td><button type='button' review_id='"+review_id+"' id='review-mod-submit'>등록</button><button type='button' id='review-mod-cancel'>취소</button></td></tr>";
+                s += "</table></form>";
+                review_div.html(s);
+                review_div.find("#review-rate").val(r.data.reviewRating).attr("selected","selected");
+            }
+        })
     })
-
-})
 
 //리뷰 수정폼 닫기
 $(document).on("click","#review-mod-cancel",function(){
@@ -270,7 +266,7 @@ $(document).on("click","#review-mod-submit",function(){
         $.ajax({
             type:"post",
             data:formData,
-            url:domain+"/upload",
+            url:config.domain +"/upload",
             processData: false,
             contentType: false,
             success:function(d){
@@ -283,7 +279,7 @@ $(document).on("click","#review-mod-submit",function(){
     $.ajax({
         type:"put",
         data:JSON.stringify(review_json),
-        url:domain+"/review",
+        url:config.domain +"/review",
         //dataType:"json",
         success:function(d){
             var storeId = $("#review-write").attr("storeId");
@@ -300,8 +296,8 @@ $(document).on("click","#review-del",function(){
     console.log(review_id);
     $.ajax({
         type:"delete",
-        url:domain+"/review/"+review_id,
-        //url:domain+"/review/null",
+        url:config.domain +"/review/"+review_id,
+        //url:config.domain +"/review/null",
         //dataType:"json",
         success:function(d){
             var storeId = $("#review-write").attr("storeId");
@@ -345,7 +341,7 @@ $(document).on("click","#reply-submit",function(){
     $.ajax({
         type:"post",
         data:JSON.stringify(reply),
-        url:domain+"/reply",
+        url:config.domain +"/reply",
         dataType:"json",
         success:function(d){
             var storeId = $("#review-write").attr("storeId");
@@ -363,7 +359,7 @@ $(document).on("click","#reply-del",function(){
     console.log("삭제할 댓글id:"+reply_id);
     $.ajax({
         type:"delete",
-        url:domain+"/reply/"+reply_id,
+        url:config.domain +"/reply/"+reply_id,
         success:function(d){
             var storeId = $("#review-write").attr("storeId");
             var storeName = $("#review-write").attr("storeName");
@@ -381,7 +377,7 @@ $(document).on("click","#reply-mod",function(){
 
     $.ajax({
         type:"get",
-        url:domain+"/review/store/stid22",
+        url:config.domain +"/review/store/stid22",
         dataType:"json",
         success:function(ajax_data){
             // 이미 열려있는 다른 댓글수정폼 닫기
@@ -432,7 +428,7 @@ $(document).on("click","#reply-mod-submit",function(){
     $.ajax({
         type:"put",
         data:JSON.stringify(reply),
-        url:domain+"/reply",
+        url:config.domain +"/reply",
         dataType:"json",
         success:function(d){
             var storeId = $("#review-write").attr("storeId");

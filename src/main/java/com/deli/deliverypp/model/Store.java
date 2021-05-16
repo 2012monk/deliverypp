@@ -1,5 +1,6 @@
 package com.deli.deliverypp.model;
 
+import com.deli.deliverypp.util.DescSerializer;
 import com.deli.deliverypp.util.ParseUtil;
 import com.deli.deliverypp.util.PathSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -14,6 +15,7 @@ public class Store implements Serializable {
 
     private String storeId;
     private String storeName;
+    @JsonSerialize(using = DescSerializer.class, as = String.class)
     private String storeDesc;
     // img 경로 수정 Method
     @JsonSerialize(using = PathSerializer.class, as = String.class)

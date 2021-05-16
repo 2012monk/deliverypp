@@ -31,8 +31,9 @@ public class PaymentHandler {
         Map<String, String > header = new HashMap<>();
         String products = orderInfo.getOrderList().stream().map(Product::getProductName).collect(Collectors.joining(","));
         // TODO 가맹점 아이디 검색후 cid 가져오기
-        log.info((int) orderInfo.getTotalAmount());
-        log.info(orderInfo.getTotalPrice());
+        log.debug((int) orderInfo.getTotalAmount());
+        log.debug(orderInfo.getTotalPrice());
+
         params.put("cid", "TC0ONETIME");
         params.put("partner_order_id", "partner_order_id");
         params.put("partner_user_id","partner_user_id");
