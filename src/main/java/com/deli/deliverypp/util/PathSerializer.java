@@ -8,8 +8,8 @@ import java.io.IOException;
 
 public class PathSerializer extends JsonSerializer<String> {
 //    private final String domain = "http://112.169.196.76:47788/";
-//    private final String domain = "https://deli.alconn.co/";
-    private final String domain = "http://localhost:47788/";
+    private final String domain = "https://deli.alconn.co/";
+//    private final String domain = "http://localhost:47788/";
     private final String subPath = "static/image/";
 
     @Override
