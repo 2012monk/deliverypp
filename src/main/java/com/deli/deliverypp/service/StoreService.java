@@ -3,7 +3,9 @@ package com.deli.deliverypp.service;
 import com.deli.deliverypp.DB.ProductAccess;
 import com.deli.deliverypp.DB.StoreAccess;
 import com.deli.deliverypp.model.Product;
+import com.deli.deliverypp.model.ResponseMessage;
 import com.deli.deliverypp.model.Store;
+import com.deli.deliverypp.util.MessageGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
@@ -34,6 +36,10 @@ public class StoreService {
             e.printStackTrace();
         }
         return store;
+    }
+
+    public ResponseMessage<List<Store>> getStoreListByUser (String userEmail) {
+        return null;
     }
 
     public boolean insertStoreService (String json, String userEmail) {

@@ -79,8 +79,10 @@ public class StoreController extends HttpServlet {
             case "list":
                 sendStoreList(request,response);
                 break;
-            case "by":
+            case "user":
                 sendStore(request, response);
+                break;
+            case "name":
                 break;
             case "check-name":
                 checkStoreName(request, response);

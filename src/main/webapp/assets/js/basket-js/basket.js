@@ -27,7 +27,6 @@ function cartPage(){
 	s+="<div class='modal-body' style='padding:40px 50px;'>";
 	
     s+="<div id='test'></div><div id='test2'></div></div>";
-    s+="<div class='modal-footer' style='padding:20px 20px;'>test2</div>";
     s+="</div></div></div></div>";
 
 	/*s+="<div id='storecus-header'></div><div id='storecus-btn-crud'></div>";
@@ -37,9 +36,7 @@ function cartPage(){
 	/*index-header에 모달창 숨기기*/
 	$("#hidden-basket").html(s);
 
-
 }
-
 
 $(document).on("click","button.cart-add",function(e){
 	//console.log("추가버튼");
@@ -126,8 +123,8 @@ $(document).on("click","button.cart-order",function(){
 function CartMain(){
 	console.log("CartMain()실행");
 	var cart_list = JSON.parse(localStorage.getItem("cartList"));
-	
-	var s = "<table class='table table-bordered'><tr><td>업체명</td><td>"+localStorage.getItem("cartStore")+"</td></tr>";
+	var s ="<h3>"+localStorage.getItem("cartStore")+"</h3>";
+	s += "<table class='table table-default'>";
 	s += "<tr><td>상품명</td><td>가격</td><td>수량</td><td>추가</td><td>삭제</td><td>비우기</td></tr>";
 	
 	for(var product in cart_list)
@@ -150,7 +147,7 @@ function CartMain(){
 }
 
 function CartMain2(){
-	var	s= "<table><tr><td>주소</td><td><input type='text' id='address'></td></tr>";
+	var	s= "<table class='table table-responsive'><tr><td>주소</td><td><input type='text' id='address'></td></tr>";
 	s+= "<tr><td>연락처</td><td><input type='text' id='telephone'></td></tr>";
 	s+= "<tr><td>요청사항</td><td><input type='text' id='orderRequirement'></td></tr>";
 	s+= "<tr><td>결제수단</td><td><select id='paymentType'><option value='kakao'>카카오 페이</option></select></td></tr></table>";
@@ -341,9 +338,9 @@ function CartClearCheck(){
 	}
 }
 
-function add(data) {
-	var ran = Math.random()*100;
-	CartLoad(data, ran>50?"A업체":"B업체");
+function add(data, storeName) {
+	
+	CartLoad(data, storeName);
 	CartMain();
 	CartMain2();
 }

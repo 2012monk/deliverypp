@@ -3,7 +3,7 @@ $(function(){
 	var storeId = $(this).attr("value");
 	$.ajax({
 		type:"get",
-		url:"http://deli.alconn.co/stores/list",
+		url:"https://deli.alconn.co/stores/list",
 		dataType:"json",
 		success:function(data){
 			var s="";
