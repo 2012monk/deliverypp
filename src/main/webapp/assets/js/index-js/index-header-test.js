@@ -24,7 +24,7 @@ function mainHeaderPage() {
             }
             s +="<li><i></i></li></ul>";
             }
-        }
+        
 		
 		/*모달 코드div 렌더링 처음에 해놔야 나중에 */
 		s += '<div id="myModal" class="modal" tabindex="-1" role="dialog">';
@@ -47,7 +47,7 @@ function mainHeaderPage() {
   		s += '</div>';
 		s += '</div>';
 		$("#index-header").html(s); 
-    }
+    // }
     $("#loginbtn").click(function(){
         $("#logmodal").modal();
         console.log(this);
@@ -57,6 +57,8 @@ function mainHeaderPage() {
         $("#signmodal").modal();
         signup();
     });
+}
+
 
 function check_pw(){  //비밀번호 확인 
     var p = document.getElementById('pw').value; 
@@ -156,6 +158,7 @@ function check_pw(){  //비밀번호 확인
             s+="</form>";
             $("#logbody").html(s);
             $('#logmodal').modal();
+            console.log($('#logmodal'))
         });
 
         // login
@@ -419,8 +422,9 @@ function loginmodal(){
 
 function init() {
     // modal insert
-    mainBodyPage();
     mainHeaderPage();
+    mainBodyPage();
+    console.log('dfidf')
 }
 
 init();
